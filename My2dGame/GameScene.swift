@@ -17,14 +17,18 @@ class GameScene: SKScene {
     let gameLayer = SKNode()
     let blocksLayer = SKNode()
     let bottomNumbersLayer = SKNode()
-    var columnsNodes = Array<SKNode>()
     let nextColumnPreviewNode = SKNode()
+    let HUDLayer = SKNode()
+    
+    var levelLabelNode = SKLabelNode()
+    var scoreLabelNode = SKLabelNode()
+    var wavesLeftLabelNode = SKLabelNode()
+    
+    var columnsNodes = Array<SKNode>()
     
     var tickLengthMillis = TickLengthLevelOne
     var lastTick: NSDate?
     var tick: (() -> ())?
-    
-    //var textureCache = Dictionary<String, SKTexture>() Do sprawdzenia w przyszłosci
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
@@ -36,11 +40,11 @@ class GameScene: SKScene {
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
         
-        let background = SKSpriteNode(imageNamed: "5C")
+        let background = SKSpriteNode(imageNamed: "Background")
         background.size = self.frame.size
         addChild(background)
         
-        gameLayer.position = CGPoint(x: 20, y: -4)
+        gameLayer.position = CGPoint(x: -20, y: -4)
         addChild(gameLayer)
         
         bottomNumbersLayer.position = CGPoint(
@@ -56,35 +60,79 @@ class GameScene: SKScene {
             bottomNumbersLayer.addChild(Label)
         }
         gameLayer.addChild(bottomNumbersLayer)
-        
-        let layerPosition = CGPoint(
+
+        blocksLayer.position = CGPoint(
             x: -BlockWidth * CGFloat(NumColumns) / 2,
             y: -BlockHeight * CGFloat(NumRows) / 2)
         
-        blocksLayer.position = layerPosition
         gameLayer.addChild(blocksLayer)
         
-        let nextColumnNodePosition = CGPoint(
-            x: (-BlockWidth * CGFloat(NumColumns) / 2) - (1.4 * BlockWidth),
-            y: -BlockHeight * CGFloat(NumRows) / 2)
-        nextColumnPreviewNode.position = nextColumnNodePosition
-        gameLayer.addChild(nextColumnPreviewNode)
+//        let nextColumnNodePosition = CGPoint(
+//            x: (-BlockWidth * CGFloat(NumColumns) / 2) - (1.4 * BlockWidth),
+//            y: -BlockHeight * CGFloat(NumRows) / 2)
+//        nextColumnPreviewNode.position = nextColumnNodePosition
+//        gameLayer.addChild(nextColumnPreviewNode)
+        
+        let levelNode = SKSpriteNode(imageNamed: "Level")
+        levelNode.size = CGSize(width: 50, height: 50)
+        
+        levelLabelNode = SKLabelNode(fontNamed: "Gill Sans Bold")
+        levelLabelNode.text = "99"
+        levelLabelNode.fontColor = UIColor.whiteColor()
+        levelLabelNode.fontSize = 22
+        levelLabelNode.position.x -= 1.5
+        levelNode.addChild(levelLabelNode)
+        
+        
+        let scoreNode = SKSpriteNode(imageNamed: "Score")
+        scoreNode.position.y -= 50
+        scoreNode.size = CGSize(width: 50, height: 50)
+        
+        scoreLabelNode = SKLabelNode(fontNamed: "Gill Sans Bold")
+        scoreLabelNode.text = "999"
+        scoreLabelNode.fontColor = UIColor.whiteColor()
+        scoreLabelNode.fontSize = 20
+        scoreLabelNode.position.x -= 1.5
+        scoreNode.addChild(scoreLabelNode)
+        
+        
+        let wavesLeftNode = SKSpriteNode(imageNamed: "WavesLeft")
+        wavesLeftNode.position.y -= 100
+        wavesLeftNode.size = CGSize(width: 50, height: 50)
+        
+        wavesLeftLabelNode = SKLabelNode(fontNamed: "Gill Sans Bold")
+        wavesLeftLabelNode.text = "99"
+        wavesLeftLabelNode.fontColor = UIColor.whiteColor()
+        wavesLeftLabelNode.fontSize = 22
+        wavesLeftLabelNode.position.x -= 1.5
+        wavesLeftNode.addChild(wavesLeftLabelNode)
+        
+        
+        let menuButtonNode = SKSpriteNode(imageNamed: "Menu")
+        menuButtonNode.position.y -= 200
+        menuButtonNode.size = CGSize(width: 50, height: 50)
+        menuButtonNode.name = "menuButton"
+        
+        
+        HUDLayer.addChild(levelNode)
+        HUDLayer.addChild(scoreNode)
+        HUDLayer.addChild(wavesLeftNode)
+        HUDLayer.addChild(menuButtonNode)
+        
+        HUDLayer.position = CGPoint(
+            x: self.size.width * 0.48,
+            y: self.size.height * 0.35)
+        
+        gameLayer.addChild(HUDLayer)
         
         //runAction(SKAction.repeatActionForever(SKAction.playSoundFileNamed("BackgroundSound.mp3", waitForCompletion: true)))
     }
+
     
     override func didMoveToView(view: SKView){
         //setup your scene here
         
-//        var v = UIView(frame: CGRectMake(0, 0, 150, 100))
-//        v.backgroundColor = UIColor.blueColor()
-//        v.layer.shadowOpacity = 0.4
-//        v.layer.shadowOffset = CGSizeMake(2.0, 2.0)
-//        v.layer.shadowRadius = 0
-//        if let x = self.view?.center{
-//            v.layer.position = x
-//        }
-//        self.view?.addSubview(v)
+        
     }
     
     override func update(currentTime: CFTimeInterval) {

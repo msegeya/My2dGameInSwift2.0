@@ -43,6 +43,15 @@ class GameViewController: UIViewController, GameDelegate {
         game = Game()
         game.delegate = self
         game.beginGame()
+
+        let tapGesture = UITapGestureRecognizer(target: self, action: "didTap")
+        skView.addGestureRecognizer(tapGesture)
+        
+        let swipeGesture = UISwipeGestureRecognizer(target: self, action: "didSwipe")
+        swipeGesture.direction = .Up 
+        skView.addGestureRecognizer(swipeGesture)
+        swipeGesture.direction = .Down
+        skView.addGestureRecognizer(swipeGesture)
         
         skView.presentScene(scene)
     }
@@ -90,7 +99,7 @@ class GameViewController: UIViewController, GameDelegate {
         view.userInteractionEnabled = false
         
         if let newColumn = game.newColumn(){
-            self.wavesLeftLabel.text = NSString(format: "%ld", game.wavesLeft)
+            //self.wavesLeftLabel.text = NSString(format: "%ld", game.wavesLeft)
             scene.animateAddingSpritesForColumn(newColumn){
                 self.view.userInteractionEnabled = true
                 self.scene.animateAddingNextColumnPreview(self.game.nextColumn!)
@@ -131,7 +140,7 @@ class GameViewController: UIViewController, GameDelegate {
             let removedBlocks = game.removeBlocks(column, row: row)
             
             if(removedBlocks.blocksRemoved.count > 0){
-                self.scoreLabel.text = String(game.score)
+                //self.scoreLabel.text = String(game.score)
                 scene.animateRemovingBlocksSprites(removedBlocks.blocksRemoved, fallenBlocks: removedBlocks.fallenBlocks){
                     self.view.userInteractionEnabled = true
                 }
