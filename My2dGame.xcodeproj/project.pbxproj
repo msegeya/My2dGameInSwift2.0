@@ -18,6 +18,10 @@
 		F9336C101AAA55DB00B0D204 /* Column.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9336C0F1AAA55DB00B0D204 /* Column.swift */; };
 		F9336C121AAA55F400B0D204 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9336C111AAA55F400B0D204 /* Block.swift */; };
 		F9336C141AAA568400B0D204 /* Sprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = F9336C131AAA568400B0D204 /* Sprites.atlas */; };
+		F9F65E4B1AAA8DDC009E4421 /* Fall.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9F65E4A1AAA8DDC009E4421 /* Fall.wav */; };
+		F9F65E4D1AAA98FC009E4421 /* HUDSKLabelNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E4C1AAA98FC009E4421 /* HUDSKLabelNode.swift */; };
+		F9F65E4F1AAAAE84009E4421 /* popUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E4E1AAAAE84009E4421 /* popUp.swift */; };
+		F9F65E511AAAB3E9009E4421 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E501AAAB3E9009E4421 /* MenuScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +50,10 @@
 		F9336C0F1AAA55DB00B0D204 /* Column.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Column.swift; sourceTree = "<group>"; };
 		F9336C111AAA55F400B0D204 /* Block.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
 		F9336C131AAA568400B0D204 /* Sprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Sprites.atlas; sourceTree = "<group>"; };
+		F9F65E4A1AAA8DDC009E4421 /* Fall.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Fall.wav; sourceTree = "<group>"; };
+		F9F65E4C1AAA98FC009E4421 /* HUDSKLabelNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUDSKLabelNode.swift; sourceTree = "<group>"; };
+		F9F65E4E1AAAAE84009E4421 /* popUp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = popUp.swift; sourceTree = "<group>"; };
+		F9F65E501AAAB3E9009E4421 /* MenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +96,7 @@
 		F9336BE51AAA52CA00B0D204 /* My2dGame */ = {
 			isa = PBXGroup;
 			children = (
+				F9F65E491AAA8DBB009E4421 /* Sounds */,
 				F9336C161AAA580E00B0D204 /* Model */,
 				F9336C151AAA57CB00B0D204 /* Scenes */,
 				F9336BE81AAA52CA00B0D204 /* AppDelegate.swift */,
@@ -129,6 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				F9336BEC1AAA52CA00B0D204 /* GameScene.swift */,
+				F9F65E501AAAB3E9009E4421 /* MenuScene.swift */,
 			);
 			name = Scenes;
 			sourceTree = "<group>";
@@ -136,11 +146,21 @@
 		F9336C161AAA580E00B0D204 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				F9F65E4C1AAA98FC009E4421 /* HUDSKLabelNode.swift */,
 				F9336C111AAA55F400B0D204 /* Block.swift */,
 				F9336C0F1AAA55DB00B0D204 /* Column.swift */,
 				F9336C0C1AAA559500B0D204 /* Game.swift */,
+				F9F65E4E1AAAAE84009E4421 /* popUp.swift */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		F9F65E491AAA8DBB009E4421 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				F9F65E4A1AAA8DDC009E4421 /* Fall.wav */,
+			);
+			name = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -224,6 +244,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F9336BF71AAA52CA00B0D204 /* LaunchScreen.xib in Resources */,
+				F9F65E4B1AAA8DDC009E4421 /* Fall.wav in Resources */,
 				F9336BF41AAA52CA00B0D204 /* Images.xcassets in Resources */,
 				F9336C141AAA568400B0D204 /* Sprites.atlas in Resources */,
 				F9336BF21AAA52CA00B0D204 /* Main.storyboard in Resources */,
@@ -244,7 +265,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9F65E4D1AAA98FC009E4421 /* HUDSKLabelNode.swift in Sources */,
 				F9336BED1AAA52CA00B0D204 /* GameScene.swift in Sources */,
+				F9F65E4F1AAAAE84009E4421 /* popUp.swift in Sources */,
+				F9F65E511AAAB3E9009E4421 /* MenuScene.swift in Sources */,
 				F9336C101AAA55DB00B0D204 /* Column.swift in Sources */,
 				F9336BEF1AAA52CA00B0D204 /* GameViewController.swift in Sources */,
 				F9336C121AAA55F400B0D204 /* Block.swift in Sources */,
@@ -441,6 +465,7 @@
 				F9336C081AAA52CA00B0D204 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F9336C091AAA52CA00B0D204 /* Build configuration list for PBXNativeTarget "My2dGameTests" */ = {
 			isa = XCConfigurationList;
@@ -449,6 +474,7 @@
 				F9336C0B1AAA52CA00B0D204 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

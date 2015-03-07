@@ -24,6 +24,8 @@ class GameScene: SKScene {
     var scoreLabelNode = SKLabelNode()
     var wavesLeftLabelNode = SKLabelNode()
     
+    var popUp = UIView()
+    
     var columnsNodes = Array<SKNode>()
     
     var tickLengthMillis = TickLengthLevelOne
@@ -67,20 +69,16 @@ class GameScene: SKScene {
         
         gameLayer.addChild(blocksLayer)
         
-//        let nextColumnNodePosition = CGPoint(
-//            x: (-BlockWidth * CGFloat(NumColumns) / 2) - (1.4 * BlockWidth),
-//            y: -BlockHeight * CGFloat(NumRows) / 2)
-//        nextColumnPreviewNode.position = nextColumnNodePosition
-//        gameLayer.addChild(nextColumnPreviewNode)
+        let nextColumnNodePosition = CGPoint(
+            x: (-BlockWidth * CGFloat(NumColumns) / 2) - (1.4 * BlockWidth),
+            y: -BlockHeight * CGFloat(NumRows) / 2)
+        nextColumnPreviewNode.position = nextColumnNodePosition
+        gameLayer.addChild(nextColumnPreviewNode)
         
         let levelNode = SKSpriteNode(imageNamed: "Level")
         levelNode.size = CGSize(width: 50, height: 50)
         
-        levelLabelNode = SKLabelNode(fontNamed: "Gill Sans Bold")
-        levelLabelNode.text = "99"
-        levelLabelNode.fontColor = UIColor.whiteColor()
-        levelLabelNode.fontSize = 22
-        levelLabelNode.position.x -= 1.5
+        levelLabelNode = HUDSKLabelNode()
         levelNode.addChild(levelLabelNode)
         
         
@@ -88,11 +86,7 @@ class GameScene: SKScene {
         scoreNode.position.y -= 50
         scoreNode.size = CGSize(width: 50, height: 50)
         
-        scoreLabelNode = SKLabelNode(fontNamed: "Gill Sans Bold")
-        scoreLabelNode.text = "999"
-        scoreLabelNode.fontColor = UIColor.whiteColor()
-        scoreLabelNode.fontSize = 20
-        scoreLabelNode.position.x -= 1.5
+        scoreLabelNode = HUDSKLabelNode()
         scoreNode.addChild(scoreLabelNode)
         
         
@@ -100,11 +94,7 @@ class GameScene: SKScene {
         wavesLeftNode.position.y -= 100
         wavesLeftNode.size = CGSize(width: 50, height: 50)
         
-        wavesLeftLabelNode = SKLabelNode(fontNamed: "Gill Sans Bold")
-        wavesLeftLabelNode.text = "99"
-        wavesLeftLabelNode.fontColor = UIColor.whiteColor()
-        wavesLeftLabelNode.fontSize = 22
-        wavesLeftLabelNode.position.x -= 1.5
+        wavesLeftLabelNode = HUDSKLabelNode()
         wavesLeftNode.addChild(wavesLeftLabelNode)
         
         
@@ -130,9 +120,30 @@ class GameScene: SKScene {
 
     
     override func didMoveToView(view: SKView){
-        //setup your scene here
+        popUp = UIView(frame: CGRect(x: 0, y: 0, width: 150, height: 100))
+        popUp.backgroundColor = UIColor.whiteColor()
+        popUp.layer.position = self.view!.center
         
+        let image = UIImage(named: "name") as UIImage?
+        let button   = UIButton.buttonWithType(UIButtonType.System) as UIButton
+        button.frame = CGRectMake(100, 100, 100, 100)
+        button.setImage(image, forState: .Normal)
+        button.addTarget(self, action: "didResume:", forControlEvents:.TouchUpInside)
         
+        popUp.addSubview(button)
+        self.view?.addSubview(popUp)
+        
+        popUp.hidden = true
+    }
+    
+    func showPopUp(){
+        popUp.hidden = false
+        let move = SKAction.moveByX(BlockWidth, y: 0, duration: 0.1)
+        move.timingMode = SKActionTimingMode.EaseOut
+        
+    }
+    func hidePopUp(){
+        popUp.hidden = true
     }
     
     override func update(currentTime: CFTimeInterval) {
@@ -166,6 +177,8 @@ class GameScene: SKScene {
         
         runAction(SKAction.waitForDuration(0.2), completion: completion)
     }
+    
+
     
     func animateSummaryResults(results: Array<Int>, columns: Array<Column>, completion: ()->()){
         for (columnId, column) in enumerate(columns){

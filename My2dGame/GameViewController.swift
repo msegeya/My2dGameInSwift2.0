@@ -43,15 +43,17 @@ class GameViewController: UIViewController, GameDelegate {
         game = Game()
         game.delegate = self
         game.beginGame()
-
-        let tapGesture = UITapGestureRecognizer(target: self, action: "didTap")
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: Selector("didTap:"))
         skView.addGestureRecognizer(tapGesture)
         
-        let swipeGesture = UISwipeGestureRecognizer(target: self, action: "didSwipe")
-        swipeGesture.direction = .Up 
-        skView.addGestureRecognizer(swipeGesture)
-        swipeGesture.direction = .Down
-        skView.addGestureRecognizer(swipeGesture)
+        let swipeGestureUp = UISwipeGestureRecognizer(target: self, action: Selector("didSwipe:"))
+        swipeGestureUp.direction = .Up
+        skView.addGestureRecognizer(swipeGestureUp)
+        
+        let swipeGestureDown = UISwipeGestureRecognizer(target: self, action: Selector("didSwipe:"))
+        swipeGestureDown.direction = .Down
+        skView.addGestureRecognizer(swipeGestureDown)
         
         skView.presentScene(scene)
     }
@@ -66,6 +68,10 @@ class GameViewController: UIViewController, GameDelegate {
         view.userInteractionEnabled = true
         scene.tickLengthMillis = TickLengthLevelOne
         scene.startTicking()
+        
+        scene.levelLabelNode.text = String("\(game.level)")
+        scene.scoreLabelNode.text = String("\(game.score)")
+        scene.wavesLeftLabelNode.text = String("\(game.wavesLeft)")
     }
     
     func gameDidEnd(game: Game) {
@@ -99,7 +105,7 @@ class GameViewController: UIViewController, GameDelegate {
         view.userInteractionEnabled = false
         
         if let newColumn = game.newColumn(){
-            //self.wavesLeftLabel.text = NSString(format: "%ld", game.wavesLeft)
+            scene.wavesLeftLabelNode.text = String(format: "%ld", game.wavesLeft)
             scene.animateAddingSpritesForColumn(newColumn){
                 self.view.userInteractionEnabled = true
                 self.scene.animateAddingNextColumnPreview(self.game.nextColumn!)
@@ -108,9 +114,9 @@ class GameViewController: UIViewController, GameDelegate {
     }
     @IBAction func didSwipe(sender: UISwipeGestureRecognizer) {
         let currentPoint = sender.locationInView(sender.view)
-        
+     
         var tmpPoint = currentPoint
-        tmpPoint.x -= 70
+        tmpPoint.x -= 36
         tmpPoint.y = 0
         
         let (success, column, row) = convertPoint(tmpPoint)
@@ -124,7 +130,8 @@ class GameViewController: UIViewController, GameDelegate {
     @IBAction func didTap(sender: UITapGestureRecognizer) {
         
         var currentPoint = sender.locationInView(self.view)
-        currentPoint.x -= 70
+        
+        currentPoint.x -= 36
         currentPoint.y -= 27
         if currentPoint.y-269 < 0{
             currentPoint.y = abs(currentPoint.y-269)
@@ -140,7 +147,7 @@ class GameViewController: UIViewController, GameDelegate {
             let removedBlocks = game.removeBlocks(column, row: row)
             
             if(removedBlocks.blocksRemoved.count > 0){
-                //self.scoreLabel.text = String(game.score)
+                scene.scoreLabelNode.text = String(game.score)
                 scene.animateRemovingBlocksSprites(removedBlocks.blocksRemoved, fallenBlocks: removedBlocks.fallenBlocks){
                     self.view.userInteractionEnabled = true
                 }
