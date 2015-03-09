@@ -7,12 +7,12 @@
 //
 import SpriteKit
 
-class HUDSKLabelNode: SKLabelNode {
+class SKHUDLabelNode: SKLabelNode {
     override init() {
         super.init()
         
         self.fontName = "Gill Sans Bold"
-        self.text = "99"
+        self.text = "0"
         self.fontColor = UIColor.whiteColor()
         self.fontSize = 22
         self.position.x -= 1.5
@@ -21,7 +21,7 @@ class HUDSKLabelNode: SKLabelNode {
     override init(fontNamed fontName: String!) {
         super.init(fontNamed: fontName)
         
-        self.text = "99"
+        self.text = "0"
         self.fontColor = UIColor.whiteColor()
         self.fontSize = 22
         self.position.x -= 1.5
@@ -32,17 +32,17 @@ class HUDSKLabelNode: SKLabelNode {
             
             let length = countElements(self.text)
             switch length{
-            case 4:
-                self.fontSize = 18
-                break
-            case 5:
-                self.fontSize = 16
-                break
-            case 6:
-                self.fontSize = 12
-            default:
-                self.fontSize = 22
-                break
+                case 4:
+                    self.fontSize = 18
+                    break
+                case 5:
+                    self.fontSize = 16
+                    break
+                case 6:
+                    self.fontSize = 12
+                default:
+                    self.fontSize = 22
+                    break
             }
             
             //Scale animation

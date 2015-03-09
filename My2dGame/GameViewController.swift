@@ -9,23 +9,12 @@
 import UIKit
 import SpriteKit
 
-class GameViewController: UIViewController, GameDelegate {
+class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
     
     var scene: GameScene!
     var game: Game!
     
-    var timePassed = 0.0
-
-    @IBAction func pauseButtonTapped(sender : AnyObject) {
-        
-        scene.view?.paused = true
-        
-        self.timePassed = scene.lastTick!.timeIntervalSinceNow
-        
-        //        popUpViewController = PopUpViewController(nibName: "PopUpView", bundle: nil)
-        //        popUpViewController.delegate = self
-        //        self.popUpViewController.showInView(self.view, withMessage: "PAUSED!", animated: true)
-    }
+    var timePassed: Double? = 0.0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,26 +33,60 @@ class GameViewController: UIViewController, GameDelegate {
         game.delegate = self
         game.beginGame()
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: Selector("didTap:"))
+        scene.pauseGame = gameDidPause
+        scene.resumeGame = gameDidResume
+        scene.popUp.delegate = self
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: Selector("handleTap:"))
         skView.addGestureRecognizer(tapGesture)
         
-        let swipeGestureUp = UISwipeGestureRecognizer(target: self, action: Selector("didSwipe:"))
+        let swipeGestureUp = UISwipeGestureRecognizer(target: self, action: Selector("handleColumnSwipe:"))
         swipeGestureUp.direction = .Up
         skView.addGestureRecognizer(swipeGestureUp)
         
-        let swipeGestureDown = UISwipeGestureRecognizer(target: self, action: Selector("didSwipe:"))
+        let swipeGestureDown = UISwipeGestureRecognizer(target: self, action: Selector("handleColumnSwipe:"))
         swipeGestureDown.direction = .Down
         skView.addGestureRecognizer(swipeGestureDown)
         
         skView.presentScene(scene)
     }
+
     
-    //    func didResumed() {
-    //        let newLastTickValue = NSDate().dateByAddingTimeInterval(NSTimeInterval(timePassed))
-    //        scene.lastTick = newLastTickValue
-    //        scene.view?.paused = false
-    //    }
+    //PopUpDelegates
+    func gameDidPause(){
+        scene.popUp.show()
+        
+        timePassed = scene.lastTick!.timeIntervalSinceNow
+        scene.stopTicking()
+    }
+    func gameDidResume(){
+        let newLastTickValue = NSDate().dateByAddingTimeInterval(NSTimeInterval(timePassed!))
+        scene.lastTick = newLastTickValue
+        timePassed = nil
+        
+        scene.popUp.hide()
+    }
+    func gameDidExit(){
+        //Finish game and back to the Menu Scene
+    }
+    func musicDidSwitch(){
+        if scene.music == .On{
+            scene.music = .Off
+        }else{
+            scene.music = .On
+        }
+    }
+    func soundDidSwitch(){
+        if  scene.sound == .On{
+            scene.sound = .Off
+        }else{
+            scene.sound = .On
+        }
+    }
+    //PopUpDelagates
     
+    
+    //GameDelegates
     func gameDidBegin(game: Game) {
         view.userInteractionEnabled = true
         scene.tickLengthMillis = TickLengthLevelOne
@@ -76,6 +99,7 @@ class GameViewController: UIViewController, GameDelegate {
     
     func gameDidEnd(game: Game) {
         view.userInteractionEnabled = false
+
         scene.stopTicking()
         scene.animateClearingScene(){
             game.beginGame()
@@ -102,17 +126,27 @@ class GameViewController: UIViewController, GameDelegate {
     }
     
     func didTick(){
-        view.userInteractionEnabled = false
+        //view.userInteractionEnabled = false
+        scene.blocksLayer.userInteractionEnabled = false
         
         if let newColumn = game.newColumn(){
             scene.wavesLeftLabelNode.text = String(format: "%ld", game.wavesLeft)
             scene.animateAddingSpritesForColumn(newColumn){
-                self.view.userInteractionEnabled = true
+                //self.view.userInteractionEnabled = true
+                self.scene.blocksLayer.userInteractionEnabled = true
                 self.scene.animateAddingNextColumnPreview(self.game.nextColumn!)
             }
         }
     }
-    @IBAction func didSwipe(sender: UISwipeGestureRecognizer) {
+    //GameDelegates
+    
+    
+    //Gestures handling
+    @IBAction func handleColumnSwipe(sender: UISwipeGestureRecognizer) {
+        if timePassed != nil{
+            return
+        }
+        
         let currentPoint = sender.locationInView(sender.view)
      
         var tmpPoint = currentPoint
@@ -126,8 +160,10 @@ class GameViewController: UIViewController, GameDelegate {
             }
         }
     }
-    
-    @IBAction func didTap(sender: UITapGestureRecognizer) {
+    @IBAction func handleTap(sender: UITapGestureRecognizer) {
+        if timePassed != nil{
+            return
+        }
         
         var currentPoint = sender.locationInView(self.view)
         
@@ -157,6 +193,8 @@ class GameViewController: UIViewController, GameDelegate {
             
         }
     }
+    //Gestures handling
+    
     
     func convertPoint(point: CGPoint) -> (success: Bool, column: Int, row: Int) {
         if (point.x >= 0 && point.x < CGFloat(NumColumns) * BlockWidth &&
@@ -170,11 +208,9 @@ class GameViewController: UIViewController, GameDelegate {
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
-    
     override func shouldAutorotate() -> Bool {
         return true
     }
-    
     override func supportedInterfaceOrientations() -> Int {
         return Int(UIInterfaceOrientationMask.LandscapeRight.rawValue)
     }

@@ -19,9 +19,10 @@
 		F9336C121AAA55F400B0D204 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9336C111AAA55F400B0D204 /* Block.swift */; };
 		F9336C141AAA568400B0D204 /* Sprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = F9336C131AAA568400B0D204 /* Sprites.atlas */; };
 		F9F65E4B1AAA8DDC009E4421 /* Fall.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9F65E4A1AAA8DDC009E4421 /* Fall.wav */; };
-		F9F65E4D1AAA98FC009E4421 /* HUDSKLabelNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E4C1AAA98FC009E4421 /* HUDSKLabelNode.swift */; };
-		F9F65E4F1AAAAE84009E4421 /* popUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E4E1AAAAE84009E4421 /* popUp.swift */; };
+		F9F65E4D1AAA98FC009E4421 /* SKHUDLabelNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E4C1AAA98FC009E4421 /* SKHUDLabelNode.swift */; };
+		F9F65E4F1AAAAE84009E4421 /* SKPopUpNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E4E1AAAAE84009E4421 /* SKPopUpNode.swift */; };
 		F9F65E511AAAB3E9009E4421 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E501AAAB3E9009E4421 /* MenuScene.swift */; };
+		F9F65E571AAC04E9009E4421 /* SKProgressBarNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E561AAC04E9009E4421 /* SKProgressBarNode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,9 +52,10 @@
 		F9336C111AAA55F400B0D204 /* Block.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
 		F9336C131AAA568400B0D204 /* Sprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Sprites.atlas; sourceTree = "<group>"; };
 		F9F65E4A1AAA8DDC009E4421 /* Fall.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Fall.wav; sourceTree = "<group>"; };
-		F9F65E4C1AAA98FC009E4421 /* HUDSKLabelNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUDSKLabelNode.swift; sourceTree = "<group>"; };
-		F9F65E4E1AAAAE84009E4421 /* popUp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = popUp.swift; sourceTree = "<group>"; };
+		F9F65E4C1AAA98FC009E4421 /* SKHUDLabelNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKHUDLabelNode.swift; sourceTree = "<group>"; };
+		F9F65E4E1AAAAE84009E4421 /* SKPopUpNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKPopUpNode.swift; sourceTree = "<group>"; };
 		F9F65E501AAAB3E9009E4421 /* MenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
+		F9F65E561AAC04E9009E4421 /* SKProgressBarNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKProgressBarNode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,13 +148,22 @@
 		F9336C161AAA580E00B0D204 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				F9F65E4C1AAA98FC009E4421 /* HUDSKLabelNode.swift */,
 				F9336C111AAA55F400B0D204 /* Block.swift */,
 				F9336C0F1AAA55DB00B0D204 /* Column.swift */,
 				F9336C0C1AAA559500B0D204 /* Game.swift */,
-				F9F65E4E1AAAAE84009E4421 /* popUp.swift */,
+				F9B0DC191AAD307400589C22 /* SpriteKit Extensions */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		F9B0DC191AAD307400589C22 /* SpriteKit Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				F9F65E4C1AAA98FC009E4421 /* SKHUDLabelNode.swift */,
+				F9F65E4E1AAAAE84009E4421 /* SKPopUpNode.swift */,
+				F9F65E561AAC04E9009E4421 /* SKProgressBarNode.swift */,
+			);
+			name = "SpriteKit Extensions";
 			sourceTree = "<group>";
 		};
 		F9F65E491AAA8DBB009E4421 /* Sounds */ = {
@@ -265,14 +276,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9F65E4D1AAA98FC009E4421 /* HUDSKLabelNode.swift in Sources */,
+				F9F65E4D1AAA98FC009E4421 /* SKHUDLabelNode.swift in Sources */,
 				F9336BED1AAA52CA00B0D204 /* GameScene.swift in Sources */,
-				F9F65E4F1AAAAE84009E4421 /* popUp.swift in Sources */,
+				F9F65E4F1AAAAE84009E4421 /* SKPopUpNode.swift in Sources */,
 				F9F65E511AAAB3E9009E4421 /* MenuScene.swift in Sources */,
 				F9336C101AAA55DB00B0D204 /* Column.swift in Sources */,
 				F9336BEF1AAA52CA00B0D204 /* GameViewController.swift in Sources */,
 				F9336C121AAA55F400B0D204 /* Block.swift in Sources */,
 				F9336BE91AAA52CA00B0D204 /* AppDelegate.swift in Sources */,
+				F9F65E571AAC04E9009E4421 /* SKProgressBarNode.swift in Sources */,
 				F9336C0D1AAA559500B0D204 /* Game.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

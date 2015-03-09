@@ -11,7 +11,7 @@ import SpriteKit
 let BlockWidth: CGFloat = 39.0
 let BlockHeight: CGFloat = 33.0
 
-let TickLengthLevelOne = NSTimeInterval(3600)
+let TickLengthLevelOne = NSTimeInterval(2600)
 
 class GameScene: SKScene {
     let gameLayer = SKNode()
@@ -23,19 +23,25 @@ class GameScene: SKScene {
     var levelLabelNode = SKLabelNode()
     var scoreLabelNode = SKLabelNode()
     var wavesLeftLabelNode = SKLabelNode()
-    
-    var popUp = UIView()
+    var wavesLeftNode: SKProgressBarNode = SKProgressBarNode()
+    var popUp = SKPopUpNode()
     
     var columnsNodes = Array<SKNode>()
+    var sound: Switch = .On
+    var music: Switch = .Off
+    
+    var pauseGame: (() -> ())?
+    var resumeGame: (() -> ())?
     
     var tickLengthMillis = TickLengthLevelOne
     var lastTick: NSDate?
     var tick: (() -> ())?
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder) is not used in this app")
+    enum Switch {
+        case On, Off
     }
     
+    //Init
     override init(size: CGSize) {
         super.init(size: size)
         
@@ -78,7 +84,7 @@ class GameScene: SKScene {
         let levelNode = SKSpriteNode(imageNamed: "Level")
         levelNode.size = CGSize(width: 50, height: 50)
         
-        levelLabelNode = HUDSKLabelNode()
+        levelLabelNode = SKHUDLabelNode()
         levelNode.addChild(levelLabelNode)
         
         
@@ -86,15 +92,14 @@ class GameScene: SKScene {
         scoreNode.position.y -= 50
         scoreNode.size = CGSize(width: 50, height: 50)
         
-        scoreLabelNode = HUDSKLabelNode()
+        scoreLabelNode = SKHUDLabelNode()
         scoreNode.addChild(scoreLabelNode)
         
         
-        let wavesLeftNode = SKSpriteNode(imageNamed: "WavesLeft")
+        wavesLeftNode = SKProgressBarNode(imageNamed: "WavesLeft100px")
         wavesLeftNode.position.y -= 100
-        wavesLeftNode.size = CGSize(width: 50, height: 50)
-        
-        wavesLeftLabelNode = HUDSKLabelNode()
+
+        wavesLeftLabelNode = SKHUDLabelNode()
         wavesLeftNode.addChild(wavesLeftLabelNode)
         
         
@@ -114,43 +119,30 @@ class GameScene: SKScene {
             y: self.size.height * 0.35)
         
         gameLayer.addChild(HUDLayer)
-        
-        //runAction(SKAction.repeatActionForever(SKAction.playSoundFileNamed("BackgroundSound.mp3", waitForCompletion: true)))
-    }
 
-    
+        popUp = SKPopUpNode(backgroundColor: UIColor.whiteColor(), backgroundSize: CGSize(width: 150, height: 100))
+        addChild(popUp)
+        
+        if music == .On{
+            runAction(SKAction.repeatActionForever(SKAction.playSoundFileNamed("BackgroundSound.mp3", waitForCompletion: true)))
+        }
+    }
     override func didMoveToView(view: SKView){
-        popUp = UIView(frame: CGRect(x: 0, y: 0, width: 150, height: 100))
-        popUp.backgroundColor = UIColor.whiteColor()
-        popUp.layer.position = self.view!.center
-        
-        let image = UIImage(named: "name") as UIImage?
-        let button   = UIButton.buttonWithType(UIButtonType.System) as UIButton
-        button.frame = CGRectMake(100, 100, 100, 100)
-        button.setImage(image, forState: .Normal)
-        button.addTarget(self, action: "didResume:", forControlEvents:.TouchUpInside)
-        
-        popUp.addSubview(button)
-        self.view?.addSubview(popUp)
-        
-        popUp.hidden = true
+        //setup
     }
+    //Init
     
-    func showPopUp(){
-        popUp.hidden = false
-        let move = SKAction.moveByX(BlockWidth, y: 0, duration: 0.1)
-        move.timingMode = SKActionTimingMode.EaseOut
-        
-    }
-    func hidePopUp(){
-        popUp.hidden = true
-    }
     
+    //Clock
     override func update(currentTime: CFTimeInterval) {
         if lastTick == nil {
             return
         }
         var timePassed = lastTick!.timeIntervalSinceNow * -1000.0
+        
+        //progressBar update
+        wavesLeftNode.setProgress(CGFloat(timePassed) / CGFloat(TickLengthLevelOne))
+        
         if timePassed > tickLengthMillis {
             lastTick = NSDate()
             //tick?() shorthand for statement below:
@@ -165,21 +157,47 @@ class GameScene: SKScene {
     func stopTicking() {
         lastTick = nil
     }
+    //Clock
     
+    
+    //Other
+    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+        super.touchesBegan(touches, withEvent: event)
+        
+        var touch: AnyObject? = touches.anyObject()
+        var location = touch?.locationInNode(self)
+        let touchedNode = self.nodeAtPoint(location!)
+        
+        if popUp.hidden == false{
+            resumeGame!()
+        }else if touchedNode.name == "menuButton"{
+            pauseGame!()
+        }
+    }
+    func pointForColumn(column: Int, row: Int) -> CGPoint {
+        return CGPoint(
+            x: CGFloat(column) * BlockWidth + BlockWidth / 2,
+            y: CGFloat(row) * BlockHeight + BlockHeight / 2)
+    }
+    func playSound(soundToPlay: String) {
+        if sound == .On{
+            runAction(SKAction.playSoundFileNamed(soundToPlay, waitForCompletion: false))
+        }
+    }
+    //Other
+    
+    
+    //Animations
     func clear(){
         columnsNodes.removeAll(keepCapacity: false)
         blocksLayer.removeAllChildren()
     }
-    
     func animateClearingScene(completion: ()->()){
         columnsNodes.removeAll(keepCapacity: false)
         blocksLayer.removeAllChildren()
         
         runAction(SKAction.waitForDuration(0.2), completion: completion)
     }
-    
-
-    
     func animateSummaryResults(results: Array<Int>, columns: Array<Column>, completion: ()->()){
         for (columnId, column) in enumerate(columns){
             for (blockId,block) in enumerate(column.blocks){
@@ -196,7 +214,6 @@ class GameScene: SKScene {
         
         runAction(SKAction.waitForDuration(1), completion: completion)
     }
-    
     func animateRemovingBlocksSprites(blocksToRemove: Array<Block>, fallenBlocks: Array<Array<Block>>, completion: ()->()){
         var acctions = Array<SKAction>()
         
@@ -244,7 +261,6 @@ class GameScene: SKScene {
         }
         runAction(SKAction.waitForDuration(0.25), completion: completion)
     }
-    
     func animateAddingSpritesForColumn(column: Column, completion: ()->()){
         
         var newColumnNode = SKNode()
@@ -279,7 +295,6 @@ class GameScene: SKScene {
         
         runAction(SKAction.waitForDuration(0.3), completion: completion)
     }
-    
     func moveCurrentColumns(){
         var k = 0
         for columnNode in columnsNodes{
@@ -302,7 +317,6 @@ class GameScene: SKScene {
             tmp.runAction(SKAction.sequence([SKAction.waitForDuration(1), SKAction.removeFromParent()]))
         }
     }
-    
     func animateAddingNextColumnPreview(column: Column){
         nextColumnPreviewNode.removeAllChildren()
         for (blockId, block) in enumerate(column.blocks) {
@@ -320,7 +334,6 @@ class GameScene: SKScene {
             sprite.runAction(fadeIn)
         }
     }
-    
     func animateSwipingColumn(column: Int, newColumn: Column, direction: UISwipeGestureRecognizerDirection){
         let oldPosition = columnsNodes[column].position
         let newColumnNode = SKNode()
@@ -352,15 +365,11 @@ class GameScene: SKScene {
         columnsNodes[column] = newColumnNode
         blocksLayer.addChild(newColumnNode)
     }
+    //Animations
+
     
-    func pointForColumn(column: Int, row: Int) -> CGPoint {
-        return CGPoint(
-            x: CGFloat(column) * BlockWidth + BlockWidth / 2,
-            y: CGFloat(row) * BlockHeight + BlockHeight / 2)
-    }
-    
-    func playSound(sound:String) {
-        runAction(SKAction.playSoundFileNamed(sound, waitForCompletion: false))
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder) is not used in this app")
     }
 }
 
