@@ -70,6 +70,7 @@ class Game {
     
     func swipeColumn(columnId: Int) -> Column?{
         if columnId < columnArray.count{
+            score -= columnArray[columnId].currentHeight * (PointsPerBlock / 2)
             let newColumn = Column(height: columnArray[columnId].currentHeight)
             columnArray[columnId] = newColumn
             

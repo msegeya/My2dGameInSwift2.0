@@ -13,7 +13,10 @@ let BlockHeight: CGFloat = 33.0
 
 let TickLengthLevelOne = NSTimeInterval(2600)
 
+let fallSound = SKAction.playSoundFileNamed("Fall.wav", waitForCompletion: false)
+
 class GameScene: SKScene {
+    let mainContainer = SKSpriteNode()
     let gameLayer = SKNode()
     let blocksLayer = SKNode()
     let bottomNumbersLayer = SKNode()
@@ -28,7 +31,6 @@ class GameScene: SKScene {
     
     var columnsNodes = Array<SKNode>()
     var sound: Switch = .On
-    var music: Switch = .Off
     
     var pauseGame: (() -> ())?
     var resumeGame: (() -> ())?
@@ -46,7 +48,6 @@ class GameScene: SKScene {
         super.init(size: size)
         
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        
         
         let background = SKSpriteNode(imageNamed: "Background")
         background.size = self.frame.size
@@ -119,13 +120,14 @@ class GameScene: SKScene {
             y: self.size.height * 0.35)
         
         gameLayer.addChild(HUDLayer)
+        
+        mainContainer = SKSpriteNode(color: UIColor.blackColor(), size: self.frame.size)
+        addChild(mainContainer)
+        mainContainer.hidden = true
 
         popUp = SKPopUpNode(backgroundColor: UIColor.whiteColor(), backgroundSize: CGSize(width: 150, height: 100))
         addChild(popUp)
-        
-        if music == .On{
-            runAction(SKAction.repeatActionForever(SKAction.playSoundFileNamed("BackgroundSound.mp3", waitForCompletion: true)))
-        }
+        popUp.runAction(SKAction.scaleTo(0.0, duration: 0.1))
     }
     override func didMoveToView(view: SKView){
         //setup
@@ -179,11 +181,6 @@ class GameScene: SKScene {
             x: CGFloat(column) * BlockWidth + BlockWidth / 2,
             y: CGFloat(row) * BlockHeight + BlockHeight / 2)
     }
-    func playSound(soundToPlay: String) {
-        if sound == .On{
-            runAction(SKAction.playSoundFileNamed(soundToPlay, waitForCompletion: false))
-        }
-    }
     //Other
     
     
@@ -197,6 +194,37 @@ class GameScene: SKScene {
         blocksLayer.removeAllChildren()
         
         runAction(SKAction.waitForDuration(0.2), completion: completion)
+    }
+    func showPopUpAnimation(){
+        popUp.hidden = false
+        mainContainer.hidden = false
+        mainContainer.alpha = 0
+        popUp.alpha = 0
+        
+        let action = SKAction.fadeAlphaTo(0.3, duration: 0.1)
+        
+        let action2 = SKAction.scaleTo(1.2, duration: 0.2)
+        action2.timingMode = .EaseIn
+        let action3 = SKAction.scaleTo(1.0, duration: 0.15)
+        action3.timingMode = .EaseOut
+        
+        let action4 = SKAction.fadeInWithDuration(0.1)
+        
+        mainContainer.runAction(SKAction.group([action]))
+        popUp.runAction(SKAction.group([action4, SKAction.sequence([action2, action3])]))
+    }
+    func hidePopUpAnimation(completion: ()->()){
+        let action = SKAction.fadeAlphaTo(0.0, duration: 0.1)
+        
+        let action2 = SKAction.scaleTo(0.0, duration: 0.1)
+        
+        popUp.runAction(SKAction.group([action, action2]))
+        mainContainer.runAction(SKAction.group([action]), completion:{
+            self.popUp.hidden = true
+            self.mainContainer.hidden = true
+        })
+        
+        runAction(SKAction.waitForDuration(0.3), completion: completion)
     }
     func animateSummaryResults(results: Array<Int>, columns: Array<Column>, completion: ()->()){
         for (columnId, column) in enumerate(columns){
@@ -253,7 +281,9 @@ class GameScene: SKScene {
                 
                 acctions.append(SKAction.waitForDuration(NSTimeInterval(blockId) * 0.05))
                 acctions.append(move)
-                acctions.append(SKAction.playSoundFileNamed("Fall.wav", waitForCompletion: false))
+                if sound == .On{
+                    acctions.append(fallSound)
+                }
                 
                 let sequence = SKAction.sequence(acctions)
                 block.sprite?.runAction(sequence)

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F927A2EE1AAD3FC700AB6F0F /* BackgroundSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F927A2ED1AAD3FC700AB6F0F /* BackgroundSound.mp3 */; };
 		F9336BE91AAA52CA00B0D204 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9336BE81AAA52CA00B0D204 /* AppDelegate.swift */; };
 		F9336BED1AAA52CA00B0D204 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9336BEC1AAA52CA00B0D204 /* GameScene.swift */; };
 		F9336BEF1AAA52CA00B0D204 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9336BEE1AAA52CA00B0D204 /* GameViewController.swift */; };
@@ -36,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F927A2ED1AAD3FC700AB6F0F /* BackgroundSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = BackgroundSound.mp3; sourceTree = "<group>"; };
 		F9336BE31AAA52CA00B0D204 /* My2dGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = My2dGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9336BE71AAA52CA00B0D204 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F9336BE81AAA52CA00B0D204 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 		F9F65E491AAA8DBB009E4421 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				F927A2ED1AAD3FC700AB6F0F /* BackgroundSound.mp3 */,
 				F9F65E4A1AAA8DDC009E4421 /* Fall.wav */,
 			);
 			name = Sounds;
@@ -223,6 +226,7 @@
 				TargetAttributes = {
 					F9336BE21AAA52CA00B0D204 = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = NU74U25Q22;
 					};
 					F9336BFB1AAA52CA00B0D204 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -258,6 +262,7 @@
 				F9F65E4B1AAA8DDC009E4421 /* Fall.wav in Resources */,
 				F9336BF41AAA52CA00B0D204 /* Images.xcassets in Resources */,
 				F9336C141AAA568400B0D204 /* Sprites.atlas in Resources */,
+				F927A2EE1AAD3FC700AB6F0F /* BackgroundSound.mp3 in Resources */,
 				F9336BF21AAA52CA00B0D204 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

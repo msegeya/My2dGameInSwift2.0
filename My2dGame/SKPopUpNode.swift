@@ -75,14 +75,6 @@ class SKPopUpNode: SKSpriteNode {
         self.hidden = true
     }
     
-    func show(){
-        self.hidden = false
-    }
-    
-    func hide(){
-        self.hidden = true
-    }
-    
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         super.touchesBegan(touches, withEvent: event)
         

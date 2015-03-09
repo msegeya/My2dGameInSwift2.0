@@ -8,13 +8,17 @@
 
 import UIKit
 import SpriteKit
+import AVFoundation
 
 class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
-    
+
     var scene: GameScene!
     var game: Game!
     
-    var timePassed: Double? = 0.0
+    var timePassed = 0.0
+    var isGamePaused: Bool = false
+    
+    var backgroundMusicPlayer: AVAudioPlayer = AVAudioPlayer()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +41,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
         scene.resumeGame = gameDidResume
         scene.popUp.delegate = self
         
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: Selector("handleTap:"))
         skView.addGestureRecognizer(tapGesture)
         
@@ -48,32 +53,46 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
         swipeGestureDown.direction = .Down
         skView.addGestureRecognizer(swipeGestureDown)
         
+        
+        //Audio
+        var backgroundMusic = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("BackgroundSound", ofType: "mp3")!)
+
+        var error:NSError?
+        backgroundMusicPlayer = AVAudioPlayer(contentsOfURL: backgroundMusic, error: &error)
+        backgroundMusicPlayer.numberOfLoops = 100
+        backgroundMusicPlayer.prepareToPlay()
+        backgroundMusicPlayer.play()
+        //Audio
+        
+        
         skView.presentScene(scene)
     }
 
     
     //PopUpDelegates
     func gameDidPause(){
-        scene.popUp.show()
+        isGamePaused = true
+        scene.showPopUpAnimation()
         
         timePassed = scene.lastTick!.timeIntervalSinceNow
         scene.stopTicking()
     }
     func gameDidResume(){
-        let newLastTickValue = NSDate().dateByAddingTimeInterval(NSTimeInterval(timePassed!))
-        scene.lastTick = newLastTickValue
-        timePassed = nil
-        
-        scene.popUp.hide()
+        scene.hidePopUpAnimation(){
+            let newLastTickValue = NSDate().dateByAddingTimeInterval(NSTimeInterval(self.timePassed))
+            self.scene.lastTick = newLastTickValue
+            self.isGamePaused = false
+        }
     }
     func gameDidExit(){
+        println("wyjscie do sceny menu")
         //Finish game and back to the Menu Scene
     }
     func musicDidSwitch(){
-        if scene.music == .On{
-            scene.music = .Off
+        if backgroundMusicPlayer.playing{
+            backgroundMusicPlayer.stop()
         }else{
-            scene.music = .On
+            backgroundMusicPlayer.play()
         }
     }
     func soundDidSwitch(){
@@ -117,8 +136,6 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
             scene.tickLengthMillis -= 50
         }
         
-        //scene.playSound("levelUp.wav")
-        
         let results = game.sumUpPointsInColumns()
         scene.animateSummaryResults(results, columns: game.columnArray){
             game.beginGame()
@@ -126,13 +143,11 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
     }
     
     func didTick(){
-        //view.userInteractionEnabled = false
         scene.blocksLayer.userInteractionEnabled = false
         
         if let newColumn = game.newColumn(){
             scene.wavesLeftLabelNode.text = String(format: "%ld", game.wavesLeft)
             scene.animateAddingSpritesForColumn(newColumn){
-                //self.view.userInteractionEnabled = true
                 self.scene.blocksLayer.userInteractionEnabled = true
                 self.scene.animateAddingNextColumnPreview(self.game.nextColumn!)
             }
@@ -143,7 +158,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
     
     //Gestures handling
     @IBAction func handleColumnSwipe(sender: UISwipeGestureRecognizer) {
-        if timePassed != nil{
+        if isGamePaused{
             return
         }
         
@@ -157,14 +172,14 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
         if success {
             if let newColumn = game.swipeColumn(column){
                 scene.animateSwipingColumn(column, newColumn: newColumn, direction: sender.direction)
+                scene.scoreLabelNode.text = "\(game.score)"
             }
         }
     }
     @IBAction func handleTap(sender: UITapGestureRecognizer) {
-        if timePassed != nil{
+        if isGamePaused{
             return
         }
-        
         var currentPoint = sender.locationInView(self.view)
         
         currentPoint.x -= 36
