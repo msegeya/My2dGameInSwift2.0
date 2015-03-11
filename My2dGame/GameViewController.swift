@@ -10,6 +10,10 @@ import UIKit
 import SpriteKit
 import AVFoundation
 
+enum Switch {
+    case On, Off
+}
+
 class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
 
     var scene: GameScene!
@@ -19,6 +23,26 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
     var isGamePaused: Bool = false
     
     var backgroundMusicPlayer: AVAudioPlayer = AVAudioPlayer()
+    
+    var sounds: Switch = .On{
+        didSet{
+            if sounds == .On{
+                scene.sound = .On
+            }else{
+                scene.sound = .Off
+            }
+        }
+    }
+    
+    var music: Switch = .On{
+        didSet{
+            if music == .On{
+                backgroundMusicPlayer.play()
+            }else{
+                backgroundMusicPlayer.stop()
+            }
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +52,8 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
         skView.showsFPS = true
         skView.showsNodeCount = true
         //skView.ignoresSiblingOrder = true
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "pauseGameSceneNotificationReceived:", name:"pauseGameScene", object: nil)
         
         scene = GameScene(size: skView.bounds.size)
         scene.scaleMode = .AspectFill
@@ -64,10 +90,16 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
         backgroundMusicPlayer.play()
         //Audio
         
-        
         skView.presentScene(scene)
     }
 
+    func pauseGameSceneNotificationReceived(notification: NSNotification){
+        if isGamePaused{
+            return
+        }
+
+        gameDidPause()
+    }
     
     //PopUpDelegates
     func gameDidPause(){
@@ -89,17 +121,17 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
         //Finish game and back to the Menu Scene
     }
     func musicDidSwitch(){
-        if backgroundMusicPlayer.playing{
-            backgroundMusicPlayer.stop()
+        if music == .On{
+            music = .Off
         }else{
-            backgroundMusicPlayer.play()
+            music = .On
         }
     }
     func soundDidSwitch(){
-        if  scene.sound == .On{
-            scene.sound = .Off
+        if sounds == .On{
+            sounds = .Off
         }else{
-            scene.sound = .On
+            sounds = .On
         }
     }
     //PopUpDelagates
@@ -152,6 +184,10 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
                 self.scene.animateAddingNextColumnPreview(self.game.nextColumn!)
             }
         }
+        if game.wavesLeft == 0{
+            println("czas na doczyszczenie planszy")
+            //komunikat o ostatniej fali i odliczanie stałego odcinka czasu dla każdego lvlu na dokonczenie
+        }
     }
     //GameDelegates
     
@@ -189,10 +225,10 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
         }else{
             currentPoint.y = -(currentPoint.y-269)
         }
-        
+        println(currentPoint)
         let (success, column, row) = convertPoint(currentPoint)
         if success {
-            
+            println("sukces \(column), \(row)")
             view.userInteractionEnabled = false
             
             let removedBlocks = game.removeBlocks(column, row: row)

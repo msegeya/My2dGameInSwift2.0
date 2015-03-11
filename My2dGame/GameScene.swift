@@ -39,10 +39,6 @@ class GameScene: SKScene {
     var lastTick: NSDate?
     var tick: (() -> ())?
     
-    enum Switch {
-        case On, Off
-    }
-    
     //Init
     override init(size: CGSize) {
         super.init(size: size)
@@ -124,10 +120,10 @@ class GameScene: SKScene {
         addChild(mainContainer)
         mainContainer.hidden = true
 
-        popUp = SKPopUpNode(backgroundColor: UIColor.lightGrayColor(), backgroundSize: CGSize(width: 250, height: 150))
+        popUp = SKPopUpNode(backgroundColor: UIColor.lightGrayColor(), backgroundSize: CGSize(width: 250, height: 170))
         popUp.zPosition = 100
         addChild(popUp)
-        popUp.runAction(SKAction.scaleTo(0.0, duration: 0.1))
+        popUp.runAction(SKAction.scaleTo(0.0, duration: 0.01))
     }
     override func didMoveToView(view: SKView){
         //setup
@@ -379,7 +375,7 @@ class GameScene: SKScene {
         
         newColumnNode.position.y += moveDistance
         
-        let move = SKAction.moveByX(0, y: -moveDistance, duration: 0.4)
+        let move = SKAction.moveByX(0, y: -moveDistance, duration: 0.15)
         move.timingMode = .EaseOut
         let remove = SKAction.removeFromParent()
         

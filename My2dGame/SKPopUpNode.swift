@@ -15,10 +15,54 @@ protocol PopUpDelegate {
     func soundDidSwitch()
 }
 
+class SKSwitchLabelButton: SKLabelNode {
+    var initialText: String = ""
+    var state: Bool = false{
+        didSet{
+            if state == true{
+                self.text = initialText + " On"
+                self.fontColor = UIColor.greenColor()
+            }else{
+                self.text = initialText + " Off"
+                self.fontColor = UIColor.redColor()
+            }
+        }
+    }
+    
+    override init() {
+        super.init()
+    }
+    
+    override init(fontNamed fontName: String!) {
+        super.init(fontNamed: fontName)
+    }
+    
+    init(fontNamed fontName: String!, text: String!, state: Bool){
+        super.init(fontNamed: fontName)
+        self.initialText = text
+        self.state = state
+        
+        if state == true{
+            self.text = initialText + " On"
+            self.fontColor = UIColor.greenColor()
+        }else{
+            self.text = initialText + " Off"
+            self.fontColor = UIColor.redColor()
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 class SKPopUpNode: SKSpriteNode {
     
     var popUpBackground: SKSpriteNode = SKSpriteNode()
     var delegate: PopUpDelegate?
+    
+    var switchMusicButtonLabel = SKSwitchLabelButton()
+    var switchSoundButtonLabel = SKSwitchLabelButton()
     
     override init(texture: SKTexture!, color: UIColor!, size: CGSize) {
         super.init(texture: texture, color: color, size: size)
@@ -49,28 +93,36 @@ class SKPopUpNode: SKSpriteNode {
         self.size = popUpBackground.size
         popUpBackground.name = "backgroundNode"
         self.userInteractionEnabled = true
+
+        
+        let backButtonLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
+        backButtonLabel.text = "Exit"
+        backButtonLabel.fontColor = UIColor.darkGrayColor()
+        backButtonLabel.fontSize = 24
+        backButtonLabel.position.y += 50
+        backButtonLabel.name = "backButton"
+        self.addChild(backButtonLabel)
+        
+        switchMusicButtonLabel = SKSwitchLabelButton(fontNamed: "Gill Sans Bold", text: "Music", state: true)
+        switchMusicButtonLabel.fontSize = 24
+        switchMusicButtonLabel.position.y += 10
+        switchMusicButtonLabel.name = "switchMusicButton"
+        self.addChild(switchMusicButtonLabel)
+        
+        
+        switchSoundButtonLabel = SKSwitchLabelButton(fontNamed: "Gill Sans Bold", text: "Sounds", state: true)
+        switchSoundButtonLabel.fontSize = 24
+        switchSoundButtonLabel.position.y -= 30
+        switchSoundButtonLabel.name = "switchSoundButton"
+        self.addChild(switchSoundButtonLabel)
+        
         
         let resumeLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
         resumeLabel.text = "Tap to resume"
         resumeLabel.fontColor = UIColor.darkGrayColor()
-        resumeLabel.fontSize = 18
-        resumeLabel.position.y -= 40
+        resumeLabel.fontSize = 24
+        resumeLabel.position.y -= 70
         self.addChild(resumeLabel)
-        
-        var button = SKSpriteNode(imageNamed: "backButton")
-        button.position.x -= 35
-        button.name = "backButton"
-        self.addChild(button)
-        
-        button = SKSpriteNode(imageNamed: "musicButton")
-        button.position.x = 0
-        button.name = "musicButton"
-        self.addChild(button)
-        
-        button = SKSpriteNode(imageNamed: "soundButton")
-        button.position.x += 35
-        button.name = "soundButton"
-        self.addChild(button)
         
         self.hidden = true
     }
@@ -92,10 +144,12 @@ class SKPopUpNode: SKSpriteNode {
             case "backButton":
                 delegate?.gameDidExit()
                 break
-            case "musicButton":
+            case "switchMusicButton":
+                switchMusicButtonLabel.state = !switchMusicButtonLabel.state
                 delegate?.musicDidSwitch()
                 break
-            case "soundButton":
+            case "switchSoundButton":
+                switchSoundButtonLabel.state = !switchSoundButtonLabel.state
                 delegate?.soundDidSwitch()
                 break
             case "":
