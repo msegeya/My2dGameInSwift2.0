@@ -15,7 +15,7 @@ protocol PopUpDelegate {
     func soundDidSwitch()
 }
 
-class SKSwitchLabelButton: SKLabelNode {
+class SwitchLabelButton: SKLabelNode {
     var initialText: String = ""
     var state: Bool = false{
         didSet{
@@ -56,13 +56,13 @@ class SKSwitchLabelButton: SKLabelNode {
     }
 }
 
-class SKPopUpNode: SKSpriteNode {
+class PopUpNode: SKSpriteNode {
     
     var popUpBackground: SKSpriteNode = SKSpriteNode()
     var delegate: PopUpDelegate?
     
-    var switchMusicButtonLabel = SKSwitchLabelButton()
-    var switchSoundButtonLabel = SKSwitchLabelButton()
+    var switchMusicButtonLabel = SwitchLabelButton()
+    var switchSoundButtonLabel = SwitchLabelButton()
     
     override init(texture: SKTexture!, color: UIColor!, size: CGSize) {
         super.init(texture: texture, color: color, size: size)
@@ -103,14 +103,14 @@ class SKPopUpNode: SKSpriteNode {
         backButtonLabel.name = "backButton"
         self.addChild(backButtonLabel)
         
-        switchMusicButtonLabel = SKSwitchLabelButton(fontNamed: "Gill Sans Bold", text: "Music", state: true)
+        switchMusicButtonLabel = SwitchLabelButton(fontNamed: "Gill Sans Bold", text: "Music", state: true)
         switchMusicButtonLabel.fontSize = 24
         switchMusicButtonLabel.position.y += 10
         switchMusicButtonLabel.name = "switchMusicButton"
         self.addChild(switchMusicButtonLabel)
         
         
-        switchSoundButtonLabel = SKSwitchLabelButton(fontNamed: "Gill Sans Bold", text: "Sounds", state: true)
+        switchSoundButtonLabel = SwitchLabelButton(fontNamed: "Gill Sans Bold", text: "Sounds", state: true)
         switchSoundButtonLabel.fontSize = 24
         switchSoundButtonLabel.position.y -= 30
         switchSoundButtonLabel.name = "switchSoundButton"

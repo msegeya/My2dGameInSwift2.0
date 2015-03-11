@@ -7,7 +7,7 @@
 //
 import SpriteKit
 
-class SKHUDLabelNode: SKLabelNode {
+class HUDLabelNode: SKLabelNode {
     override init() {
         super.init()
         

@@ -19,11 +19,14 @@
 		F9336C101AAA55DB00B0D204 /* Column.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9336C0F1AAA55DB00B0D204 /* Column.swift */; };
 		F9336C121AAA55F400B0D204 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9336C111AAA55F400B0D204 /* Block.swift */; };
 		F9F65E4B1AAA8DDC009E4421 /* Fall.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9F65E4A1AAA8DDC009E4421 /* Fall.wav */; };
-		F9F65E4D1AAA98FC009E4421 /* SKHUDLabelNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E4C1AAA98FC009E4421 /* SKHUDLabelNode.swift */; };
-		F9F65E4F1AAAAE84009E4421 /* SKPopUpNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E4E1AAAAE84009E4421 /* SKPopUpNode.swift */; };
+		F9F65E4D1AAA98FC009E4421 /* HUDLabelNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E4C1AAA98FC009E4421 /* HUDLabelNode.swift */; };
+		F9F65E4F1AAAAE84009E4421 /* PopUpNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E4E1AAAAE84009E4421 /* PopUpNode.swift */; };
 		F9F65E511AAAB3E9009E4421 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E501AAAB3E9009E4421 /* MenuScene.swift */; };
-		F9F65E571AAC04E9009E4421 /* SKProgressBarNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E561AAC04E9009E4421 /* SKProgressBarNode.swift */; };
+		F9F65E571AAC04E9009E4421 /* ProgressBarNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E561AAC04E9009E4421 /* ProgressBarNode.swift */; };
 		F9FC8F991AAFA8D900B3E896 /* Sprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = F9FC8F981AAFA8D900B3E896 /* Sprites.atlas */; };
+		F9FC8FCD1AB0D09F00B3E896 /* HUDNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FC8FCC1AB0D09F00B3E896 /* HUDNode.swift */; };
+		F9FC8FCF1AB0D24300B3E896 /* MainNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FC8FCE1AB0D24300B3E896 /* MainNode.swift */; };
+		F9FC8FD11AB0ECA100B3E896 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9FC8FD01AB0ECA100B3E896 /* GameKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,11 +56,15 @@
 		F9336C0F1AAA55DB00B0D204 /* Column.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Column.swift; sourceTree = "<group>"; };
 		F9336C111AAA55F400B0D204 /* Block.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
 		F9F65E4A1AAA8DDC009E4421 /* Fall.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Fall.wav; sourceTree = "<group>"; };
-		F9F65E4C1AAA98FC009E4421 /* SKHUDLabelNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKHUDLabelNode.swift; sourceTree = "<group>"; };
-		F9F65E4E1AAAAE84009E4421 /* SKPopUpNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKPopUpNode.swift; sourceTree = "<group>"; };
+		F9F65E4C1AAA98FC009E4421 /* HUDLabelNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUDLabelNode.swift; sourceTree = "<group>"; };
+		F9F65E4E1AAAAE84009E4421 /* PopUpNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopUpNode.swift; sourceTree = "<group>"; };
 		F9F65E501AAAB3E9009E4421 /* MenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
-		F9F65E561AAC04E9009E4421 /* SKProgressBarNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKProgressBarNode.swift; sourceTree = "<group>"; };
+		F9F65E561AAC04E9009E4421 /* ProgressBarNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressBarNode.swift; sourceTree = "<group>"; };
 		F9FC8F981AAFA8D900B3E896 /* Sprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Sprites.atlas; sourceTree = "<group>"; };
+		F9FC8FCC1AB0D09F00B3E896 /* HUDNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUDNode.swift; sourceTree = "<group>"; };
+		F9FC8FCE1AB0D24300B3E896 /* MainNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNode.swift; sourceTree = "<group>"; };
+		F9FC8FD01AB0ECA100B3E896 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		F9FC8FD21AB0ED1600B3E896 /* My2dGame.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = My2dGame.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9FC8FD11AB0ECA100B3E896 /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +89,7 @@
 		F9336BDA1AAA52CA00B0D204 = {
 			isa = PBXGroup;
 			children = (
+				F9FC8FD01AB0ECA100B3E896 /* GameKit.framework */,
 				F9336BE51AAA52CA00B0D204 /* My2dGame */,
 				F9336BFF1AAA52CA00B0D204 /* My2dGameTests */,
 				F9336BE41AAA52CA00B0D204 /* Products */,
@@ -100,6 +109,7 @@
 		F9336BE51AAA52CA00B0D204 /* My2dGame */ = {
 			isa = PBXGroup;
 			children = (
+				F9FC8FD21AB0ED1600B3E896 /* My2dGame.entitlements */,
 				F9F65E491AAA8DBB009E4421 /* Sounds */,
 				F9336C161AAA580E00B0D204 /* Model */,
 				F9336C151AAA57CB00B0D204 /* Scenes */,
@@ -161,9 +171,11 @@
 		F9B0DC191AAD307400589C22 /* SpriteKit Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				F9F65E4C1AAA98FC009E4421 /* SKHUDLabelNode.swift */,
-				F9F65E4E1AAAAE84009E4421 /* SKPopUpNode.swift */,
-				F9F65E561AAC04E9009E4421 /* SKProgressBarNode.swift */,
+				F9F65E4C1AAA98FC009E4421 /* HUDLabelNode.swift */,
+				F9F65E4E1AAAAE84009E4421 /* PopUpNode.swift */,
+				F9F65E561AAC04E9009E4421 /* ProgressBarNode.swift */,
+				F9FC8FCC1AB0D09F00B3E896 /* HUDNode.swift */,
+				F9FC8FCE1AB0D24300B3E896 /* MainNode.swift */,
 			);
 			name = "SpriteKit Extensions";
 			sourceTree = "<group>";
@@ -227,6 +239,14 @@
 					F9336BE21AAA52CA00B0D204 = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = NU74U25Q22;
+						SystemCapabilities = {
+							com.apple.GameCenter = {
+								enabled = 1;
+							};
+							com.apple.iCloud = {
+								enabled = 0;
+							};
+						};
 					};
 					F9336BFB1AAA52CA00B0D204 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -281,15 +301,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9F65E4D1AAA98FC009E4421 /* SKHUDLabelNode.swift in Sources */,
+				F9F65E4D1AAA98FC009E4421 /* HUDLabelNode.swift in Sources */,
 				F9336BED1AAA52CA00B0D204 /* GameScene.swift in Sources */,
-				F9F65E4F1AAAAE84009E4421 /* SKPopUpNode.swift in Sources */,
+				F9FC8FCD1AB0D09F00B3E896 /* HUDNode.swift in Sources */,
+				F9F65E4F1AAAAE84009E4421 /* PopUpNode.swift in Sources */,
+				F9FC8FCF1AB0D24300B3E896 /* MainNode.swift in Sources */,
 				F9F65E511AAAB3E9009E4421 /* MenuScene.swift in Sources */,
 				F9336C101AAA55DB00B0D204 /* Column.swift in Sources */,
 				F9336BEF1AAA52CA00B0D204 /* GameViewController.swift in Sources */,
 				F9336C121AAA55F400B0D204 /* Block.swift in Sources */,
 				F9336BE91AAA52CA00B0D204 /* AppDelegate.swift in Sources */,
-				F9F65E571AAC04E9009E4421 /* SKProgressBarNode.swift in Sources */,
+				F9F65E571AAC04E9009E4421 /* ProgressBarNode.swift in Sources */,
 				F9336C0D1AAA559500B0D204 /* Game.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

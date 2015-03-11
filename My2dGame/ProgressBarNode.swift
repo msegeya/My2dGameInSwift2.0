@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-class SKProgressBarNode: SKSpriteNode {
+class ProgressBarNode: SKSpriteNode {
 
     let backgroundImage = SKSpriteNode()
     let shapeToMask = SKSpriteNode()

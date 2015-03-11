@@ -11,23 +11,18 @@ import SpriteKit
 let BlockWidth: CGFloat = 42.5
 let BlockHeight: CGFloat = 42.5
 
+let BlockWidthOffset: CGFloat = 1.5
+let BlockHeightOffset: CGFloat = -3.5
+
 let TickLengthLevelOne = NSTimeInterval(2600)
 
 let fallSound = SKAction.playSoundFileNamed("Fall.wav", waitForCompletion: false)
 
 class GameScene: SKScene {
-    let mainContainer = SKSpriteNode()
-    let gameLayer = SKNode()
-    let blocksLayer = SKNode()
-    let bottomNumbersLayer = SKNode()
-    let nextColumnPreviewNode = SKNode()
-    let HUDLayer = SKNode()
-    
-    var levelLabelNode = SKLabelNode()
-    var scoreLabelNode = SKLabelNode()
-    var wavesLeftLabelNode = SKLabelNode()
-    var wavesLeftNode: SKProgressBarNode = SKProgressBarNode()
-    var popUp = SKPopUpNode()
+    let darkeningLayer = SKSpriteNode()
+    let gameLayer = MainNode()
+    let HUDLayer = HUDNode()
+    let popUp = PopUpNode()
     
     var columnsNodes = Array<SKNode>()
     var sound: Switch = .On
@@ -45,82 +40,32 @@ class GameScene: SKScene {
         
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
+        //background
         let background = SKSpriteNode(imageNamed: "Background")
         background.size = self.frame.size
         addChild(background)
         
-        for i in 0..<NumColumns{
-            let Label = SKLabelNode(fontNamed: "GillSans-Bold")
-            Label.fontSize = 10
-            Label.fontColor = UIColor(red: 0.20, green: 0.20, blue: 0.20, alpha: 0.90)
-            Label.text = NSString(format: "%ld", i+1)
-            Label.position = CGPoint(x: CGFloat(i) * (BlockWidth+1.4), y: 0.0)
-            bottomNumbersLayer.addChild(Label)
-        }
+        
+        //HUD
+        HUDLayer.anchorPoint = CGPoint(x: 0, y: 0.5)
+        HUDLayer.position.x += gameLayer.size.width / 2
+        HUDLayer.position.y += (gameLayer.size.height / 2) - 65
+        gameLayer.addChild(HUDLayer)
 
-        blocksLayer.position = CGPoint(
-            x: -BlockWidth * CGFloat(NumColumns) / 2,
-            y: -BlockHeight * CGFloat(NumRows) / 2)
-
-        let nextColumnNodePosition = CGPoint(
-            x: blocksLayer.position.x - (1.2 * BlockWidth),
-            y: blocksLayer.position.y)
         
-        nextColumnPreviewNode.position = nextColumnNodePosition
-        
-        bottomNumbersLayer.position = CGPoint(x: blocksLayer.position.x - 3, y: blocksLayer.position.y - 36.5)
-        
-        gameLayer.addChild(blocksLayer)
-        gameLayer.addChild(bottomNumbersLayer)
-        gameLayer.addChild(nextColumnPreviewNode)
-        
+        //Main game layer
         gameLayer.position = CGPoint(x: -8, y: 27)
         addChild(gameLayer)
         
-        let levelNode = SKSpriteNode(imageNamed: "Level")
-        levelNode.size = CGSize(width: 50, height: 50)
         
-        levelLabelNode = SKHUDLabelNode()
-        levelNode.addChild(levelLabelNode)
-        
-        
-        let scoreNode = SKSpriteNode(imageNamed: "Score")
-        scoreNode.position.y -= 50
-        scoreNode.size = CGSize(width: 50, height: 50)
-        
-        scoreLabelNode = SKHUDLabelNode()
-        scoreNode.addChild(scoreLabelNode)
+        //Darkening efect when popUp shows
+        darkeningLayer = SKSpriteNode(color: UIColor.blackColor(), size: self.frame.size)
+        darkeningLayer.hidden = true
+        addChild(darkeningLayer)
         
         
-        wavesLeftNode = SKProgressBarNode(imageNamed: "WavesLeft100px")
-        wavesLeftNode.position.y -= 100
-
-        wavesLeftLabelNode = SKHUDLabelNode()
-        wavesLeftNode.addChild(wavesLeftLabelNode)
-        
-        
-        let menuButtonNode = SKSpriteNode(imageNamed: "Menu")
-        menuButtonNode.position.y -= 200
-        menuButtonNode.size = CGSize(width: 50, height: 50)
-        menuButtonNode.name = "menuButton"
-        
-        
-        HUDLayer.addChild(levelNode)
-        HUDLayer.addChild(scoreNode)
-        HUDLayer.addChild(wavesLeftNode)
-        HUDLayer.addChild(menuButtonNode)
-        
-        HUDLayer.position = CGPoint(
-            x: self.size.width * 0.46,
-            y: self.size.height * 0.27)
-        
-        gameLayer.addChild(HUDLayer)
-        
-        mainContainer = SKSpriteNode(color: UIColor.blackColor(), size: self.frame.size)
-        addChild(mainContainer)
-        mainContainer.hidden = true
-
-        popUp = SKPopUpNode(backgroundColor: UIColor.lightGrayColor(), backgroundSize: CGSize(width: 250, height: 170))
+        //Popup
+        popUp = PopUpNode(backgroundColor: UIColor.lightGrayColor(), backgroundSize: CGSize(width: 250, height: 170))
         popUp.zPosition = 100
         addChild(popUp)
         popUp.runAction(SKAction.scaleTo(0.0, duration: 0.01))
@@ -139,7 +84,7 @@ class GameScene: SKScene {
         var timePassed = lastTick!.timeIntervalSinceNow * -1000.0
         
         //progressBar update
-        wavesLeftNode.setProgress(CGFloat(timePassed) / CGFloat(TickLengthLevelOne))
+        HUDLayer.wavesLeftNode.setProgress(CGFloat(timePassed) / CGFloat(TickLengthLevelOne))
         
         if timePassed > tickLengthMillis {
             lastTick = NSDate()
@@ -177,10 +122,10 @@ class GameScene: SKScene {
         var y: CGFloat = 0.0
         
         if column != 0{
-            x = CGFloat(column) * (BlockWidth+1)
+            x = CGFloat(column) * (BlockWidth+BlockWidthOffset)
         }
         if row != 0{
-            y = CGFloat(row) * (BlockHeight-3.5)
+            y = CGFloat(row) * (BlockHeight+BlockHeightOffset)
         }
         
         return CGPoint(x: x, y: y)
@@ -191,18 +136,18 @@ class GameScene: SKScene {
     //Animations
     func clear(){
         columnsNodes.removeAll(keepCapacity: false)
-        blocksLayer.removeAllChildren()
+        gameLayer.columnsLayer.removeAllChildren()
     }
     func animateClearingScene(completion: ()->()){
         columnsNodes.removeAll(keepCapacity: false)
-        blocksLayer.removeAllChildren()
+        gameLayer.columnsLayer.removeAllChildren()
         
         runAction(SKAction.waitForDuration(0.2), completion: completion)
     }
     func showPopUpAnimation(){
         popUp.hidden = false
-        mainContainer.hidden = false
-        mainContainer.alpha = 0
+        darkeningLayer.hidden = false
+        darkeningLayer.alpha = 0
         popUp.alpha = 0
         
         let action = SKAction.fadeAlphaTo(0.3, duration: 0.1)
@@ -214,7 +159,7 @@ class GameScene: SKScene {
         
         let action4 = SKAction.fadeInWithDuration(0.1)
         
-        mainContainer.runAction(SKAction.group([action]))
+        darkeningLayer.runAction(SKAction.group([action]))
         popUp.runAction(SKAction.group([action4, SKAction.sequence([action2, action3])]))
     }
     func hidePopUpAnimation(completion: ()->()){
@@ -223,9 +168,9 @@ class GameScene: SKScene {
         let action2 = SKAction.scaleTo(0.0, duration: 0.1)
         
         popUp.runAction(SKAction.group([action, action2]))
-        mainContainer.runAction(SKAction.group([action]), completion:{
+        darkeningLayer.runAction(SKAction.group([action]), completion:{
             self.popUp.hidden = true
-            self.mainContainer.hidden = true
+            self.darkeningLayer.hidden = true
         })
         
         runAction(SKAction.waitForDuration(0.3), completion: completion)
@@ -310,7 +255,7 @@ class GameScene: SKScene {
         for col in tmpColumnArray{
             columnsNodes.append(col)
         }
-        blocksLayer.addChild(columnsNodes[0])
+        gameLayer.columnsLayer.addChild(columnsNodes[0])
         
         runAction(SKAction.waitForDuration(0.3), completion: completion)
     }
@@ -318,7 +263,7 @@ class GameScene: SKScene {
         var k = 0
         for columnNode in columnsNodes{
             if(columnNode.children.count > 0){
-                let move = SKAction.moveByX(BlockWidth+1, y: 0, duration: 0.1)
+                let move = SKAction.moveByX(BlockWidth+BlockWidthOffset, y: 0, duration: 0.1)
                 move.timingMode = SKActionTimingMode.EaseOut
                 columnNode.runAction(move)
             }else{
@@ -337,13 +282,13 @@ class GameScene: SKScene {
         }
     }
     func animateAddingNextColumnPreview(column: Column){
-        nextColumnPreviewNode.removeAllChildren()
+        gameLayer.nextColumnPreviewNode.removeAllChildren()
         for (blockId, block) in enumerate(column.blocks) {
             let sprite = SKSpriteNode(imageNamed: block!.blockColor.spriteName)
             sprite.position = pointForColumn(0, row: block!.row)
             sprite.size = CGSize(width: CGFloat(BlockWidth), height: CGFloat(BlockHeight))
             
-            nextColumnPreviewNode.addChild(sprite)
+            gameLayer.nextColumnPreviewNode.addChild(sprite)
             block!.sprite = sprite
             
             //animation
@@ -382,7 +327,7 @@ class GameScene: SKScene {
         columnsNodes[column].runAction(SKAction.sequence([move, remove]))
         newColumnNode.runAction(move)
         columnsNodes[column] = newColumnNode
-        blocksLayer.addChild(newColumnNode)
+        gameLayer.columnsLayer.addChild(newColumnNode)
     }
     //Animations
 
