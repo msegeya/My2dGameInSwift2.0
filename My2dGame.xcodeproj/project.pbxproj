@@ -18,12 +18,12 @@
 		F9336C0D1AAA559500B0D204 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9336C0C1AAA559500B0D204 /* Game.swift */; };
 		F9336C101AAA55DB00B0D204 /* Column.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9336C0F1AAA55DB00B0D204 /* Column.swift */; };
 		F9336C121AAA55F400B0D204 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9336C111AAA55F400B0D204 /* Block.swift */; };
-		F9336C141AAA568400B0D204 /* Sprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = F9336C131AAA568400B0D204 /* Sprites.atlas */; };
 		F9F65E4B1AAA8DDC009E4421 /* Fall.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9F65E4A1AAA8DDC009E4421 /* Fall.wav */; };
 		F9F65E4D1AAA98FC009E4421 /* SKHUDLabelNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E4C1AAA98FC009E4421 /* SKHUDLabelNode.swift */; };
 		F9F65E4F1AAAAE84009E4421 /* SKPopUpNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E4E1AAAAE84009E4421 /* SKPopUpNode.swift */; };
 		F9F65E511AAAB3E9009E4421 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E501AAAB3E9009E4421 /* MenuScene.swift */; };
 		F9F65E571AAC04E9009E4421 /* SKProgressBarNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E561AAC04E9009E4421 /* SKProgressBarNode.swift */; };
+		F9FC8F991AAFA8D900B3E896 /* Sprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = F9FC8F981AAFA8D900B3E896 /* Sprites.atlas */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,12 +52,12 @@
 		F9336C0C1AAA559500B0D204 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		F9336C0F1AAA55DB00B0D204 /* Column.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Column.swift; sourceTree = "<group>"; };
 		F9336C111AAA55F400B0D204 /* Block.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
-		F9336C131AAA568400B0D204 /* Sprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Sprites.atlas; sourceTree = "<group>"; };
 		F9F65E4A1AAA8DDC009E4421 /* Fall.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Fall.wav; sourceTree = "<group>"; };
 		F9F65E4C1AAA98FC009E4421 /* SKHUDLabelNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKHUDLabelNode.swift; sourceTree = "<group>"; };
 		F9F65E4E1AAAAE84009E4421 /* SKPopUpNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKPopUpNode.swift; sourceTree = "<group>"; };
 		F9F65E501AAAB3E9009E4421 /* MenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		F9F65E561AAC04E9009E4421 /* SKProgressBarNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKProgressBarNode.swift; sourceTree = "<group>"; };
+		F9FC8F981AAFA8D900B3E896 /* Sprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Sprites.atlas; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,7 +84,7 @@
 				F9336BE51AAA52CA00B0D204 /* My2dGame */,
 				F9336BFF1AAA52CA00B0D204 /* My2dGameTests */,
 				F9336BE41AAA52CA00B0D204 /* Products */,
-				F9336C131AAA568400B0D204 /* Sprites.atlas */,
+				F9FC8F981AAFA8D900B3E896 /* Sprites.atlas */,
 			);
 			sourceTree = "<group>";
 		};
@@ -258,10 +258,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9FC8F991AAFA8D900B3E896 /* Sprites.atlas in Resources */,
 				F9336BF71AAA52CA00B0D204 /* LaunchScreen.xib in Resources */,
 				F9F65E4B1AAA8DDC009E4421 /* Fall.wav in Resources */,
 				F9336BF41AAA52CA00B0D204 /* Images.xcassets in Resources */,
-				F9336C141AAA568400B0D204 /* Sprites.atlas in Resources */,
 				F927A2EE1AAD3FC700AB6F0F /* BackgroundSound.mp3 in Resources */,
 				F9336BF21AAA52CA00B0D204 /* Main.storyboard in Resources */,
 			);
@@ -413,9 +413,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = My2dGame/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -423,9 +427,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = My2dGame/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

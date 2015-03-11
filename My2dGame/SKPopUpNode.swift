@@ -53,7 +53,7 @@ class SKPopUpNode: SKSpriteNode {
         let resumeLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
         resumeLabel.text = "Tap to resume"
         resumeLabel.fontColor = UIColor.darkGrayColor()
-        resumeLabel.fontSize = 16
+        resumeLabel.fontSize = 18
         resumeLabel.position.y -= 40
         self.addChild(resumeLabel)
         

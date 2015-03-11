@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 Karol Kedziora. All rights reserved.
 //
 
-let NumColumns = 12
-let NumRows = 8
+let NumColumns = 11
+let NumRows = 7
 
-let StartingNumWaves = 13
+let StartingNumWaves = 12
 
 let PointsPerBlock = 10
 

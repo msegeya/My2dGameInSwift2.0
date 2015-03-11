@@ -9,14 +9,14 @@
 import SpriteKit
 
 enum BlockColor: Int {
-    case Unknown = 0, Red, Blue, Green, Yellow
+    case Unknown = 0, Red, Blue, Green, Orange
     
     var spriteName: String {
         let spriteNames = [
             "Red",
             "Blue",
             "Green",
-            "Yellow"]
+            "Orange"]
         
         return spriteNames[rawValue]
     }
