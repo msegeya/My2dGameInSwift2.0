@@ -71,7 +71,7 @@ class GameScene: SKScene {
         popUp.runAction(SKAction.scaleTo(0.0, duration: 0.01))
     }
     override func didMoveToView(view: SKView){
-        //setup
+        clear()
     }
     //Init
     

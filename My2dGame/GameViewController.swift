@@ -14,23 +14,37 @@ enum Switch {
     case On, Off
 }
 
-class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
+protocol MenuDelegate {
+    func startGame()
+    func showHighscore()
+}
 
-    var scene: GameScene!
+func delay(delay:Double, closure:()->()) {
+    dispatch_after(
+        dispatch_time(
+            DISPATCH_TIME_NOW,
+            Int64(delay * Double(NSEC_PER_SEC))
+        ),
+        dispatch_get_main_queue(), closure)
+}
+
+class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDelegate {
+
+    var gameScene: GameScene!
     var menuScene: MenuScene!
-    var game: Game!
+    var gameLogic: Game!
     
     var timePassed = 0.0
-    var isGamePaused: Bool = false
+    var isGamePaused: Bool = true
     
     var backgroundMusicPlayer: AVAudioPlayer = AVAudioPlayer()
     
     var sounds: Switch = .On{
         didSet{
             if sounds == .On{
-                scene.sound = .On
+                gameScene.sound = .On
             }else{
-                scene.sound = .Off
+                gameScene.sound = .Off
             }
         }
     }
@@ -44,13 +58,15 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
             }
         }
     }
+    
+    var skView: SKView = SKView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "pauseGameSceneNotificationReceived:", name:"pauseGameScene", object: nil)
         
-        let skView = view as SKView
+        skView = view as SKView
         skView.multipleTouchEnabled = false
         skView.showsFPS = true
         skView.showsNodeCount = true
@@ -58,19 +74,10 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
         
         menuScene = MenuScene(size: skView.bounds.size)
         menuScene.scaleMode = .AspectFill
+        menuScene.thisDelegate = self
         
-        scene = GameScene(size: skView.bounds.size)
-        scene.scaleMode = .AspectFill
-        scene.tick = didTick
-        
-        game = Game()
-        game.delegate = self
-        game.beginGame()
-        
-        scene.pauseGame = gameDidPause
-        scene.resumeGame = gameDidResume
-        scene.popUp.delegate = self
-        
+        gameLogic = Game()
+        gameLogic.delegate = self
         
         let tapGesture = UITapGestureRecognizer(target: self, action: Selector("handleTap:"))
         skView.addGestureRecognizer(tapGesture)
@@ -89,11 +96,11 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
 
         var error:NSError?
         backgroundMusicPlayer = AVAudioPlayer(contentsOfURL: backgroundMusic, error: &error)
-        backgroundMusicPlayer.numberOfLoops = 100
+        backgroundMusicPlayer.numberOfLoops = -1 //infinite loop
         backgroundMusicPlayer.prepareToPlay()
         backgroundMusicPlayer.play()
         //Audio
-        
+
         skView.presentScene(menuScene)
     }
 
@@ -105,24 +112,49 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
         gameDidPause()
     }
     
+    //MenuDelegates
+    func startGame() {
+        let transition = SKTransition.pushWithDirection(SKTransitionDirection.Left, duration: 0.5)
+
+        gameScene = GameScene(size: skView.bounds.size)
+        gameScene.scaleMode = .AspectFill
+        gameScene.tick = didTick
+        
+        gameScene.pauseGame = gameDidPause
+        gameScene.resumeGame = gameDidResume
+        gameScene.popUp.delegate = self
+        
+        skView.presentScene(gameScene, transition: transition)
+        backgroundMusicPlayer.volume = 1.0
+        delay(0.7){
+            self.gameLogic.beginGame()
+        }
+    }
+    func showHighscore() {
+        //show highscore scene
+    }
+    //MenuDelegates
+    
+    
     //PopUpDelegates
     func gameDidPause(){
         isGamePaused = true
-        scene.showPopUpAnimation()
+        gameScene.showPopUpAnimation()
         
-        timePassed = scene.lastTick!.timeIntervalSinceNow
-        scene.stopTicking()
+        timePassed = gameScene.lastTick!.timeIntervalSinceNow
+        gameScene.stopTicking()
     }
     func gameDidResume(){
-        scene.hidePopUpAnimation(){
+        gameScene.hidePopUpAnimation(){
             let newLastTickValue = NSDate().dateByAddingTimeInterval(NSTimeInterval(self.timePassed))
-            self.scene.lastTick = newLastTickValue
+            self.gameScene.lastTick = newLastTickValue
             self.isGamePaused = false
         }
     }
-    func gameDidExit(){
-        println("wyjscie do sceny menu")
-        //Finish game and back to the Menu Scene
+    func gameDidExitToMenu(){
+        backgroundMusicPlayer.volume = 0.0
+        let transition = SKTransition.pushWithDirection(SKTransitionDirection.Left, duration: 0.5)
+        skView.presentScene(menuScene, transition: transition)
     }
     func musicDidSwitch(){
         if music == .On{
@@ -143,20 +175,21 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
     
     //GameDelegates
     func gameDidBegin(game: Game) {
+        isGamePaused = false
         view.userInteractionEnabled = true
-        scene.tickLengthMillis = TickLengthLevelOne
-        scene.startTicking()
+        gameScene.tickLengthMillis = TickLengthLevelOne
+        gameScene.startTicking()
         
-        scene.HUDLayer.levelLabelNode.text = String("\(game.level)")
-        scene.HUDLayer.scoreLabelNode.text = String("\(game.score)")
-        scene.HUDLayer.wavesLeftLabelNode.text = String("\(game.wavesLeft)")
+        gameScene.HUDLayer.levelLabelNode.text = String("\(game.level)")
+        gameScene.HUDLayer.scoreLabelNode.text = String("\(game.score)")
+        gameScene.HUDLayer.wavesLeftLabelNode.text = String("\(game.wavesLeft)")
     }
     
     func gameDidEnd(game: Game) {
         view.userInteractionEnabled = false
 
-        scene.stopTicking()
-        scene.animateClearingScene(){
+        gameScene.stopTicking()
+        gameScene.animateClearingScene(){
             game.beginGame()
         }
     }
@@ -164,31 +197,31 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
     func gameDidLevelUp(game: Game) {
         
         view.userInteractionEnabled = false
-        scene.stopTicking()
+        gameScene.stopTicking()
         
-        if(scene.tickLengthMillis >= 1800){
-            scene.tickLengthMillis -= 100
-        }else if scene.tickLengthMillis > 600{
-            scene.tickLengthMillis -= 50
+        if(gameScene.tickLengthMillis >= 1800){
+            gameScene.tickLengthMillis -= 100
+        }else if gameScene.tickLengthMillis > 600{
+            gameScene.tickLengthMillis -= 50
         }
         
         let results = game.sumUpPointsInColumns()
-        scene.animateSummaryResults(results, columns: game.columnArray){
+        gameScene.animateSummaryResults(results, columns: game.columnArray){
             game.beginGame()
         }
     }
     
     func didTick(){
-        scene.gameLayer.columnsLayer.userInteractionEnabled = false
+        gameScene.gameLayer.columnsLayer.userInteractionEnabled = false
         
-        if let newColumn = game.newColumn(){
-            scene.HUDLayer.wavesLeftLabelNode.text = String(format: "%ld", game.wavesLeft)
-            scene.animateAddingSpritesForColumn(newColumn){
-                self.scene.gameLayer.columnsLayer.userInteractionEnabled = true
-                self.scene.animateAddingNextColumnPreview(self.game.nextColumn!)
+        if let newColumn = gameLogic.newColumn(){
+            gameScene.HUDLayer.wavesLeftLabelNode.text = String(format: "%ld", gameLogic.wavesLeft)
+            gameScene.animateAddingSpritesForColumn(newColumn){
+                self.gameScene.gameLayer.columnsLayer.userInteractionEnabled = true
+                self.gameScene.animateAddingNextColumnPreview(self.gameLogic.nextColumn!)
             }
         }
-        if game.wavesLeft == 0{
+        if gameLogic.wavesLeft == 0{
             println("czas na doczyszczenie planszy")
             //komunikat o ostatniej fali i odliczanie stałego odcinka czasu dla każdego lvlu na dokonczenie
         }
@@ -210,9 +243,9 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
         
         let (success, column, row) = convertPoint(tmpPoint)
         if success {
-            if let newColumn = game.swipeColumn(column){
-                scene.animateSwipingColumn(column, newColumn: newColumn, direction: sender.direction)
-                scene.HUDLayer.scoreLabelNode.text = "\(game.score)"
+            if let newColumn = gameLogic.swipeColumn(column){
+                gameScene.animateSwipingColumn(column, newColumn: newColumn, direction: sender.direction)
+                gameScene.HUDLayer.scoreLabelNode.text = "\(gameLogic.score)"
             }
         }
     }
@@ -235,11 +268,11 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate {
             println("sukces \(column), \(row)")
             view.userInteractionEnabled = false
             
-            let removedBlocks = game.removeBlocks(column, row: row)
+            let removedBlocks = gameLogic.removeBlocks(column, row: row)
             
             if(removedBlocks.blocksRemoved.count > 0){
-                scene.HUDLayer.scoreLabelNode.text = String(game.score)
-                scene.animateRemovingBlocksSprites(removedBlocks.blocksRemoved, fallenBlocks: removedBlocks.fallenBlocks){
+                gameScene.HUDLayer.scoreLabelNode.text = String(gameLogic.score)
+                gameScene.animateRemovingBlocksSprites(removedBlocks.blocksRemoved, fallenBlocks: removedBlocks.fallenBlocks){
                     self.view.userInteractionEnabled = true
                 }
             }else{

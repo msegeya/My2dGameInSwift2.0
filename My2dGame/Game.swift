@@ -47,6 +47,10 @@ class Game {
         if(nextColumn == nil){
             nextColumn = Column(height: NumRows)
         }
+        level = 1
+        score = 0
+        wavesLeft = StartingNumWaves
+        
         currentNumberOfColumns = 0
         columnArray.removeAll(keepCapacity: false)
         
@@ -54,9 +58,6 @@ class Game {
     }
     
     func endGame(){
-        level = 1
-        score = 0
-        wavesLeft = StartingNumWaves
         
         delegate?.gameDidEnd(self)
     }

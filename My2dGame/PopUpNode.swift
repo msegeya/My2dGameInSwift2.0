@@ -10,7 +10,7 @@ import SpriteKit
 
 protocol PopUpDelegate {
     func gameDidResume()
-    func gameDidExit()
+    func gameDidExitToMenu()
     func musicDidSwitch()
     func soundDidSwitch()
 }
@@ -142,7 +142,7 @@ class PopUpNode: SKSpriteNode {
         
         switch nodeName{
             case "backButton":
-                delegate?.gameDidExit()
+                delegate?.gameDidExitToMenu()
                 break
             case "switchMusicButton":
                 switchMusicButtonLabel.state = !switchMusicButtonLabel.state
