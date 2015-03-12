@@ -181,7 +181,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     }
     
     func didTick(){
-        println(gameScene.tickLengthMillis)
+        println("*************** \(gameScene.tickLengthMillis)")
         gameScene.gameLayer.columnsLayer.userInteractionEnabled = false
         
         if let newColumn = gameLogic.newColumn(){
