@@ -28,6 +28,8 @@ let audio = Audio()
 
 class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDelegate {
     
+    var gameCenter: GameCenter!
+    
     var gameScene: GameScene!
     var menuScene: MenuScene!
     var gameLogic: Game!
@@ -70,6 +72,18 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         skView.addGestureRecognizer(swipeGestureDown)
         
         skView.presentScene(menuScene)
+        
+        //self.gameCenter = GameCenter(rootViewController: self)
+        
+//        /* Open Windows Game Center if player not login in Game Center */
+//        self.gameCenter.loginToGameCenter() {
+//            (result: Bool) in
+//            if result {
+//                /* Player is login in Game Center OR Open Windows for login in Game Center */
+//            } else {
+//                /* Player is not login in Game Center */
+//            }
+//        }
     }
     
     func pauseGameSceneNotificationReceived(notification: NSNotification){

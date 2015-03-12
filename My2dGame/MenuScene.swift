@@ -28,8 +28,6 @@ class MenuScene: SKScene{
         highscoreLabel.position.y -= 20
         highscoreLabel.name = "highscores"
         self.addChild(highscoreLabel)
-        
-        
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
