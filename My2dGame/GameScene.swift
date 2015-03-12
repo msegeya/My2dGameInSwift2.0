@@ -18,7 +18,7 @@ let TickLengthLevelOne = NSTimeInterval(3000)
 
 let sounds: [String: SKAction] = [
 "Fall": SKAction.playSoundFileNamed("Fall.wav", waitForCompletion: false),
-"HurryUp": SKAction.playSoundFileNamed("HurryUp.wav", waitForCompletion: false),
+"HurryUp": SKAction.playSoundFileNamed("hurryUp.wav", waitForCompletion: false),
 ]
 
 class GameScene: SKScene {
