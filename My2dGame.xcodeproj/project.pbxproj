@@ -27,6 +27,8 @@
 		F9FC8FCD1AB0D09F00B3E896 /* HUDNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FC8FCC1AB0D09F00B3E896 /* HUDNode.swift */; };
 		F9FC8FCF1AB0D24300B3E896 /* MainNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FC8FCE1AB0D24300B3E896 /* MainNode.swift */; };
 		F9FC8FD11AB0ECA100B3E896 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9FC8FD01AB0ECA100B3E896 /* GameKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		F9FC8FD61AB11EBF00B3E896 /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FC8FD51AB11EBF00B3E896 /* Audio.swift */; };
+		F9FC8FD81AB13C0500B3E896 /* hurryUp.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9FC8FD71AB13C0500B3E896 /* hurryUp.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +67,8 @@
 		F9FC8FCE1AB0D24300B3E896 /* MainNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNode.swift; sourceTree = "<group>"; };
 		F9FC8FD01AB0ECA100B3E896 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		F9FC8FD21AB0ED1600B3E896 /* My2dGame.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = My2dGame.entitlements; sourceTree = "<group>"; };
+		F9FC8FD51AB11EBF00B3E896 /* Audio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
+		F9FC8FD71AB13C0500B3E896 /* hurryUp.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hurryUp.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +164,7 @@
 		F9336C161AAA580E00B0D204 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				F9FC8FD51AB11EBF00B3E896 /* Audio.swift */,
 				F9336C111AAA55F400B0D204 /* Block.swift */,
 				F9336C0F1AAA55DB00B0D204 /* Column.swift */,
 				F9336C0C1AAA559500B0D204 /* Game.swift */,
@@ -183,6 +188,7 @@
 		F9F65E491AAA8DBB009E4421 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				F9FC8FD71AB13C0500B3E896 /* hurryUp.wav */,
 				F927A2ED1AAD3FC700AB6F0F /* BackgroundSound.mp3 */,
 				F9F65E4A1AAA8DDC009E4421 /* Fall.wav */,
 			);
@@ -280,6 +286,7 @@
 			files = (
 				F9FC8F991AAFA8D900B3E896 /* Sprites.atlas in Resources */,
 				F9336BF71AAA52CA00B0D204 /* LaunchScreen.xib in Resources */,
+				F9FC8FD81AB13C0500B3E896 /* hurryUp.wav in Resources */,
 				F9F65E4B1AAA8DDC009E4421 /* Fall.wav in Resources */,
 				F9336BF41AAA52CA00B0D204 /* Images.xcassets in Resources */,
 				F927A2EE1AAD3FC700AB6F0F /* BackgroundSound.mp3 in Resources */,
@@ -308,6 +315,7 @@
 				F9FC8FCF1AB0D24300B3E896 /* MainNode.swift in Sources */,
 				F9F65E511AAAB3E9009E4421 /* MenuScene.swift in Sources */,
 				F9336C101AAA55DB00B0D204 /* Column.swift in Sources */,
+				F9FC8FD61AB11EBF00B3E896 /* Audio.swift in Sources */,
 				F9336BEF1AAA52CA00B0D204 /* GameViewController.swift in Sources */,
 				F9336C121AAA55F400B0D204 /* Block.swift in Sources */,
 				F9336BE91AAA52CA00B0D204 /* AppDelegate.swift in Sources */,

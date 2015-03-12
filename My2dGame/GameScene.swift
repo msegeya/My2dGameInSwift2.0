@@ -14,7 +14,7 @@ let BlockHeight: CGFloat = 42.5
 let BlockWidthOffset: CGFloat = 1.5
 let BlockHeightOffset: CGFloat = -3.5
 
-let TickLengthLevelOne = NSTimeInterval(2600)
+let TickLengthLevelOne = NSTimeInterval(3000)
 
 let sounds: [String: SKAction] = [
 "Fall": SKAction.playSoundFileNamed("Fall.wav", waitForCompletion: false),
@@ -32,12 +32,8 @@ class GameScene: SKScene {
     var pauseGame: (() -> ())?
     var resumeGame: (() -> ())?
     
-    var tickLengthMillisTmp: Double = 0.0
-    var tickLengthMillis: Double = TickLengthLevelOne{
-        didSet{
-            tickLengthMillisTmp = oldValue
-        }
-    }
+    var tickLengthMillisTmp: Double? = nil
+    var tickLengthMillis = TickLengthLevelOne
     var lastTick: NSDate?
     var tick: (() -> ())?
     
@@ -155,7 +151,7 @@ class GameScene: SKScene {
         columnsNodes.removeAll(keepCapacity: false)
         gameLayer.columnsLayer.removeAllChildren()
         
-        runAction(SKAction.waitForDuration(0.2), completion: completion)
+        runAction(SKAction.waitForDuration(0.5), completion: completion)
     }
     func showShortMessage(message: String, delay: NSTimeInterval = 1, completion: ()->()){
         let messageLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
@@ -219,9 +215,9 @@ class GameScene: SKScene {
         for (columnId, column) in enumerate(columns){
             for (blockId,block) in enumerate(column.blocks){
                 if(block != nil){
-                    let move = SKAction.moveByX(3, y: 4, duration: 0.2)
+                    let move = SKAction.moveByX(3, y: 4, duration: 0.15)
                     move.timingMode = .EaseOut
-                    let fadeOut = SKAction.fadeAlphaTo(0, duration: 0.2)
+                    let fadeOut = SKAction.fadeAlphaTo(0, duration: 0.15)
                     fadeOut.timingMode = .EaseOut
                     let delay = SKAction.waitForDuration(NSTimeInterval(CGFloat(blockId + columnId) * 0.1))
                     block!.sprite!.runAction(SKAction.sequence([delay, SKAction.group([move, fadeOut]), SKAction.removeFromParent()]))
@@ -229,7 +225,7 @@ class GameScene: SKScene {
             }
         }
         
-        runAction(SKAction.waitForDuration(1), completion: completion)
+        runAction(SKAction.waitForDuration(2), completion: completion)
     }
     func animateRemovingBlocksSprites(blocksToRemove: Array<Block>, fallenBlocks: Array<Array<Block>>, completion: ()->()){
         var acctions = Array<SKAction>()

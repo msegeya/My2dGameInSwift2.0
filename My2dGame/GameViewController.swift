@@ -148,8 +148,8 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     
     func gameDidEnd(game: Game) {
         view.userInteractionEnabled = false
+        self.gameScene.stopTicking()
         gameScene.showShortMessage("Game Over Sucker!", delay: 2.0){
-            self.gameScene.stopTicking()
             self.gameScene.animateClearingScene(){
                 game.beginGame()
             }
@@ -161,7 +161,10 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         view.userInteractionEnabled = false
         gameScene.stopTicking()
         
-        
+        if gameScene.tickLengthMillisTmp != nil{
+            gameScene.tickLengthMillis = gameScene.tickLengthMillisTmp!
+            gameScene.tickLengthMillisTmp = nil
+        }
         
         if(gameScene.tickLengthMillis >= 1800){
             gameScene.tickLengthMillis -= 100
@@ -178,6 +181,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     }
     
     func didTick(){
+        println(gameScene.tickLengthMillis)
         gameScene.gameLayer.columnsLayer.userInteractionEnabled = false
         
         if let newColumn = gameLogic.newColumn(){
@@ -188,6 +192,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
             }
         }
         if gameLogic.wavesLeft == 0{
+            gameScene.tickLengthMillisTmp = gameScene.tickLengthMillis
             gameScene.tickLengthMillis = 4200
             gameScene.playSound("HurryUp")
             gameScene.showShortMessage("Hurry up!", delay: 1, completion: {})
@@ -239,12 +244,12 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
             
             if removedBlocks.blocksRemoved.count > 0{
                 
-                if removedBlocks.blocksRemoved.count > 4{
-                    gameScene.showShortMessage("GOOD GOD!", delay: 0.5, completion: {})
+                if removedBlocks.blocksRemoved.count > 5{
+                    gameScene.showShortMessage("GOOD GOD!", delay: 0.4, completion: {})
+                }else if removedBlocks.blocksRemoved.count == 5{
+                    gameScene.showShortMessage("Vvveerryy Gooodd!", delay: 0.3, completion: {})
                 }else if removedBlocks.blocksRemoved.count == 4{
-                    gameScene.showShortMessage("Vvveerryy Gooodd!", delay: 0.5, completion: {})
-                }else if removedBlocks.blocksRemoved.count == 3{
-                    gameScene.showShortMessage("Nice!", delay: 0.5, completion: {})
+                    gameScene.showShortMessage("Nice!", delay: 0.2, completion: {})
                 }
                 
                 gameScene.HUDLayer.scoreLabelNode.text = String(gameLogic.score)
