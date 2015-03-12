@@ -29,6 +29,7 @@
 		F9FC8FD11AB0ECA100B3E896 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9FC8FD01AB0ECA100B3E896 /* GameKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		F9FC8FD61AB11EBF00B3E896 /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FC8FD51AB11EBF00B3E896 /* Audio.swift */; };
 		F9FC8FD81AB13C0500B3E896 /* hurryUp.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9FC8FD71AB13C0500B3E896 /* hurryUp.wav */; };
+		F9FC8FDB1AB1E02C00B3E896 /* GameCenterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FC8FDA1AB1E02C00B3E896 /* GameCenterHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		F9FC8FD21AB0ED1600B3E896 /* My2dGame.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = My2dGame.entitlements; sourceTree = "<group>"; };
 		F9FC8FD51AB11EBF00B3E896 /* Audio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
 		F9FC8FD71AB13C0500B3E896 /* hurryUp.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hurryUp.wav; sourceTree = "<group>"; };
+		F9FC8FDA1AB1E02C00B3E896 /* GameCenterHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCenterHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				F9FC8FD21AB0ED1600B3E896 /* My2dGame.entitlements */,
+				F9FC8FD91AB1DFFE00B3E896 /* GameKit */,
 				F9F65E491AAA8DBB009E4421 /* Sounds */,
 				F9336C161AAA580E00B0D204 /* Model */,
 				F9336C151AAA57CB00B0D204 /* Scenes */,
@@ -193,6 +196,14 @@
 				F9F65E4A1AAA8DDC009E4421 /* Fall.wav */,
 			);
 			name = Sounds;
+			sourceTree = "<group>";
+		};
+		F9FC8FD91AB1DFFE00B3E896 /* GameKit */ = {
+			isa = PBXGroup;
+			children = (
+				F9FC8FDA1AB1E02C00B3E896 /* GameCenterHelper.swift */,
+			);
+			name = GameKit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -310,6 +321,7 @@
 			files = (
 				F9F65E4D1AAA98FC009E4421 /* HUDLabelNode.swift in Sources */,
 				F9336BED1AAA52CA00B0D204 /* GameScene.swift in Sources */,
+				F9FC8FDB1AB1E02C00B3E896 /* GameCenterHelper.swift in Sources */,
 				F9FC8FCD1AB0D09F00B3E896 /* HUDNode.swift in Sources */,
 				F9F65E4F1AAAAE84009E4421 /* PopUpNode.swift in Sources */,
 				F9FC8FCF1AB0D24300B3E896 /* MainNode.swift in Sources */,
