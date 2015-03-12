@@ -16,7 +16,10 @@ let BlockHeightOffset: CGFloat = -3.5
 
 let TickLengthLevelOne = NSTimeInterval(2600)
 
-let fallSound = SKAction.playSoundFileNamed("Fall.wav", waitForCompletion: false)
+let sounds: [String: SKAction] = [
+"Fall": SKAction.playSoundFileNamed("Fall.wav", waitForCompletion: false),
+"HurryUp": SKAction.playSoundFileNamed("HurryUp.wav", waitForCompletion: false),
+]
 
 class GameScene: SKScene {
     let darkeningLayer = SKSpriteNode()
@@ -25,12 +28,16 @@ class GameScene: SKScene {
     let popUp = PopUpNode()
     
     var columnsNodes = Array<SKNode>()
-    var sound: Switch = .On
     
     var pauseGame: (() -> ())?
     var resumeGame: (() -> ())?
     
-    var tickLengthMillis = TickLengthLevelOne
+    var tickLengthMillisTmp: Double = 0.0
+    var tickLengthMillis: Double = TickLengthLevelOne{
+        didSet{
+            tickLengthMillisTmp = oldValue
+        }
+    }
     var lastTick: NSDate?
     var tick: (() -> ())?
     
@@ -84,7 +91,7 @@ class GameScene: SKScene {
         var timePassed = lastTick!.timeIntervalSinceNow * -1000.0
         
         //progressBar update
-        HUDLayer.wavesLeftNode.setProgress(CGFloat(timePassed) / CGFloat(TickLengthLevelOne))
+        HUDLayer.wavesLeftNode.setProgress(CGFloat(timePassed) / CGFloat(tickLengthMillis))
         
         if timePassed > tickLengthMillis {
             lastTick = NSDate()
@@ -130,6 +137,12 @@ class GameScene: SKScene {
         
         return CGPoint(x: x, y: y)
     }
+    func playSound(name: String){
+        if audio.sounds{
+            runAction(sounds[name])
+        }
+        
+    }
     //Other
     
     
@@ -143,6 +156,33 @@ class GameScene: SKScene {
         gameLayer.columnsLayer.removeAllChildren()
         
         runAction(SKAction.waitForDuration(0.2), completion: completion)
+    }
+    func showShortMessage(message: String, delay: NSTimeInterval = 1, completion: ()->()){
+        let messageLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
+        messageLabel.text = message
+        messageLabel.fontSize = 34
+        messageLabel.fontColor = UIColor.grayColor()
+        messageLabel.zPosition = 99
+        self.addChild(messageLabel)
+        messageLabel.runAction(SKAction.scaleTo(0.0, duration: 0.01))
+        messageLabel.alpha = 0
+        
+        let action = SKAction.scaleTo(1.5, duration: 0.1)
+        action.timingMode = .EaseIn
+        let action2 = SKAction.scaleTo(1.0, duration: 0.1)
+        action2.timingMode = .EaseOut
+        
+        let action3 = SKAction.fadeInWithDuration(0.15)
+        
+        let delay = SKAction.waitForDuration(delay)
+        
+        let action4 = SKAction.scaleTo(0.0, duration: 0.1)
+        
+        let action5 = SKAction.fadeAlphaTo(0.0, duration: 0.1)
+        
+        let action6 = SKAction.removeFromParent()
+        
+        messageLabel.runAction(SKAction.sequence([SKAction.group([SKAction.sequence([action, action2]),action3]), delay, SKAction.group([action4, action5]), action6]), completion: completion)
     }
     func showPopUpAnimation(){
         popUp.hidden = false
@@ -214,8 +254,8 @@ class GameScene: SKScene {
                 
                 acctions.append(SKAction.waitForDuration(NSTimeInterval(blockId) * 0.03))
                 acctions.append(move)
-                if sound == .On{
-                    acctions.append(fallSound)
+                if audio.sounds{
+                    acctions.append(sounds["Fall"]!)
                 }
                 
                 let sequence = SKAction.sequence(acctions)

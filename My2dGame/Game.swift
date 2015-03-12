@@ -42,14 +42,21 @@ class Game {
         columnArray = Array<Column>()
         blocksToRemove = Array<Block>()
     }
+    func reset(){
+        level = 1
+        score = 0
+        wavesLeft = StartingNumWaves
+        
+        nextColumn = nil
+        currentNumberOfColumns = 0
+        columnArray = Array<Column>()
+        blocksToRemove = Array<Block>()
+    }
     
     func beginGame(){
         if(nextColumn == nil){
             nextColumn = Column(height: NumRows)
         }
-        level = 1
-        score = 0
-        wavesLeft = StartingNumWaves
         
         currentNumberOfColumns = 0
         columnArray.removeAll(keepCapacity: false)
@@ -58,7 +65,9 @@ class Game {
     }
     
     func endGame(){
-        
+        level = 1
+        score = 0
+        wavesLeft = StartingNumWaves
         delegate?.gameDidEnd(self)
     }
     

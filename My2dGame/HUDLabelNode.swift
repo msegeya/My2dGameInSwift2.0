@@ -12,7 +12,6 @@ class HUDLabelNode: SKLabelNode {
         super.init()
         
         self.fontName = "Gill Sans Bold"
-        self.text = "0"
         self.fontColor = UIColor.whiteColor()
         self.fontSize = 22
         self.position.x -= 1.5
@@ -21,7 +20,6 @@ class HUDLabelNode: SKLabelNode {
     override init(fontNamed fontName: String!) {
         super.init(fontNamed: fontName)
         
-        self.text = "0"
         self.fontColor = UIColor.whiteColor()
         self.fontSize = 22
         self.position.x -= 1.5

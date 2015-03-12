@@ -8,11 +8,6 @@
 
 import UIKit
 import SpriteKit
-import AVFoundation
-
-enum Switch {
-    case On, Off
-}
 
 protocol MenuDelegate {
     func startGame()
@@ -28,8 +23,11 @@ func delay(delay:Double, closure:()->()) {
         dispatch_get_main_queue(), closure)
 }
 
-class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDelegate {
+let audio = Audio()
 
+
+class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDelegate {
+    
     var gameScene: GameScene!
     var menuScene: MenuScene!
     var gameLogic: Game!
@@ -37,30 +35,8 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     var timePassed = 0.0
     var isGamePaused: Bool = true
     
-    var backgroundMusicPlayer: AVAudioPlayer = AVAudioPlayer()
-    
-    var sounds: Switch = .On{
-        didSet{
-            if sounds == .On{
-                gameScene.sound = .On
-            }else{
-                gameScene.sound = .Off
-            }
-        }
-    }
-    
-    var music: Switch = .On{
-        didSet{
-            if music == .On{
-                backgroundMusicPlayer.play()
-            }else{
-                backgroundMusicPlayer.stop()
-            }
-        }
-    }
-    
     var skView: SKView = SKView()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -76,6 +52,9 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         menuScene.scaleMode = .AspectFill
         menuScene.thisDelegate = self
         
+        gameScene = GameScene(size: skView.bounds.size)
+        gameScene.scaleMode = .AspectFill
+        
         gameLogic = Game()
         gameLogic.delegate = self
         
@@ -90,32 +69,23 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         swipeGestureDown.direction = .Down
         skView.addGestureRecognizer(swipeGestureDown)
         
-        
-        //Audio
-        var backgroundMusic = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("BackgroundSound", ofType: "mp3")!)
-
-        var error:NSError?
-        backgroundMusicPlayer = AVAudioPlayer(contentsOfURL: backgroundMusic, error: &error)
-        backgroundMusicPlayer.numberOfLoops = -1 //infinite loop
-        backgroundMusicPlayer.prepareToPlay()
-        backgroundMusicPlayer.play()
-        //Audio
-
         skView.presentScene(menuScene)
     }
-
+    
     func pauseGameSceneNotificationReceived(notification: NSNotification){
         if isGamePaused{
             return
         }
-
+        
         gameDidPause()
     }
     
     //MenuDelegates
     func startGame() {
         let transition = SKTransition.pushWithDirection(SKTransitionDirection.Left, duration: 0.5)
-
+        
+        self.gameScene.tickLengthMillis = TickLengthLevelOne
+        
         gameScene = GameScene(size: skView.bounds.size)
         gameScene.scaleMode = .AspectFill
         gameScene.tick = didTick
@@ -125,8 +95,10 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         gameScene.popUp.delegate = self
         
         skView.presentScene(gameScene, transition: transition)
-        backgroundMusicPlayer.volume = 1.0
-        delay(0.7){
+        
+        delay(0.6){
+            audio.reset()
+            self.gameLogic.reset()
             self.gameLogic.beginGame()
         }
     }
@@ -141,8 +113,10 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         isGamePaused = true
         gameScene.showPopUpAnimation()
         
-        timePassed = gameScene.lastTick!.timeIntervalSinceNow
-        gameScene.stopTicking()
+        if let lastTick = gameScene.lastTick{
+            timePassed = lastTick.timeIntervalSinceNow
+            gameScene.stopTicking()
+        }
     }
     func gameDidResume(){
         gameScene.hidePopUpAnimation(){
@@ -152,45 +126,33 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         }
     }
     func gameDidExitToMenu(){
-        backgroundMusicPlayer.volume = 0.0
+        audio.backgroundMusicPlayer.volume = 0.0
         let transition = SKTransition.pushWithDirection(SKTransitionDirection.Left, duration: 0.5)
         skView.presentScene(menuScene, transition: transition)
-    }
-    func musicDidSwitch(){
-        if music == .On{
-            music = .Off
-        }else{
-            music = .On
-        }
-    }
-    func soundDidSwitch(){
-        if sounds == .On{
-            sounds = .Off
-        }else{
-            sounds = .On
-        }
     }
     //PopUpDelagates
     
     
     //GameDelegates
     func gameDidBegin(game: Game) {
-        isGamePaused = false
-        view.userInteractionEnabled = true
-        gameScene.tickLengthMillis = TickLengthLevelOne
-        gameScene.startTicking()
-        
-        gameScene.HUDLayer.levelLabelNode.text = String("\(game.level)")
-        gameScene.HUDLayer.scoreLabelNode.text = String("\(game.score)")
-        gameScene.HUDLayer.wavesLeftLabelNode.text = String("\(game.wavesLeft)")
+        gameScene.showShortMessage("Ready.. set.. go!", delay: 1){
+            self.isGamePaused = false
+            self.view.userInteractionEnabled = true
+            self.gameScene.startTicking()
+            
+            self.gameScene.HUDLayer.levelLabelNode.text = String("\(game.level)")
+            self.gameScene.HUDLayer.scoreLabelNode.text = String("\(game.score)")
+            self.gameScene.HUDLayer.wavesLeftLabelNode.text = String("\(game.wavesLeft)")
+        }
     }
     
     func gameDidEnd(game: Game) {
         view.userInteractionEnabled = false
-
-        gameScene.stopTicking()
-        gameScene.animateClearingScene(){
-            game.beginGame()
+        gameScene.showShortMessage("Game Over Sucker!", delay: 2.0){
+            self.gameScene.stopTicking()
+            self.gameScene.animateClearingScene(){
+                game.beginGame()
+            }
         }
     }
     
@@ -199,15 +161,19 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         view.userInteractionEnabled = false
         gameScene.stopTicking()
         
+        
+        
         if(gameScene.tickLengthMillis >= 1800){
             gameScene.tickLengthMillis -= 100
         }else if gameScene.tickLengthMillis > 600{
             gameScene.tickLengthMillis -= 50
         }
         
-        let results = game.sumUpPointsInColumns()
-        gameScene.animateSummaryResults(results, columns: game.columnArray){
-            game.beginGame()
+        gameScene.showShortMessage("Level Up!", delay: 1){
+            let results = game.sumUpPointsInColumns()
+            self.gameScene.animateSummaryResults(results, columns: game.columnArray){
+                game.beginGame()
+            }
         }
     }
     
@@ -222,8 +188,9 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
             }
         }
         if gameLogic.wavesLeft == 0{
-            println("czas na doczyszczenie planszy")
-            //komunikat o ostatniej fali i odliczanie stałego odcinka czasu dla każdego lvlu na dokonczenie
+            gameScene.tickLengthMillis = 4200
+            gameScene.playSound("HurryUp")
+            gameScene.showShortMessage("Hurry up!", delay: 1, completion: {})
         }
     }
     //GameDelegates
@@ -236,7 +203,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         }
         
         let currentPoint = sender.locationInView(sender.view)
-     
+        
         var tmpPoint = currentPoint
         tmpPoint.x -= 36
         tmpPoint.y = 0
@@ -270,7 +237,16 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
             
             let removedBlocks = gameLogic.removeBlocks(column, row: row)
             
-            if(removedBlocks.blocksRemoved.count > 0){
+            if removedBlocks.blocksRemoved.count > 0{
+                
+                if removedBlocks.blocksRemoved.count > 4{
+                    gameScene.showShortMessage("GOOD GOD!", delay: 0.5, completion: {})
+                }else if removedBlocks.blocksRemoved.count == 4{
+                    gameScene.showShortMessage("Vvveerryy Gooodd!", delay: 0.5, completion: {})
+                }else if removedBlocks.blocksRemoved.count == 3{
+                    gameScene.showShortMessage("Nice!", delay: 0.5, completion: {})
+                }
+                
                 gameScene.HUDLayer.scoreLabelNode.text = String(gameLogic.score)
                 gameScene.animateRemovingBlocksSprites(removedBlocks.blocksRemoved, fallenBlocks: removedBlocks.fallenBlocks){
                     self.view.userInteractionEnabled = true

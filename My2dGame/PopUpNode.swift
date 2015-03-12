@@ -11,8 +11,6 @@ import SpriteKit
 protocol PopUpDelegate {
     func gameDidResume()
     func gameDidExitToMenu()
-    func musicDidSwitch()
-    func soundDidSwitch()
 }
 
 class SwitchLabelButton: SKLabelNode {
@@ -103,14 +101,13 @@ class PopUpNode: SKSpriteNode {
         backButtonLabel.name = "backButton"
         self.addChild(backButtonLabel)
         
-        switchMusicButtonLabel = SwitchLabelButton(fontNamed: "Gill Sans Bold", text: "Music", state: true)
+        switchMusicButtonLabel = SwitchLabelButton(fontNamed: "Gill Sans Bold", text: "Music", state: audio.music)
         switchMusicButtonLabel.fontSize = 24
         switchMusicButtonLabel.position.y += 10
         switchMusicButtonLabel.name = "switchMusicButton"
         self.addChild(switchMusicButtonLabel)
         
-        
-        switchSoundButtonLabel = SwitchLabelButton(fontNamed: "Gill Sans Bold", text: "Sounds", state: true)
+        switchSoundButtonLabel = SwitchLabelButton(fontNamed: "Gill Sans Bold", text: "Sounds", state: audio.sounds)
         switchSoundButtonLabel.fontSize = 24
         switchSoundButtonLabel.position.y -= 30
         switchSoundButtonLabel.name = "switchSoundButton"
@@ -146,11 +143,11 @@ class PopUpNode: SKSpriteNode {
                 break
             case "switchMusicButton":
                 switchMusicButtonLabel.state = !switchMusicButtonLabel.state
-                delegate?.musicDidSwitch()
+                audio.music = !audio.music
                 break
             case "switchSoundButton":
                 switchSoundButtonLabel.state = !switchSoundButtonLabel.state
-                delegate?.soundDidSwitch()
+                audio.sounds = !audio.sounds
                 break
             case "":
                 delegate?.gameDidResume()
