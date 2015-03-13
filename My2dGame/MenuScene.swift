@@ -18,16 +18,23 @@ class MenuScene: SKScene{
         let startGameLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
         startGameLabel.text = "Start Game"
         startGameLabel.fontSize = 26
-        startGameLabel.position.y += 20
+        startGameLabel.position.y += 40
         startGameLabel.name = "startGame"
         self.addChild(startGameLabel)
         
         let highscoreLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
-        highscoreLabel.text = "Highscores"
+        highscoreLabel.text = "Leaderboard"
         highscoreLabel.fontSize = 26
-        highscoreLabel.position.y -= 20
-        highscoreLabel.name = "highscores"
+        highscoreLabel.position.y = 0
+        highscoreLabel.name = "leaderboard"
         self.addChild(highscoreLabel)
+        
+        let optionsLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
+        optionsLabel.text = "How to play"
+        optionsLabel.fontSize = 24
+        optionsLabel.position.y -= 40
+        optionsLabel.name = "howToPlay"
+        self.addChild(optionsLabel)
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
@@ -46,8 +53,11 @@ class MenuScene: SKScene{
         case "startGame":
             thisDelegate?.startGame()
             break
-        case "highscores":
+        case "leaderboard":
            thisDelegate?.showHighscore()
+            break
+        case "howToPlay":
+            //thisDelegate?.showOptions()
             break
         case "":
            

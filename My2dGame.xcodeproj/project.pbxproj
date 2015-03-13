@@ -18,6 +18,7 @@
 		F9336C0D1AAA559500B0D204 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9336C0C1AAA559500B0D204 /* Game.swift */; };
 		F9336C101AAA55DB00B0D204 /* Column.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9336C0F1AAA55DB00B0D204 /* Column.swift */; };
 		F9336C121AAA55F400B0D204 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9336C111AAA55F400B0D204 /* Block.swift */; };
+		F9C93C251AB289BD00C05063 /* ColumnNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C93C241AB289BD00C05063 /* ColumnNode.swift */; };
 		F9F65E4B1AAA8DDC009E4421 /* Fall.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9F65E4A1AAA8DDC009E4421 /* Fall.wav */; };
 		F9F65E4D1AAA98FC009E4421 /* HUDLabelNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E4C1AAA98FC009E4421 /* HUDLabelNode.swift */; };
 		F9F65E4F1AAAAE84009E4421 /* PopUpNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E4E1AAAAE84009E4421 /* PopUpNode.swift */; };
@@ -58,6 +59,7 @@
 		F9336C0C1AAA559500B0D204 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		F9336C0F1AAA55DB00B0D204 /* Column.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Column.swift; sourceTree = "<group>"; };
 		F9336C111AAA55F400B0D204 /* Block.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
+		F9C93C241AB289BD00C05063 /* ColumnNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColumnNode.swift; sourceTree = "<group>"; };
 		F9F65E4A1AAA8DDC009E4421 /* Fall.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Fall.wav; sourceTree = "<group>"; };
 		F9F65E4C1AAA98FC009E4421 /* HUDLabelNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUDLabelNode.swift; sourceTree = "<group>"; };
 		F9F65E4E1AAAAE84009E4421 /* PopUpNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopUpNode.swift; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 				F9F65E561AAC04E9009E4421 /* ProgressBarNode.swift */,
 				F9FC8FCC1AB0D09F00B3E896 /* HUDNode.swift */,
 				F9FC8FCE1AB0D24300B3E896 /* MainNode.swift */,
+				F9C93C241AB289BD00C05063 /* ColumnNode.swift */,
 			);
 			name = "SpriteKit Extensions";
 			sourceTree = "<group>";
@@ -322,6 +325,7 @@
 				F9F65E4D1AAA98FC009E4421 /* HUDLabelNode.swift in Sources */,
 				F9336BED1AAA52CA00B0D204 /* GameScene.swift in Sources */,
 				F9FC8FDB1AB1E02C00B3E896 /* GameCenterHelper.swift in Sources */,
+				F9C93C251AB289BD00C05063 /* ColumnNode.swift in Sources */,
 				F9FC8FCD1AB0D09F00B3E896 /* HUDNode.swift in Sources */,
 				F9F65E4F1AAAAE84009E4421 /* PopUpNode.swift in Sources */,
 				F9FC8FCF1AB0D24300B3E896 /* MainNode.swift in Sources */,

@@ -27,7 +27,7 @@ class GameScene: SKScene {
     let HUDLayer = HUDNode()
     let popUp = PopUpNode()
     
-    var columnsNodes = Array<SKNode>()
+    var columnsNodes = Array<ColumnNode>()
     
     var pauseGame: (() -> ())?
     var resumeGame: (() -> ())?
@@ -43,7 +43,7 @@ class GameScene: SKScene {
         
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
-        //background
+        //Background
         let background = SKSpriteNode(imageNamed: "Background")
         background.size = self.frame.size
         addChild(background)
@@ -61,7 +61,7 @@ class GameScene: SKScene {
         addChild(gameLayer)
         
         
-        //Darkening efect when popUp shows
+        //Layer for darkening efect when popUp shows
         darkeningLayer = SKSpriteNode(color: UIColor.blackColor(), size: self.frame.size)
         darkeningLayer.hidden = true
         addChild(darkeningLayer)
@@ -207,7 +207,6 @@ class GameScene: SKScene {
         
         runAction(SKAction.waitForDuration(0.3), completion: completion)
     }
-    
     func animateSummaryResults(results: Array<Int>, columns: Array<Column>, completion: ()->()){
         let fadeOut = SKAction.fadeAlphaTo(0, duration: 0.4)
         fadeOut.timingMode = .EaseOut
@@ -216,19 +215,20 @@ class GameScene: SKScene {
         let removeColumnActionGroup = SKAction.group([fadeOut, scale])
 
         var wholeDelayTime = 0.0
+        
         for column in columnsNodes.reverse(){
             if column.children.count > 0{
+                
                 let duration = wholeDelayTime * 0.3
                 let delay = SKAction.waitForDuration(NSTimeInterval(duration))
-                
+                println(duration)
                 column.runAction(SKAction.sequence([delay, removeColumnActionGroup, SKAction.removeFromParent()]))
                 wholeDelayTime++
             }
         }
-
+        columnsNodes.removeAll(keepCapacity: false)
         runAction(SKAction.waitForDuration(NSTimeInterval(wholeDelayTime * 0.4)), completion: completion)
     }
-
     func animateRemovingBlocksSprites(blocksToRemove: Array<Block>, fallenBlocks: Array<Array<Block>>, completion: ()->()){
         var acctions = Array<SKAction>()
         
@@ -262,10 +262,9 @@ class GameScene: SKScene {
         }
         runAction(SKAction.waitForDuration(0.15), completion: completion)
     }
-    
     func animateAddingSpritesForColumn(column: Column, completion: ()->()){
         
-        var newColumnNode = SKNode()
+        var newColumnNode = ColumnNode()
         
         moveCurrentColumns()
         
@@ -318,18 +317,11 @@ class GameScene: SKScene {
                 move.timingMode = SKActionTimingMode.EaseOut
                 columnNode.runAction(move)
             }else{
-                columnNode.removeFromParent()
                 columnsNodes.removeAtIndex(k)
+                columnNode.removeFromParent()
                 break
             }
             k++
-        }
-        if(columnsNodes.count == NumColumns){
-            var tmp = columnsNodes[NumColumns-1]
-            tmp.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: BlockWidth, height: BlockHeight))
-            tmp.physicsBody?.dynamic = true
-            
-            tmp.runAction(SKAction.sequence([SKAction.waitForDuration(1), SKAction.removeFromParent()]))
         }
     }
     func animateAddingNextColumnPreview(column: Column){
@@ -351,7 +343,7 @@ class GameScene: SKScene {
     }
     func animateSwipingColumn(column: Int, newColumn: Column, direction: UISwipeGestureRecognizerDirection){
         let oldPosition = columnsNodes[column].position
-        let newColumnNode = SKNode()
+        let newColumnNode = ColumnNode()
         
         for (blockId, block) in enumerate(newColumn.blocks) {
             let sprite = SKSpriteNode(imageNamed: block!.blockColor.spriteName)

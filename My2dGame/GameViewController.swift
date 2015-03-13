@@ -182,7 +182,8 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
             gameScene.tickLengthMillis -= 50
         }
         let results = game.sumUpPointsInColumns()
-        updateHUD()
+        updateHUD("level")
+        updateHUD("wavesLeft")
         
         gameScene.showShortMessage("Level Up!", delay: 1){
             self.gameScene.animateSummaryResults(results, columns: game.columnArray){
@@ -248,7 +249,6 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         println(currentPoint)
         let (success, column, row) = convertPoint(currentPoint)
         if success {
-            //println("sukces \(column), \(row)")
             view.userInteractionEnabled = false
             
             let removedBlocks = gameLogic.removeBlocks(column, row: row)
@@ -256,11 +256,14 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
             if removedBlocks.blocksRemoved.count > 0{
                 
                 if removedBlocks.blocksRemoved.count > 5{
-                    gameScene.showShortMessage("GOOD GOD!", delay: 0.4, completion: {})
+                    gameScene.showShortMessage("GOOD GOD! +50", delay: 0.4, completion: {})
+                    gameLogic.score += 50
                 }else if removedBlocks.blocksRemoved.count == 5{
-                    gameScene.showShortMessage("Vvveerryy Gooodd!", delay: 0.3, completion: {})
+                    gameScene.showShortMessage("Vvveerryy Gooodd! + 25", delay: 0.3, completion: {})
+                    gameLogic.score += 25
                 }else if removedBlocks.blocksRemoved.count == 4{
-                    gameScene.showShortMessage("Nice!", delay: 0.2, completion: {})
+                    gameScene.showShortMessage("Nice! + 10", delay: 0.2, completion: {})
+                    gameLogic.score += 10
                 }
                 
                 gameScene.HUDLayer.scoreLabelNode.text = String(gameLogic.score)
@@ -279,6 +282,24 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         self.gameScene.HUDLayer.levelLabelNode.text = "\(gameLogic.level)"
         self.gameScene.HUDLayer.scoreLabelNode.text = "\(gameLogic.score)"
         self.gameScene.HUDLayer.wavesLeftLabelNode.text = "\(gameLogic.wavesLeft)"
+    }
+    func updateHUD(label: String){
+        switch label{
+            case "level":
+                self.gameScene.HUDLayer.levelLabelNode.text = "\(gameLogic.level)"
+            break
+            
+            case "score":
+                self.gameScene.HUDLayer.scoreLabelNode.text = "\(gameLogic.score)"
+            break
+            
+            case "wavesLeft":
+                 self.gameScene.HUDLayer.wavesLeftLabelNode.text = "\(gameLogic.wavesLeft)"
+            break
+            
+        default:
+            break
+        }
     }
     
     func convertPoint(point: CGPoint) -> (success: Bool, column: Int, row: Int) {
