@@ -42,6 +42,7 @@ class GameScene: SKScene {
         super.init(size: size)
         
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        self.userInteractionEnabled = false
         
         //Background
         let background = SKSpriteNode(imageNamed: "Background")
@@ -54,11 +55,12 @@ class GameScene: SKScene {
         HUDLayer.position.x += gameLayer.size.width / 2
         HUDLayer.position.y += (gameLayer.size.height / 2) - 65
         gameLayer.addChild(HUDLayer)
-
+        HUDLayer.userInteractionEnabled = true
         
         //Main game layer
         gameLayer.position = CGPoint(x: -8, y: 27)
         addChild(gameLayer)
+        //gameLayer.userInteractionEnabled = true
         
         
         //Layer for darkening efect when popUp shows
@@ -116,8 +118,6 @@ class GameScene: SKScene {
         
         if popUp.hidden == false{
             resumeGame!()
-        }else if touchedNode.name == "menuButton"{
-            pauseGame!()
         }
     }
     func pointForColumn(column: Int, row: Int) -> CGPoint {

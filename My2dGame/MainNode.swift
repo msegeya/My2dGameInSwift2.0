@@ -8,9 +8,10 @@
 
 import SpriteKit
 
+
 class MainNode: SKSpriteNode {
     
-    let columnsLayer = SKNode()
+    let columnsLayer = SKSpriteNode()
     let nextColumnPreviewNode = SKNode()
     
     override init(texture: SKTexture!, color: UIColor!, size: CGSize) {
@@ -21,7 +22,8 @@ class MainNode: SKSpriteNode {
         super.init()
         
         self.size = CGSize(width: (BlockWidth * CGFloat(NumColumns)) + 55, height: (BlockHeight * CGFloat(NumRows)))
-        
+        columnsLayer.size = CGSize(width: ((BlockWidth + BlockWidthOffset) * CGFloat(NumColumns)), height: ((BlockHeight + BlockHeightOffset) * CGFloat(NumRows)))
+
         columnsLayer.position = CGPoint(x: -BlockWidth * CGFloat(NumColumns) / 2, y: -BlockHeight * CGFloat(NumRows) / 2)
         
         nextColumnPreviewNode.position = CGPoint(x: columnsLayer.position.x - (1.2 * BlockWidth), y: columnsLayer.position.y)
@@ -40,6 +42,19 @@ class MainNode: SKSpriteNode {
         self.addChild(columnsLayer)
         self.addChild(bottomNumbersLayer)
         self.addChild(nextColumnPreviewNode)
+
+        self.columnsLayer.userInteractionEnabled = true
+    }
+    
+    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+        super.touchesBegan(touches, withEvent: event)
+        
+        var touch: AnyObject? = touches.anyObject()
+        var location = touch?.locationInNode(self.columnsLayer)
+        let touchedNode = self.nodeAtPoint(location!)
+        
+        println("*\(location)")
+
     }
 
     required init?(coder aDecoder: NSCoder) {

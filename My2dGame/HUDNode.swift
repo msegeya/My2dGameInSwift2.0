@@ -56,6 +56,20 @@ class HUDNode: SKSpriteNode {
         self.addChild(wavesLeftNode)
         self.addChild(menuButtonNode)
     }
+    
+    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+        super.touchesBegan(touches, withEvent: event)
+        
+        var touch: AnyObject? = touches.anyObject()
+        var location = touch?.locationInNode(self)
+        let touchedNode = self.nodeAtPoint(location!)
+        
+        if touchedNode.name != nil{
+            if touchedNode.name! == "menuButton"{
+                NSNotificationCenter.defaultCenter().postNotificationName("pauseGameScene", object: nil)
+            }
+        }
+    }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

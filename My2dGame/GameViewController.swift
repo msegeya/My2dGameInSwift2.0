@@ -43,7 +43,8 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         super.viewDidLoad()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "pauseGameSceneNotificationReceived:", name:"pauseGameScene", object: nil)
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "resumeGameSceneNotificationReceived:", name:"resumeGameScene", object: nil)
+
         skView = view as SKView
         skView.multipleTouchEnabled = false
         skView.showsFPS = true
@@ -86,12 +87,16 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
 //        }
     }
     
-    func pauseGameSceneNotificationReceived(notification: NSNotification){
+    func pauseGameSceneNotificationReceived(notification: NSNotification){  
         if isGamePaused{
             return
         }
-        
         gameDidPause()
+    }
+    func resumeGameSceneNotificationReceived(notification: NSNotification){
+        if isGamePaused{
+            gameDidResume()
+        }
     }
     
     //MenuDelegates
@@ -125,6 +130,9 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     
     //PopUpDelegates
     func gameDidPause(){
+        gameScene.userInteractionEnabled = true
+        gameScene.gameLayer.columnsLayer.userInteractionEnabled = false
+        gameScene.HUDLayer.userInteractionEnabled = false
         isGamePaused = true
         gameScene.showPopUpAnimation()
         
@@ -138,6 +146,10 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
             let newLastTickValue = NSDate().dateByAddingTimeInterval(NSTimeInterval(self.timePassed))
             self.gameScene.lastTick = newLastTickValue
             self.isGamePaused = false
+            
+            self.gameScene.userInteractionEnabled = false
+            self.gameScene.gameLayer.columnsLayer.userInteractionEnabled = true
+            self.gameScene.HUDLayer.userInteractionEnabled = true
         }
     }
     func gameDidExitToMenu(){
@@ -152,13 +164,11 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     func gameDidBegin(game: Game) {
         gameScene.showShortMessage("Ready.. set.. go!", delay: 1){
             self.isGamePaused = false
-            self.view.userInteractionEnabled = true
             self.gameScene.startTicking()
         }
     }
     
     func gameDidEnd(game: Game) {
-        view.userInteractionEnabled = false
         self.gameScene.stopTicking()
         self.gameScene.animateClearingScene(){}
         gameScene.showShortMessage("Game Over!", delay: 2.0){
@@ -168,7 +178,6 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     }
     
     func gameDidLevelUp(game: Game) {
-        view.userInteractionEnabled = false
         gameScene.stopTicking()
         
         if gameScene.tickLengthMillisTmp != nil{
@@ -194,12 +203,9 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     }
     
     func didTick(){
-        gameScene.gameLayer.columnsLayer.userInteractionEnabled = false
-        
         if let newColumn = gameLogic.newColumn(){
             gameScene.HUDLayer.wavesLeftLabelNode.text = String(format: "%ld", gameLogic.wavesLeft)
             gameScene.animateAddingSpritesForColumn(newColumn){
-                self.gameScene.gameLayer.columnsLayer.userInteractionEnabled = true
                 self.gameScene.animateAddingNextColumnPreview(self.gameLogic.nextColumn!)
             }
         }
@@ -246,11 +252,9 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         }else{
             currentPoint.y = -(currentPoint.y-269)
         }
-        println(currentPoint)
+        //println(currentPoint)
         let (success, column, row) = convertPoint(currentPoint)
         if success {
-            view.userInteractionEnabled = false
-            
             let removedBlocks = gameLogic.removeBlocks(column, row: row)
             
             if removedBlocks.blocksRemoved.count > 0{
@@ -268,12 +272,8 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
                 
                 gameScene.HUDLayer.scoreLabelNode.text = String(gameLogic.score)
                 gameScene.animateRemovingBlocksSprites(removedBlocks.blocksRemoved, fallenBlocks: removedBlocks.fallenBlocks){
-                    self.view.userInteractionEnabled = true
                 }
-            }else{
-                self.view.userInteractionEnabled = true
             }
-            
         }
     }
     //Gestures handling

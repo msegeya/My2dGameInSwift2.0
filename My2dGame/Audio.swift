@@ -9,7 +9,7 @@ import AVFoundation
 
 class Audio {
     var sounds: Bool = true
-    var music: Bool = true{
+    var music: Bool = false{
         didSet{
             if music{
                 backgroundMusicPlayer.play()
