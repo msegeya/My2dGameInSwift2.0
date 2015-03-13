@@ -27,7 +27,9 @@ class HUDLabelNode: SKLabelNode {
     
     override var text : String{
         didSet{
-            
+            if text == oldValue{
+                return
+            }
             let length = countElements(self.text)
             switch length{
                 case 4:

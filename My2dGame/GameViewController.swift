@@ -113,6 +113,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         delay(0.6){
             audio.reset()
             self.gameLogic.reset()
+            self.updateHUD()
             self.gameLogic.beginGame()
         }
     }
@@ -153,25 +154,20 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
             self.isGamePaused = false
             self.view.userInteractionEnabled = true
             self.gameScene.startTicking()
-            
-            self.gameScene.HUDLayer.levelLabelNode.text = String("\(game.level)")
-            self.gameScene.HUDLayer.scoreLabelNode.text = String("\(game.score)")
-            self.gameScene.HUDLayer.wavesLeftLabelNode.text = String("\(game.wavesLeft)")
         }
     }
     
     func gameDidEnd(game: Game) {
         view.userInteractionEnabled = false
         self.gameScene.stopTicking()
-        gameScene.showShortMessage("Game Over Sucker!", delay: 2.0){
-            self.gameScene.animateClearingScene(){
-                game.beginGame()
-            }
+        self.gameScene.animateClearingScene(){}
+        gameScene.showShortMessage("Game Over!", delay: 2.0){
+            game.beginGame()
+            self.updateHUD()
         }
     }
     
     func gameDidLevelUp(game: Game) {
-        
         view.userInteractionEnabled = false
         gameScene.stopTicking()
         
@@ -185,17 +181,18 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         }else if gameScene.tickLengthMillis > 600{
             gameScene.tickLengthMillis -= 50
         }
+        let results = game.sumUpPointsInColumns()
+        updateHUD()
         
         gameScene.showShortMessage("Level Up!", delay: 1){
-            let results = game.sumUpPointsInColumns()
             self.gameScene.animateSummaryResults(results, columns: game.columnArray){
                 game.beginGame()
+                self.updateHUD()
             }
         }
     }
     
     func didTick(){
-        println("*************** \(gameScene.tickLengthMillis)")
         gameScene.gameLayer.columnsLayer.userInteractionEnabled = false
         
         if let newColumn = gameLogic.newColumn(){
@@ -251,7 +248,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         println(currentPoint)
         let (success, column, row) = convertPoint(currentPoint)
         if success {
-            println("sukces \(column), \(row)")
+            //println("sukces \(column), \(row)")
             view.userInteractionEnabled = false
             
             let removedBlocks = gameLogic.removeBlocks(column, row: row)
@@ -278,6 +275,11 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     }
     //Gestures handling
     
+    func updateHUD(){
+        self.gameScene.HUDLayer.levelLabelNode.text = "\(gameLogic.level)"
+        self.gameScene.HUDLayer.scoreLabelNode.text = "\(gameLogic.score)"
+        self.gameScene.HUDLayer.wavesLeftLabelNode.text = "\(gameLogic.wavesLeft)"
+    }
     
     func convertPoint(point: CGPoint) -> (success: Bool, column: Int, row: Int) {
         if (point.x >= 0 && point.x < CGFloat(NumColumns) * (BlockWidth+BlockWidthOffset) &&

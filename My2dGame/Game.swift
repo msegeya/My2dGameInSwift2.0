@@ -98,7 +98,6 @@ class Game {
             pointsInColumns.insert(columnScore, atIndex: i)
             score += columnScore
         }
-        pointsInColumns.reverse()
         return pointsInColumns
     }
     
@@ -132,6 +131,11 @@ class Game {
         
         wavesLeft -= 1
         currentNumberOfColumns = columnArray.count
+        
+        if currentNumberOfColumns > NumColumns{
+            endGame()
+            return nil
+        }
         
         var tmpColumn = nextColumn
         nextColumn = Column(height: NumRows)

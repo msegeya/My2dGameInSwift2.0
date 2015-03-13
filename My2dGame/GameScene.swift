@@ -14,7 +14,7 @@ let BlockHeight: CGFloat = 42.5
 let BlockWidthOffset: CGFloat = 1.5
 let BlockHeightOffset: CGFloat = -3.5
 
-let TickLengthLevelOne = NSTimeInterval(3000)
+let TickLengthLevelOne = NSTimeInterval(2000)
 
 let sounds: [String: SKAction] = [
 "Fall": SKAction.playSoundFileNamed("Fall.wav", waitForCompletion: false),
@@ -169,13 +169,9 @@ class GameScene: SKScene {
         action2.timingMode = .EaseOut
         
         let action3 = SKAction.fadeInWithDuration(0.15)
-        
         let delay = SKAction.waitForDuration(delay)
-        
         let action4 = SKAction.scaleTo(0.0, duration: 0.1)
-        
         let action5 = SKAction.fadeAlphaTo(0.0, duration: 0.1)
-        
         let action6 = SKAction.removeFromParent()
         
         messageLabel.runAction(SKAction.sequence([SKAction.group([SKAction.sequence([action, action2]),action3]), delay, SKAction.group([action4, action5]), action6]), completion: completion)
@@ -211,22 +207,28 @@ class GameScene: SKScene {
         
         runAction(SKAction.waitForDuration(0.3), completion: completion)
     }
+    
     func animateSummaryResults(results: Array<Int>, columns: Array<Column>, completion: ()->()){
-        for (columnId, column) in enumerate(columns){
-            for (blockId,block) in enumerate(column.blocks){
-                if(block != nil){
-                    let move = SKAction.moveByX(3, y: 4, duration: 0.15)
-                    move.timingMode = .EaseOut
-                    let fadeOut = SKAction.fadeAlphaTo(0, duration: 0.15)
-                    fadeOut.timingMode = .EaseOut
-                    let delay = SKAction.waitForDuration(NSTimeInterval(CGFloat(blockId + columnId) * 0.1))
-                    block!.sprite!.runAction(SKAction.sequence([delay, SKAction.group([move, fadeOut]), SKAction.removeFromParent()]))
-                }
+        let fadeOut = SKAction.fadeAlphaTo(0, duration: 0.4)
+        fadeOut.timingMode = .EaseOut
+        let scale = SKAction.scaleTo(1.2, duration: 0.4)
+        scale.timingMode = .EaseOut
+        let removeColumnActionGroup = SKAction.group([fadeOut, scale])
+
+        var wholeDelayTime = 0.0
+        for column in columnsNodes.reverse(){
+            if column.children.count > 0{
+                let duration = wholeDelayTime * 0.3
+                let delay = SKAction.waitForDuration(NSTimeInterval(duration))
+                
+                column.runAction(SKAction.sequence([delay, removeColumnActionGroup, SKAction.removeFromParent()]))
+                wholeDelayTime++
             }
         }
-        
-        runAction(SKAction.waitForDuration(2), completion: completion)
+
+        runAction(SKAction.waitForDuration(NSTimeInterval(wholeDelayTime * 0.4)), completion: completion)
     }
+
     func animateRemovingBlocksSprites(blocksToRemove: Array<Block>, fallenBlocks: Array<Array<Block>>, completion: ()->()){
         var acctions = Array<SKAction>()
         
@@ -260,6 +262,7 @@ class GameScene: SKScene {
         }
         runAction(SKAction.waitForDuration(0.15), completion: completion)
     }
+    
     func animateAddingSpritesForColumn(column: Column, completion: ()->()){
         
         var newColumnNode = SKNode()
@@ -268,7 +271,7 @@ class GameScene: SKScene {
         
         for (blockId, block) in enumerate(column.blocks) {
             let sprite = SKSpriteNode(imageNamed: block!.blockColor.spriteName)
-            sprite.position = pointForColumn(-2, row: block!.row)
+            sprite.position = pointForColumn(0, row: block!.row)
             sprite.size = CGSize(width: CGFloat(BlockWidth), height: CGFloat(BlockHeight))
             //sprite.zPosition = CGFloat(blockId)
             
@@ -276,14 +279,15 @@ class GameScene: SKScene {
             block!.sprite = sprite
             
             //animation
-            sprite.alpha = 0
-            let move = SKAction.moveTo(pointForColumn(0, row: block!.row), duration: 0.15)
-            move.timingMode = .EaseOut
-            let fadeIn = SKAction.fadeAlphaTo(1, duration: 0.15)
-            fadeIn.timingMode = .EaseOut
-            let delay = SKAction.waitForDuration(NSTimeInterval(blockId) * 0.03)
-            sprite.runAction(SKAction.sequence([delay, SKAction.group([move, fadeIn])]))
+//            sprite.alpha = 0
+//            let move = SKAction.moveTo(pointForColumn(0, row: block!.row), duration: 0.15)
+//            move.timingMode = .EaseOut
+//            let fadeIn = SKAction.fadeAlphaTo(1, duration: 0.15)
+//            fadeIn.timingMode = .EaseOut
+//            let delay = SKAction.waitForDuration(NSTimeInterval(blockId) * 0.03)
+//            sprite.runAction(SKAction.sequence([delay, SKAction.group([move, fadeIn])]))
         }
+        
         var tmpColumnArray = columnsNodes
         columnsNodes.removeAll(keepCapacity: false)
         
@@ -291,7 +295,18 @@ class GameScene: SKScene {
         for col in tmpColumnArray{
             columnsNodes.append(col)
         }
+        newColumnNode.alpha = 0
+        newColumnNode.runAction(SKAction.scaleTo(0.0, duration: 0.01))
         gameLayer.columnsLayer.addChild(columnsNodes[0])
+        
+        let action2 = SKAction.scaleTo(1.1, duration: 0.1)
+        action2.timingMode = .EaseIn
+        let action3 = SKAction.scaleTo(1.0, duration: 0.07)
+        action3.timingMode = .EaseOut
+        
+        let action4 = SKAction.fadeInWithDuration(0.1)
+        
+        newColumnNode.runAction(SKAction.group([action4, SKAction.sequence([action2, action3])]))
         
         runAction(SKAction.waitForDuration(0.3), completion: completion)
     }
