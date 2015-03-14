@@ -21,40 +21,45 @@ class HUDNode: SKSpriteNode {
     
     override init(){
         super.init()
-        
-        //level
-        let levelNode = SKSpriteNode(imageNamed: "Level")
-        levelNode.size = CGSize(width: 50, height: 50)
-        levelLabelNode = HUDLabelNode()
-        levelNode.addChild(levelLabelNode)
-        
-        
-        //score
-        let scoreNode = SKSpriteNode(imageNamed: "Score")
-        scoreNode.position.y -= 50
-        scoreNode.size = CGSize(width: 50, height: 50)
-        scoreLabelNode = HUDLabelNode()
-        scoreNode.addChild(scoreLabelNode)
-        
-        
-        //wavesLeft
-        wavesLeftNode = ProgressBarNode(imageNamed: "WavesLeft100px")
-        wavesLeftNode.position.y -= 100
-        wavesLeftLabelNode = HUDLabelNode()
-        wavesLeftNode.addChild(wavesLeftLabelNode)
+        self.color = UIColor.redColor()
+        self.size = CGSize(width: 50, height: 125)
         
         
         //Menu
         let menuButtonNode = SKSpriteNode(imageNamed: "Menu")
-        menuButtonNode.position.y -= 200
-        menuButtonNode.size = CGSize(width: 50, height: 50)
+        menuButtonNode.position.y -= 12.5
+        menuButtonNode.size = CGSize(width: 50, height: 25)
         menuButtonNode.name = "menuButton"
+        
+        
+        //wavesLeft
+        wavesLeftNode = ProgressBarNode(imageNamed: "WavesLeft")
+        wavesLeftNode.position.y -= 50
+        wavesLeftLabelNode = HUDLabelNode()
+        wavesLeftNode.addChild(wavesLeftLabelNode)
+
+        
+        //score
+        let scoreNode = SKSpriteNode(imageNamed: "Score")
+        scoreNode.position.y -= 87.5
+        scoreNode.size = CGSize(width: 50, height: 25)
+        scoreLabelNode = HUDLabelNode()
+        scoreNode.addChild(scoreLabelNode)
+        
+        
+        //level
+        let levelNode = SKSpriteNode(imageNamed: "Level")
+        levelNode.size = CGSize(width: 50, height: 25)
+        levelNode.position.y -= 112.5
+        levelLabelNode = HUDLabelNode()
+        levelNode.addChild(levelLabelNode)
         
         
         self.addChild(levelNode)
         self.addChild(scoreNode)
         self.addChild(wavesLeftNode)
         self.addChild(menuButtonNode)
+
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {

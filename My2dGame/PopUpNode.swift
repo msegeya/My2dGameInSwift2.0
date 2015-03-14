@@ -78,9 +78,9 @@ class PopUpNode: SKSpriteNode {
         
         self.setup()
     }
-    init(backgroundColor: UIColor, backgroundSize: CGSize) {
+    init(backgroundColor: UIColor, backgroundSize: CGSize, frameSize: CGSize) {
         super.init()
-        
+        self.size = frameSize
         popUpBackground = SKSpriteNode(color: backgroundColor, size: backgroundSize)
         self.addChild(popUpBackground)
         
@@ -88,7 +88,6 @@ class PopUpNode: SKSpriteNode {
     }
     
     func setup(){
-        self.size = popUpBackground.size
         popUpBackground.name = "backgroundNode"
         self.userInteractionEnabled = true
 

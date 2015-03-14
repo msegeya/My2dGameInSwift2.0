@@ -41,37 +41,39 @@ class GameScene: SKScene {
     override init(size: CGSize) {
         super.init(size: size)
         
-        anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        anchorPoint = CGPoint(x: 0.0, y: 0.0)
         self.userInteractionEnabled = false
         
         //Background
         let background = SKSpriteNode(imageNamed: "Background")
-        background.size = self.frame.size
+        background.size = size
+        background.anchorPoint = CGPointZero
         addChild(background)
         
         
         //HUD
-        HUDLayer.anchorPoint = CGPoint(x: 0, y: 0.5)
-        HUDLayer.position.x += gameLayer.size.width / 2
-        HUDLayer.position.y += (gameLayer.size.height / 2) - 65
-        gameLayer.addChild(HUDLayer)
+        HUDLayer.position = CGPoint(x: 33, y: 50)
+        HUDLayer.anchorPoint = CGPoint(x: 0.5, y: 1.0)
+        addChild(HUDLayer)
         HUDLayer.userInteractionEnabled = true
         
         //Main game layer
-        gameLayer.position = CGPoint(x: -8, y: 27)
+        gameLayer.position = CGPoint(x: 67, y: 20)
+        gameLayer.anchorPoint = CGPointZero
         addChild(gameLayer)
-        //gameLayer.userInteractionEnabled = true
         
         
         //Layer for darkening efect when popUp shows
-        darkeningLayer = SKSpriteNode(color: UIColor.blackColor(), size: self.frame.size)
+        darkeningLayer = SKSpriteNode(color: UIColor.blackColor(), size: size)
         darkeningLayer.hidden = true
+        darkeningLayer.anchorPoint = CGPointZero
         addChild(darkeningLayer)
         
         
         //Popup
-        popUp = PopUpNode(backgroundColor: UIColor.lightGrayColor(), backgroundSize: CGSize(width: 250, height: 170))
+        popUp = PopUpNode(backgroundColor: UIColor.lightGrayColor(), backgroundSize: CGSize(width: 250, height: 170), frameSize: size)
         popUp.zPosition = 100
+        popUp.position = CGPoint(x: size.width / 2, y: size.height / 2)
         addChild(popUp)
         popUp.runAction(SKAction.scaleTo(0.0, duration: 0.01))
     }
@@ -155,6 +157,7 @@ class GameScene: SKScene {
     }
     func showShortMessage(message: String, delay: NSTimeInterval = 1, completion: ()->()){
         let messageLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
+        messageLabel.position = CGPoint(x: size.width / 2, y: size.height / 2)
         messageLabel.text = message
         messageLabel.fontSize = 34
         messageLabel.fontColor = UIColor.grayColor()
@@ -265,11 +268,12 @@ class GameScene: SKScene {
     func animateAddingSpritesForColumn(column: Column, completion: ()->()){
         
         var newColumnNode = ColumnNode()
-        
+        newColumnNode.anchorPoint = CGPointZero
         moveCurrentColumns()
         
         for (blockId, block) in enumerate(column.blocks) {
             let sprite = SKSpriteNode(imageNamed: block!.blockColor.spriteName)
+            sprite.anchorPoint = CGPointZero
             sprite.position = pointForColumn(0, row: block!.row)
             sprite.size = CGSize(width: CGFloat(BlockWidth), height: CGFloat(BlockHeight))
             //sprite.zPosition = CGFloat(blockId)
@@ -328,8 +332,9 @@ class GameScene: SKScene {
         gameLayer.nextColumnPreviewNode.removeAllChildren()
         for (blockId, block) in enumerate(column.blocks) {
             let sprite = SKSpriteNode(imageNamed: block!.blockColor.spriteName)
-            sprite.position = pointForColumn(0, row: block!.row)
-            sprite.size = CGSize(width: CGFloat(BlockWidth), height: CGFloat(BlockHeight))
+            sprite.position = CGPoint(x: 0, y: CGFloat(blockId) * (BlockHeight / 2))
+            sprite.size = CGSize(width: CGFloat(BlockWidth / 2), height: CGFloat(BlockHeight / 2))
+            sprite.anchorPoint = CGPointZero
             
             gameLayer.nextColumnPreviewNode.addChild(sprite)
             block!.sprite = sprite

@@ -131,7 +131,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     //PopUpDelegates
     func gameDidPause(){
         gameScene.userInteractionEnabled = true
-        gameScene.gameLayer.columnsLayer.userInteractionEnabled = false
+        gameScene.gameLayer.userInteractionEnabled = false
         gameScene.HUDLayer.userInteractionEnabled = false
         isGamePaused = true
         gameScene.showPopUpAnimation()
@@ -148,7 +148,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
             self.isGamePaused = false
             
             self.gameScene.userInteractionEnabled = false
-            self.gameScene.gameLayer.columnsLayer.userInteractionEnabled = true
+            self.gameScene.gameLayer.userInteractionEnabled = true
             self.gameScene.HUDLayer.userInteractionEnabled = true
         }
     }
