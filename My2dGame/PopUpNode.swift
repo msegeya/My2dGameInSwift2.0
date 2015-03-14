@@ -19,10 +19,10 @@ class SwitchLabelButton: SKLabelNode {
         didSet{
             if state == true{
                 self.text = initialText + " On"
-                self.fontColor = UIColor.greenColor()
+                self.fontColor = UIColor(red:0.298039, green:0.760784, blue:0.282353, alpha:1.0)
             }else{
                 self.text = initialText + " Off"
-                self.fontColor = UIColor.redColor()
+                self.fontColor = UIColor(red:0.780392, green:0.243137, blue:0.219608, alpha:1.0)
             }
         }
     }
@@ -42,10 +42,10 @@ class SwitchLabelButton: SKLabelNode {
         
         if state == true{
             self.text = initialText + " On"
-            self.fontColor = UIColor.greenColor()
+            self.fontColor = UIColor(red:0.298039, green:0.760784, blue:0.282353, alpha:1.0)
         }else{
             self.text = initialText + " Off"
-            self.fontColor = UIColor.redColor()
+            self.fontColor = UIColor(red:0.780392, green:0.243137, blue:0.219608, alpha:1.0)
         }
     }
 
@@ -94,7 +94,7 @@ class PopUpNode: SKSpriteNode {
         
         let backButtonLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
         backButtonLabel.text = "Exit"
-        backButtonLabel.fontColor = UIColor.darkGrayColor()
+        backButtonLabel.fontColor = UIColor.whiteColor()
         backButtonLabel.fontSize = 24
         backButtonLabel.position.y += 50
         backButtonLabel.name = "backButton"
@@ -115,7 +115,7 @@ class PopUpNode: SKSpriteNode {
         
         let resumeLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
         resumeLabel.text = "Tap to resume"
-        resumeLabel.fontColor = UIColor.darkGrayColor()
+        resumeLabel.fontColor = UIColor.whiteColor()
         resumeLabel.fontSize = 24
         resumeLabel.position.y -= 70
         self.addChild(resumeLabel)

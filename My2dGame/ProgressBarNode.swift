@@ -31,13 +31,13 @@ class ProgressBarNode: SKSpriteNode {
         backgroundImage.size = CGSize(width: 50, height: 50)
         addChild(backgroundImage)
         
-        self.shapeToMask = SKSpriteNode(color: UIColor.whiteColor(), size: CGSize(width: 47, height: 47))
-        self.shapeToMask.alpha = 0.1
+        self.shapeToMask = SKSpriteNode(color: UIColor(red:0.780392, green:0.243137, blue:0.219608, alpha:1.0), size: CGSize(width: 47, height: 47))
+        self.shapeToMask.alpha = 1
         self.shapeToMask.position.x -= 0.9
         self.shapeToMask.position.y += 1.3
         
         self.mask = SKShapeNode()
-        self.mask.antialiased = true
+        self.mask.antialiased = false
         self.mask.lineWidth = CGFloat(shapeToMask.size.width)
         
         self.radius = shapeToMask.size.width / 2

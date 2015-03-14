@@ -15,6 +15,8 @@ class MenuScene: SKScene{
         super.init(size: size)
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
+        self.backgroundColor = UIColor(red:0.184314, green:0.184314, blue:0.184314, alpha:1.0)
+        
         let startGameLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
         startGameLabel.text = "Start Game"
         startGameLabel.fontSize = 26

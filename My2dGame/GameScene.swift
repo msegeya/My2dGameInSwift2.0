@@ -8,13 +8,13 @@
 
 import SpriteKit
 
-let BlockWidth: CGFloat = 42.5
-let BlockHeight: CGFloat = 42.5
+let BlockWidth: CGFloat = 42.0
+let BlockHeight: CGFloat = 42.0
 
 let BlockWidthOffset: CGFloat = 1.5
-let BlockHeightOffset: CGFloat = -3.5
+let BlockHeightOffset: CGFloat = -0.5
 
-let TickLengthLevelOne = NSTimeInterval(2000)
+let TickLengthLevelOne = NSTimeInterval(3600)
 
 let sounds: [String: SKAction] = [
 "Fall": SKAction.playSoundFileNamed("Fall.wav", waitForCompletion: false),
@@ -52,13 +52,14 @@ class GameScene: SKScene {
         
         
         //HUD
-        HUDLayer.position = CGPoint(x: 33, y: 50)
+        HUDLayer.position = CGPoint(x: 33, y: size.height)
         HUDLayer.anchorPoint = CGPoint(x: 0.5, y: 1.0)
+        HUDLayer.zPosition = 98
         addChild(HUDLayer)
         HUDLayer.userInteractionEnabled = true
         
         //Main game layer
-        gameLayer.position = CGPoint(x: 67, y: 20)
+        gameLayer.position = CGPoint(x: 72, y: 19)
         gameLayer.anchorPoint = CGPointZero
         addChild(gameLayer)
         
@@ -67,11 +68,12 @@ class GameScene: SKScene {
         darkeningLayer = SKSpriteNode(color: UIColor.blackColor(), size: size)
         darkeningLayer.hidden = true
         darkeningLayer.anchorPoint = CGPointZero
+
         addChild(darkeningLayer)
         
         
         //Popup
-        popUp = PopUpNode(backgroundColor: UIColor.lightGrayColor(), backgroundSize: CGSize(width: 250, height: 170), frameSize: size)
+        popUp = PopUpNode(backgroundColor: UIColor(red:0.184314, green:0.184314, blue:0.184314, alpha:1.0), backgroundSize: CGSize(width: 250, height: 170), frameSize: size)
         popUp.zPosition = 100
         popUp.position = CGPoint(x: size.width / 2, y: size.height / 2)
         addChild(popUp)
@@ -155,12 +157,13 @@ class GameScene: SKScene {
         
         runAction(SKAction.waitForDuration(0.5), completion: completion)
     }
+    var messageLabel: SKLabelNode = SKLabelNode()
     func showShortMessage(message: String, delay: NSTimeInterval = 1, completion: ()->()){
-        let messageLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
+        messageLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
         messageLabel.position = CGPoint(x: size.width / 2, y: size.height / 2)
         messageLabel.text = message
-        messageLabel.fontSize = 34
-        messageLabel.fontColor = UIColor.grayColor()
+        messageLabel.fontSize = 30
+        messageLabel.fontColor = UIColor.whiteColor()
         messageLabel.zPosition = 99
         self.addChild(messageLabel)
         messageLabel.runAction(SKAction.scaleTo(0.0, duration: 0.01))
@@ -183,9 +186,10 @@ class GameScene: SKScene {
         popUp.hidden = false
         darkeningLayer.hidden = false
         darkeningLayer.alpha = 0
+        darkeningLayer.zPosition = 99
         popUp.alpha = 0
         
-        let action = SKAction.fadeAlphaTo(0.3, duration: 0.1)
+        let action = SKAction.fadeAlphaTo(0.6, duration: 0.1)
         
         let action2 = SKAction.scaleTo(1.2, duration: 0.2)
         action2.timingMode = .EaseIn
@@ -206,6 +210,7 @@ class GameScene: SKScene {
         darkeningLayer.runAction(SKAction.group([action]), completion:{
             self.popUp.hidden = true
             self.darkeningLayer.hidden = true
+            self.darkeningLayer.zPosition = 0
         })
         
         runAction(SKAction.waitForDuration(0.3), completion: completion)
@@ -255,13 +260,14 @@ class GameScene: SKScene {
                 
                 acctions.append(SKAction.waitForDuration(NSTimeInterval(blockId) * 0.03))
                 acctions.append(move)
-                if audio.sounds{
-                    acctions.append(sounds["Fall"]!)
-                }
+//                if audio.sounds{
+//                    acctions.append(sounds["Fall"]!)
+//                }
                 
                 let sequence = SKAction.sequence(acctions)
                 block.sprite?.runAction(sequence)
             }
+            playSound("Fall")
         }
         runAction(SKAction.waitForDuration(0.15), completion: completion)
     }
@@ -341,24 +347,29 @@ class GameScene: SKScene {
             
             //animation
             sprite.alpha = 0
-            let fadeIn = SKAction.fadeAlphaTo(0.3, duration: 0.2)
+            let fadeIn = SKAction.fadeAlphaTo(0.4, duration: 0.1)
             fadeIn.timingMode = .EaseOut
             sprite.runAction(fadeIn)
         }
     }
     func animateSwipingColumn(column: Int, newColumn: Column, direction: UISwipeGestureRecognizerDirection){
+        if columnsNodes.isEmpty{
+            return
+        }
         let oldPosition = columnsNodes[column].position
         let newColumnNode = ColumnNode()
+        newColumnNode.anchorPoint = CGPointZero
         
         for (blockId, block) in enumerate(newColumn.blocks) {
             let sprite = SKSpriteNode(imageNamed: block!.blockColor.spriteName)
             sprite.position = pointForColumn(0, row: block!.row)
             sprite.size = CGSize(width: CGFloat(BlockWidth), height: CGFloat(BlockHeight))
+            sprite.anchorPoint = CGPointZero
             
             newColumnNode.addChild(sprite)
             block!.sprite = sprite
         }
-        
+        println(oldPosition)
         newColumnNode.position = oldPosition
         var moveDistance: CGFloat = 300
         
@@ -376,6 +387,7 @@ class GameScene: SKScene {
         newColumnNode.runAction(move)
         columnsNodes[column] = newColumnNode
         gameLayer.columnsLayer.addChild(newColumnNode)
+        println(newColumnNode.position)
     }
     //Animations
 

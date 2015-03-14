@@ -21,42 +21,38 @@ class HUDNode: SKSpriteNode {
     
     override init(){
         super.init()
-        self.color = UIColor.redColor()
-        self.size = CGSize(width: 50, height: 125)
+        //self.color = UIColor.redColor()
+        self.size = CGSize(width: 50, height: 100)
         
         
         //Menu
         let menuButtonNode = SKSpriteNode(imageNamed: "Menu")
-        menuButtonNode.position.y -= 12.5
-        menuButtonNode.size = CGSize(width: 50, height: 25)
+        menuButtonNode.position.y -= 46
+        menuButtonNode.size = CGSize(width: 50, height: 50)
         menuButtonNode.name = "menuButton"
         
         
         //wavesLeft
-        wavesLeftNode = ProgressBarNode(imageNamed: "WavesLeft")
-        wavesLeftNode.position.y -= 50
+        wavesLeftNode = ProgressBarNode(imageNamed: "wavesLeft")
+        wavesLeftNode.position.y -= 106
         wavesLeftLabelNode = HUDLabelNode()
         wavesLeftNode.addChild(wavesLeftLabelNode)
 
         
-        //score
-        let scoreNode = SKSpriteNode(imageNamed: "Score")
-        scoreNode.position.y -= 87.5
-        scoreNode.size = CGSize(width: 50, height: 25)
-        scoreLabelNode = HUDLabelNode()
-        scoreNode.addChild(scoreLabelNode)
-        
-        
         //level
-        let levelNode = SKSpriteNode(imageNamed: "Level")
-        levelNode.size = CGSize(width: 50, height: 25)
-        levelNode.position.y -= 112.5
         levelLabelNode = HUDLabelNode()
-        levelNode.addChild(levelLabelNode)
+        levelLabelNode.position.x += 340
+        levelLabelNode.position.y -= 25
         
         
-        self.addChild(levelNode)
-        self.addChild(scoreNode)
+        //score
+        scoreLabelNode = HUDLabelNode()
+        scoreLabelNode.position.x += 450
+        scoreLabelNode.position.y -= 25
+        
+        
+        self.addChild(levelLabelNode)
+        self.addChild(scoreLabelNode)
         self.addChild(wavesLeftNode)
         self.addChild(menuButtonNode)
 

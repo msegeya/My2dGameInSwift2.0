@@ -120,6 +120,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
             self.gameLogic.reset()
             self.updateHUD()
             self.gameLogic.beginGame()
+            self.gameScene.animateAddingNextColumnPreview(self.gameLogic.nextColumn!)
         }
     }
     func showHighscore() {
@@ -228,14 +229,14 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         let currentPoint = sender.locationInView(sender.view)
         
         var tmpPoint = currentPoint
-        tmpPoint.x -= 36
+        tmpPoint.x -= 72
         tmpPoint.y = 0
         
         let (success, column, row) = convertPoint(tmpPoint)
         if success {
             if let newColumn = gameLogic.swipeColumn(column){
                 gameScene.animateSwipingColumn(column, newColumn: newColumn, direction: sender.direction)
-                gameScene.HUDLayer.scoreLabelNode.text = "\(gameLogic.score)"
+                updateHUD("score")
             }
         }
     }
@@ -245,14 +246,14 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         }
         var currentPoint = sender.locationInView(self.view)
         
-        currentPoint.x -= 22
-        currentPoint.y -= 34
+        currentPoint.x -= 72
+        currentPoint.y -= 32
         if currentPoint.y-269 < 0{
             currentPoint.y = abs(currentPoint.y-269)
         }else{
             currentPoint.y = -(currentPoint.y-269)
         }
-        //println(currentPoint)
+        println(currentPoint)
         let (success, column, row) = convertPoint(currentPoint)
         if success {
             let removedBlocks = gameLogic.removeBlocks(column, row: row)
@@ -260,17 +261,17 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
             if removedBlocks.blocksRemoved.count > 0{
                 
                 if removedBlocks.blocksRemoved.count > 5{
-                    gameScene.showShortMessage("GOOD GOD! +50", delay: 0.4, completion: {})
+                    gameScene.showShortMessage("SŁODKI JEZUU!", delay: 0.4, completion: {})
                     gameLogic.score += 50
                 }else if removedBlocks.blocksRemoved.count == 5{
-                    gameScene.showShortMessage("Vvveerryy Gooodd! + 25", delay: 0.3, completion: {})
+                    gameScene.showShortMessage("ło kurwa kurwa!", delay: 0.3, completion: {})
                     gameLogic.score += 25
                 }else if removedBlocks.blocksRemoved.count == 4{
-                    gameScene.showShortMessage("Nice! + 10", delay: 0.2, completion: {})
+                    gameScene.showShortMessage("Nice!", delay: 0.2, completion: {})
                     gameLogic.score += 10
                 }
                 
-                gameScene.HUDLayer.scoreLabelNode.text = String(gameLogic.score)
+                updateHUD("score")
                 gameScene.animateRemovingBlocksSprites(removedBlocks.blocksRemoved, fallenBlocks: removedBlocks.fallenBlocks){
                 }
             }
@@ -279,18 +280,18 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     //Gestures handling
     
     func updateHUD(){
-        self.gameScene.HUDLayer.levelLabelNode.text = "\(gameLogic.level)"
-        self.gameScene.HUDLayer.scoreLabelNode.text = "\(gameLogic.score)"
+        self.gameScene.HUDLayer.levelLabelNode.text = "Level: \(gameLogic.level)"
+        self.gameScene.HUDLayer.scoreLabelNode.text = "Score: \(gameLogic.score)"
         self.gameScene.HUDLayer.wavesLeftLabelNode.text = "\(gameLogic.wavesLeft)"
     }
     func updateHUD(label: String){
         switch label{
             case "level":
-                self.gameScene.HUDLayer.levelLabelNode.text = "\(gameLogic.level)"
+                self.gameScene.HUDLayer.levelLabelNode.text = "Level: \(gameLogic.level)"
             break
             
             case "score":
-                self.gameScene.HUDLayer.scoreLabelNode.text = "\(gameLogic.score)"
+                self.gameScene.HUDLayer.scoreLabelNode.text = "Score: \(gameLogic.score)"
             break
             
             case "wavesLeft":

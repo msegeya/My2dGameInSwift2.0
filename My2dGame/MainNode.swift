@@ -25,19 +25,19 @@ class MainNode: SKSpriteNode {
         
         columnsLayer.size = CGSize(width: ((BlockWidth + BlockWidthOffset) * CGFloat(NumColumns)), height: ((BlockHeight + BlockHeightOffset) * CGFloat(NumRows)))
         
-        nextColumnPreviewNode.position = CGPoint(x: columnsLayer.position.x - 50, y: columnsLayer.position.y)
+        nextColumnPreviewNode.position = CGPoint(x: columnsLayer.position.x - 50, y: columnsLayer.position.y + 10)
         
         let bottomNumbersLayer = SKSpriteNode()
         for i in 0..<NumColumns{
             let Label = SKLabelNode(fontNamed: "GillSans-Bold")
             Label.fontSize = 10
-            Label.fontColor = UIColor(red: 0.20, green: 0.20, blue: 0.20, alpha: 1)
+            Label.fontColor = UIColor(red: 0.40, green: 0.40, blue: 0.40, alpha: 1)
             Label.text = NSString(format: "%ld", i+1)
             Label.position = CGPoint(x: CGFloat(i) * (BlockWidth+BlockWidthOffset+0.4), y: 0.0)
             bottomNumbersLayer.addChild(Label)
         }
         bottomNumbersLayer.anchorPoint = CGPointZero
-        bottomNumbersLayer.position = CGPoint(x: (BlockWidth / 2)-3, y: columnsLayer.position.y - 15)
+        bottomNumbersLayer.position = CGPoint(x: (BlockWidth / 2)-3, y: columnsLayer.position.y - 17)
         
         self.addChild(columnsLayer)
         self.addChild(bottomNumbersLayer)
