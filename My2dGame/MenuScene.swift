@@ -18,21 +18,21 @@ class MenuScene: SKScene{
         self.backgroundColor = UIColor(red:0.184314, green:0.184314, blue:0.184314, alpha:1.0)
         
         let startGameLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
-        startGameLabel.text = "Start Game"
+        startGameLabel.text = NSLocalizedString("StartGame", comment: "Start Game")
         startGameLabel.fontSize = 26
         startGameLabel.position.y += 40
         startGameLabel.name = "startGame"
         self.addChild(startGameLabel)
         
         let highscoreLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
-        highscoreLabel.text = "Leaderboard"
+        highscoreLabel.text = NSLocalizedString("Leaderboard", comment: "Leaderboard")
         highscoreLabel.fontSize = 26
         highscoreLabel.position.y = 0
         highscoreLabel.name = "leaderboard"
         self.addChild(highscoreLabel)
         
         let optionsLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
-        optionsLabel.text = "How to play"
+        optionsLabel.text = NSLocalizedString("HowToPlay", comment: "How to play")
         optionsLabel.fontSize = 24
         optionsLabel.position.y -= 40
         optionsLabel.name = "howToPlay"

@@ -163,7 +163,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     
     //GameDelegates
     func gameDidBegin(game: Game) {
-        gameScene.showShortMessage("Ready.. set.. go!", delay: 1){
+        gameScene.showShortMessage(NSLocalizedString("Start", comment: "Start"), delay: 1){
             self.isGamePaused = false
             self.gameScene.startTicking()
         }
@@ -172,7 +172,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     func gameDidEnd(game: Game) {
         self.gameScene.stopTicking()
         self.gameScene.animateClearingScene(){}
-        gameScene.showShortMessage("Game Over!", delay: 2.0){
+        gameScene.showShortMessage(NSLocalizedString("GameOver", comment: "Game Over"), delay: 2.0){
             game.beginGame()
             self.updateHUD()
         }
@@ -195,7 +195,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         updateHUD("level")
         updateHUD("wavesLeft")
         
-        gameScene.showShortMessage("Level Up!", delay: 1){
+        gameScene.showShortMessage(NSLocalizedString("LevelUp", comment: "Level Up"), delay: 1){
             self.gameScene.animateSummaryResults(results, columns: game.columnArray){
                 game.beginGame()
                 self.updateHUD()
@@ -214,7 +214,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
             gameScene.tickLengthMillisTmp = gameScene.tickLengthMillis
             gameScene.tickLengthMillis = 4200
             gameScene.playSound("HurryUp")
-            gameScene.showShortMessage("Hurry up!", delay: 1, completion: {})
+            gameScene.showShortMessage(NSLocalizedString("HurryUp", comment: "Hurry Up"), delay: 1, completion: {})
         }
     }
     //GameDelegates
@@ -261,13 +261,13 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
             if removedBlocks.blocksRemoved.count > 0{
                 
                 if removedBlocks.blocksRemoved.count > 5{
-                    gameScene.showShortMessage("SŁODKI JEZUU!", delay: 0.4, completion: {})
+                    gameScene.showShortMessage(NSLocalizedString("GoodGod", comment: "Good God"), delay: 0.4, completion: {})
                     gameLogic.score += 50
                 }else if removedBlocks.blocksRemoved.count == 5{
-                    gameScene.showShortMessage("ło kurwa kurwa!", delay: 0.3, completion: {})
+                    gameScene.showShortMessage(NSLocalizedString("VeryGood", comment: "Very Good"), delay: 0.3, completion: {})
                     gameLogic.score += 25
                 }else if removedBlocks.blocksRemoved.count == 4{
-                    gameScene.showShortMessage("Nice!", delay: 0.2, completion: {})
+                    gameScene.showShortMessage(NSLocalizedString("Nice", comment: "Nice"), delay: 0.2, completion: {})
                     gameLogic.score += 10
                 }
                 
@@ -280,18 +280,18 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     //Gestures handling
     
     func updateHUD(){
-        self.gameScene.HUDLayer.levelLabelNode.text = "Level: \(gameLogic.level)"
-        self.gameScene.HUDLayer.scoreLabelNode.text = "Score: \(gameLogic.score)"
+        self.gameScene.HUDLayer.levelLabelNode.text = NSLocalizedString("Level", comment: "Level") + ": \(gameLogic.level)"
+        self.gameScene.HUDLayer.scoreLabelNode.text = NSLocalizedString("Score", comment: "Score") + ": \(gameLogic.score)"
         self.gameScene.HUDLayer.wavesLeftLabelNode.text = "\(gameLogic.wavesLeft)"
     }
     func updateHUD(label: String){
         switch label{
             case "level":
-                self.gameScene.HUDLayer.levelLabelNode.text = "Level: \(gameLogic.level)"
+                self.gameScene.HUDLayer.levelLabelNode.text = NSLocalizedString("Level", comment: "Level") + ": \(gameLogic.level)"
             break
             
             case "score":
-                self.gameScene.HUDLayer.scoreLabelNode.text = "Score: \(gameLogic.score)"
+                self.gameScene.HUDLayer.scoreLabelNode.text = NSLocalizedString("Score", comment: "Score") + ": \(gameLogic.score)"
             break
             
             case "wavesLeft":

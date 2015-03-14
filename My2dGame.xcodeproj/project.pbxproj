@@ -19,6 +19,7 @@
 		F9A3767D1AB3F1AC0079FACA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9336BF01AAA52CA00B0D204 /* Main.storyboard */; };
 		F9A3767E1AB3F1AC0079FACA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F9336BF51AAA52CA00B0D204 /* LaunchScreen.xib */; };
 		F9A376831AB3FFDA0079FACA /* Sprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = F9A376821AB3FFDA0079FACA /* Sprites.atlas */; };
+		F9A376861AB412460079FACA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F9A376881AB412460079FACA /* Localizable.strings */; };
 		F9C93C251AB289BD00C05063 /* ColumnNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C93C241AB289BD00C05063 /* ColumnNode.swift */; };
 		F9F65E4B1AAA8DDC009E4421 /* Fall.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9F65E4A1AAA8DDC009E4421 /* Fall.wav */; };
 		F9F65E4D1AAA98FC009E4421 /* HUDLabelNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E4C1AAA98FC009E4421 /* HUDLabelNode.swift */; };
@@ -60,6 +61,9 @@
 		F9336C0F1AAA55DB00B0D204 /* Column.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Column.swift; sourceTree = "<group>"; };
 		F9336C111AAA55F400B0D204 /* Block.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
 		F9A376821AB3FFDA0079FACA /* Sprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Sprites.atlas; sourceTree = "<group>"; };
+		F9A376871AB412460079FACA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F9A3768A1AB413D20079FACA /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F9A3768C1AB414390079FACA /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F9C93C241AB289BD00C05063 /* ColumnNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColumnNode.swift; sourceTree = "<group>"; };
 		F9F65E4A1AAA8DDC009E4421 /* Fall.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Fall.wav; sourceTree = "<group>"; };
 		F9F65E4C1AAA98FC009E4421 /* HUDLabelNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUDLabelNode.swift; sourceTree = "<group>"; };
@@ -97,6 +101,7 @@
 		F9336BDA1AAA52CA00B0D204 = {
 			isa = PBXGroup;
 			children = (
+				F9A376881AB412460079FACA /* Localizable.strings */,
 				F9FC8FD01AB0ECA100B3E896 /* GameKit.framework */,
 				F9336BE51AAA52CA00B0D204 /* My2dGame */,
 				F9336BFF1AAA52CA00B0D204 /* My2dGameTests */,
@@ -281,6 +286,7 @@
 			knownRegions = (
 				en,
 				Base,
+				pl,
 			);
 			mainGroup = F9336BDA1AAA52CA00B0D204;
 			productRefGroup = F9336BE41AAA52CA00B0D204 /* Products */;
@@ -303,6 +309,7 @@
 				F9A3767E1AB3F1AC0079FACA /* LaunchScreen.xib in Resources */,
 				F9FC8FD81AB13C0500B3E896 /* hurryUp.wav in Resources */,
 				F9F65E4B1AAA8DDC009E4421 /* Fall.wav in Resources */,
+				F9A376861AB412460079FACA /* Localizable.strings in Resources */,
 				F9336BF41AAA52CA00B0D204 /* Images.xcassets in Resources */,
 				F927A2EE1AAD3FC700AB6F0F /* BackgroundSound.mp3 in Resources */,
 			);
@@ -371,8 +378,18 @@
 			isa = PBXVariantGroup;
 			children = (
 				F9336BF61AAA52CA00B0D204 /* Base */,
+				F9A3768A1AB413D20079FACA /* pl */,
 			);
 			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+		F9A376881AB412460079FACA /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F9A376871AB412460079FACA /* en */,
+				F9A3768C1AB414390079FACA /* pl */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

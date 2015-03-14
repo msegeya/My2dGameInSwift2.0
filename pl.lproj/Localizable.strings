@@ -1,0 +1,26 @@
+/* 
+  Localizable.strings
+  My2dGame
+
+  Created by Karol Kedziora on 14.03.2015.
+  Copyright (c) 2015 Karol Kedziora. All rights reserved.
+*/
+
+"StartGame" = "Zacznij grę";
+"Leaderboard" = "Tablica wyników";
+"HowToPlay" = "Jak grać";
+"Level" = "Level";
+"Score" = "Punkty";
+"Nice" = "Nieźle";
+"VeryGood" = "Bardzo dobrze!";
+"GoodGod" = "Słodki Jezu!";
+"Music" = "Muzyka";
+"Sounds" = "Dźwięki";
+"Exit" = "Wyjście";
+"On" = "Włączone";
+"Off" = "Wyłączone";
+"TapToResume" = "Kliknij żeby wrócić";
+"Start" = "Start!";
+"GameOver" = "Porażka!";
+"LevelUp" = "Poziom w górę!";
+"HurryUp" = "Pośpiesz się!";

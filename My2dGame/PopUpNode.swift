@@ -18,10 +18,10 @@ class SwitchLabelButton: SKLabelNode {
     var state: Bool = false{
         didSet{
             if state == true{
-                self.text = initialText + " On"
+                self.text = initialText + " " + NSLocalizedString("On", comment: "On")
                 self.fontColor = UIColor(red:0.298039, green:0.760784, blue:0.282353, alpha:1.0)
             }else{
-                self.text = initialText + " Off"
+                self.text = initialText + " " + NSLocalizedString("Off", comment: "Off")
                 self.fontColor = UIColor(red:0.780392, green:0.243137, blue:0.219608, alpha:1.0)
             }
         }
@@ -41,10 +41,10 @@ class SwitchLabelButton: SKLabelNode {
         self.state = state
         
         if state == true{
-            self.text = initialText + " On"
+            self.text = initialText + " " + NSLocalizedString("On", comment: "On")
             self.fontColor = UIColor(red:0.298039, green:0.760784, blue:0.282353, alpha:1.0)
         }else{
-            self.text = initialText + " Off"
+            self.text = initialText + " " + NSLocalizedString("Off", comment: "Off")
             self.fontColor = UIColor(red:0.780392, green:0.243137, blue:0.219608, alpha:1.0)
         }
     }
@@ -93,20 +93,20 @@ class PopUpNode: SKSpriteNode {
 
         
         let backButtonLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
-        backButtonLabel.text = "Exit"
+        backButtonLabel.text = NSLocalizedString("Exit", comment: "Exit")
         backButtonLabel.fontColor = UIColor.whiteColor()
         backButtonLabel.fontSize = 24
         backButtonLabel.position.y += 50
         backButtonLabel.name = "backButton"
         self.addChild(backButtonLabel)
         
-        switchMusicButtonLabel = SwitchLabelButton(fontNamed: "Gill Sans Bold", text: "Music", state: audio.music)
+        switchMusicButtonLabel = SwitchLabelButton(fontNamed: "Gill Sans Bold", text: NSLocalizedString("Music", comment: "Music") , state: audio.music)
         switchMusicButtonLabel.fontSize = 24
         switchMusicButtonLabel.position.y += 10
         switchMusicButtonLabel.name = "switchMusicButton"
         self.addChild(switchMusicButtonLabel)
         
-        switchSoundButtonLabel = SwitchLabelButton(fontNamed: "Gill Sans Bold", text: "Sounds", state: audio.sounds)
+        switchSoundButtonLabel = SwitchLabelButton(fontNamed: "Gill Sans Bold", text: NSLocalizedString("Sounds", comment: "Sounds") , state: audio.sounds)
         switchSoundButtonLabel.fontSize = 24
         switchSoundButtonLabel.position.y -= 30
         switchSoundButtonLabel.name = "switchSoundButton"
@@ -114,7 +114,7 @@ class PopUpNode: SKSpriteNode {
         
         
         let resumeLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
-        resumeLabel.text = "Tap to resume"
+        resumeLabel.text = NSLocalizedString("TapToResume", comment: "Tap to resume")
         resumeLabel.fontColor = UIColor.whiteColor()
         resumeLabel.fontSize = 24
         resumeLabel.position.y -= 70
