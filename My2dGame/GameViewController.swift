@@ -180,6 +180,8 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     
     func gameDidLevelUp(game: Game) {
         gameScene.stopTicking()
+
+        isGamePaused = true
         
         if gameScene.tickLengthMillisTmp != nil{
             gameScene.tickLengthMillis = gameScene.tickLengthMillisTmp!
@@ -199,6 +201,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
             self.gameScene.animateSummaryResults(results, columns: game.columnArray){
                 game.beginGame()
                 self.updateHUD()
+                self.isGamePaused = false
             }
         }
     }
@@ -261,14 +264,14 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
             if removedBlocks.blocksRemoved.count > 0{
                 
                 if removedBlocks.blocksRemoved.count > 5{
-                    gameScene.showShortMessage(NSLocalizedString("GoodGod", comment: "Good God"), delay: 0.4, completion: {})
-                    gameLogic.score += 50
+                    gameScene.showShortMessage(NSLocalizedString("GoodGod", comment: "Good God"), delay: 0.4, completion: {self.gameLogic.score += 50})
+                    
                 }else if removedBlocks.blocksRemoved.count == 5{
-                    gameScene.showShortMessage(NSLocalizedString("VeryGood", comment: "Very Good"), delay: 0.3, completion: {})
-                    gameLogic.score += 25
+                    gameScene.showShortMessage(NSLocalizedString("VeryGood", comment: "Very Good"), delay: 0.3, completion: {self.gameLogic.score += 25})
+                    
                 }else if removedBlocks.blocksRemoved.count == 4{
-                    gameScene.showShortMessage(NSLocalizedString("Nice", comment: "Nice"), delay: 0.2, completion: {})
-                    gameLogic.score += 10
+                    gameScene.showShortMessage(NSLocalizedString("Nice", comment: "Nice"), delay: 0.2, completion: {self.gameLogic.score += 10})
+                    
                 }
                 
                 updateHUD("score")

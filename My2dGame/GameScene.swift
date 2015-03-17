@@ -159,6 +159,8 @@ class GameScene: SKScene {
     }
     var messageLabel: SKLabelNode = SKLabelNode()
     func showShortMessage(message: String, delay: NSTimeInterval = 1, completion: ()->()){
+        messageLabel.runAction(SKAction.fadeOutWithDuration(0.1))
+        
         messageLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
         messageLabel.position = CGPoint(x: size.width / 2, y: size.height / 2)
         messageLabel.text = message
@@ -260,9 +262,6 @@ class GameScene: SKScene {
                 
                 acctions.append(SKAction.waitForDuration(NSTimeInterval(blockId) * 0.03))
                 acctions.append(move)
-//                if audio.sounds{
-//                    acctions.append(sounds["Fall"]!)
-//                }
                 
                 let sequence = SKAction.sequence(acctions)
                 block.sprite?.runAction(sequence)
@@ -282,6 +281,13 @@ class GameScene: SKScene {
             sprite.anchorPoint = CGPointZero
             sprite.position = pointForColumn(0, row: block!.row)
             sprite.size = CGSize(width: CGFloat(BlockWidth), height: CGFloat(BlockHeight))
+            
+            if block!.blockType != BlockType.Normal{
+                let type = SKSpriteNode(imageNamed: block!.blockType.typeName)
+                type.position = CGPoint(x: BlockWidth/2, y: BlockHeight/2)
+                sprite.addChild(type)
+            }
+            
             //sprite.zPosition = CGFloat(blockId)
             
             newColumnNode.addChild(sprite)

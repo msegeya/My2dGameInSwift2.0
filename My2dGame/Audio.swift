@@ -8,13 +8,25 @@
 import AVFoundation
 
 class Audio {
-    var sounds: Bool = true
-    var music: Bool = false{
+    let defaults = NSUserDefaults.standardUserDefaults()
+    
+    var sounds: Bool{
+        didSet{
+            if sounds{
+                defaults.setBool(true, forKey: "sounds")
+            }else{
+                defaults.setBool(false, forKey: "sounds")
+            }
+        }
+    }
+    var music: Bool{
         didSet{
             if music{
                 backgroundMusicPlayer.play()
+                defaults.setBool(true, forKey: "music")
             }else{
                 backgroundMusicPlayer.stop()
+                defaults.setBool(false, forKey: "music")
             }
         }
     }
@@ -28,6 +40,19 @@ class Audio {
         backgroundMusicPlayer = AVAudioPlayer(contentsOfURL: backgroundMusic, error: &error)
         backgroundMusicPlayer.numberOfLoops = -1 //infinite loop
         backgroundMusicPlayer.prepareToPlay()
+
+        if let soundsFromDefaults = defaults.boolForKey("sounds") as Bool?
+        {
+            self.sounds = soundsFromDefaults
+        }else{
+            self.sounds = true
+        }
+        if let musicFromDefaults = defaults.boolForKey("music") as Bool?
+        {
+            self.music = musicFromDefaults
+        }else{
+            self.music = true
+        }
     }
     
     func reset(){

@@ -96,7 +96,9 @@ class Game {
         for (i, column) in enumerate(columnArray){
             let columnScore = column.sumUpScore() * PointsPerBlock
             pointsInColumns.insert(columnScore, atIndex: i)
-            score += columnScore
+        }
+        for col in pointsInColumns{
+            score += col
         }
         return pointsInColumns
     }
