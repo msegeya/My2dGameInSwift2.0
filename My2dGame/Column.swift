@@ -51,7 +51,7 @@ class Column {
     }
     
     func randomBlockTypeForColumn(){
-        var probability = 0.7
+        var probability = 0.9
         var result = Int(arc4random_uniform(10))
 
         if result > Int(probability * 10){

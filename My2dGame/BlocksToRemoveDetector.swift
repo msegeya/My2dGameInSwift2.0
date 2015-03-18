@@ -10,7 +10,7 @@ import Foundation
 
 class BlocksToRemoveDetector {
     
-    var blocksToRemove: Set<Block>
+    private var blocksToRemove: Set<Block>
     private var columnArray: Array<Column>
     
     init(){
@@ -50,7 +50,7 @@ class BlocksToRemoveDetector {
             return
         }
         
-        if block!.isChecked{
+        if blocksToRemove.containsElement(block!){
             return
         }
         
@@ -80,6 +80,7 @@ class BlocksToRemoveDetector {
     func detectSpecialBlockTypes(){
         for block in blocksToRemove{
             if block.blockType == BlockType.Bomb{
+                block.isChecked = true
                 bombDetected(block)
             }
         }
@@ -91,9 +92,16 @@ class BlocksToRemoveDetector {
                 if let tmpBlock = blockAtColumn(block.column.id+column, row: block.row+row){
                     if !tmpBlock.isChecked{
                         blocksToRemove.addElement(tmpBlock)
+                        
+                        //detecting bombs in previouse bomb area
+                        if tmpBlock.blockType == BlockType.Bomb{
+                            tmpBlock.isChecked = true
+                            bombDetected(tmpBlock)
+                        }
                     }
                 }
             }
         }
+        return
     }
 }

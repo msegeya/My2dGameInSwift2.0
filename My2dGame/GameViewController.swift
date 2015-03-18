@@ -44,6 +44,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "pauseGameSceneNotificationReceived:", name:"pauseGameScene", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "resumeGameSceneNotificationReceived:", name:"resumeGameScene", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleTapDirectly:", name:"handleTapDirectly", object: nil)
 
         skView = view as SKView
         skView.multipleTouchEnabled = false
@@ -256,8 +257,9 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         }else{
             currentPoint.y = -(currentPoint.y-269)
         }
-        println(currentPoint)
+
         let (success, column, row) = convertPoint(currentPoint)
+        println("\(success),(\(column), \(row))")
         if success {
             if let (removedBlocks, fallenBlocks) = gameLogic.removeMatchesBlocks(column, row: row){
                 if removedBlocks.count > 0{
@@ -279,6 +281,36 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
                 }
             }
         }
+    }
+    func handleTapDirectly(notification: NSNotification){
+        if isGamePaused{
+            return
+        }
+        
+        let (success, column, row) = convertPoint(tappedPoint)
+        println(">>>tap>>>\(success),(\(column), \(row))")
+//        if success {
+//            if let (removedBlocks, fallenBlocks) = gameLogic.removeMatchesBlocks(column, row: row){
+//                if removedBlocks.count > 0{
+//                    
+//                    if removedBlocks.count > 5{
+//                        gameScene.showShortMessage(NSLocalizedString("GoodGod", comment: "Good God"), delay: 0.4, completion: {self.gameLogic.score += 50})
+//                        
+//                    }else if removedBlocks.count == 5{
+//                        gameScene.showShortMessage(NSLocalizedString("VeryGood", comment: "Very Good"), delay: 0.3, completion: {self.gameLogic.score += 25})
+//                        
+//                    }else if removedBlocks.count == 4{
+//                        gameScene.showShortMessage(NSLocalizedString("Nice", comment: "Nice"), delay: 0.2, completion: {self.gameLogic.score += 10})
+//                        
+//                    }
+//                    
+//                    updateHUD("score")
+//                    gameScene.animateRemovingBlocksSprites(removedBlocks, fallenBlocks: fallenBlocks){
+//                    }
+//                }
+//            }
+//        }
+
     }
     //Gestures handling
     
@@ -309,7 +341,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     func convertPoint(point: CGPoint) -> (success: Bool, column: Int, row: Int) {
         if (point.x >= 0 && point.x < CGFloat(NumColumns) * (BlockWidth+BlockWidthOffset) &&
             point.y >= 0 && point.y < CGFloat(NumRows) * (BlockHeight+BlockHeightOffset)) {
-                return (true, Int(point.x / (BlockWidth)), Int(point.y / (BlockHeight+BlockHeightOffset)))
+                return (true, Int(point.x / (BlockWidth+BlockWidthOffset)), Int(point.y / (BlockHeight+BlockHeightOffset)))
         } else {
             return (false, 0, 0)
         }

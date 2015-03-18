@@ -85,6 +85,7 @@ class Game {
         if columnId < columnArray.count{
             score -= columnArray[columnId].currentHeight * (PointsPerBlock / 2)
             let newColumn = Column(height: columnArray[columnId].currentHeight)
+            newColumn.id = columnId
             columnArray[columnId] = newColumn
             
             return newColumn
@@ -162,11 +163,15 @@ class Game {
     }
     
     func removeMatchesBlocks(column: Int, row: Int) -> (removedBlocks: Set<Block>, fallenBlocks: Array<Array<Block>>)?{
+        for (id,x) in enumerate(columnArray){
+            println("   *col\(id)(\(x.id)) - \(x.currentHeight)")
+        }
+        println()
         detector.detectMatchesBlocks(column, row: row, array: columnArray)
-        println("*1*\(detector.getMatchesBlocks()?.count)")
         detector.detectSpecialBlockTypes()
-        println("*2*\(detector.getMatchesBlocks()?.count)")
         
+        println("matechesBlocks: - \(detector.getMatchesBlocks()?.count)")
+        println()
         if let matchesBlocks = detector.getMatchesBlocks(){
             score += matchesBlocks.count
             

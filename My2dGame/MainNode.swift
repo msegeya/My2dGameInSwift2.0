@@ -8,6 +8,7 @@
 
 import SpriteKit
 
+var tappedPoint = CGPoint()
 
 class MainNode: SKSpriteNode {
     
@@ -54,8 +55,9 @@ class MainNode: SKSpriteNode {
         var location = touch?.locationInNode(self.columnsLayer)
         let touchedNode = self.nodeAtPoint(location!)
         
-        println("*\(location)")
-
+        println("*\(location!)")
+        tappedPoint = location!
+        NSNotificationCenter.defaultCenter().postNotificationName("handleTapDirectly", object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {

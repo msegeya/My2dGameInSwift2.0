@@ -231,7 +231,7 @@ class GameScene: SKScene {
                 
                 let duration = wholeDelayTime * 0.3
                 let delay = SKAction.waitForDuration(NSTimeInterval(duration))
-                println(duration)
+
                 column.runAction(SKAction.sequence([delay, removeColumnActionGroup, SKAction.removeFromParent()]))
                 wholeDelayTime++
             }
