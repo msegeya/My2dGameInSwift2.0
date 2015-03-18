@@ -9,9 +9,6 @@
 import SpriteKit
 
 class HUDNode: SKSpriteNode {
-    
-    var levelLabelNode = HUDLabelNode()
-    var scoreLabelNode = HUDLabelNode()
     var wavesLeftLabelNode = HUDLabelNode()
     var wavesLeftNode: ProgressBarNode = ProgressBarNode()
     
@@ -37,25 +34,10 @@ class HUDNode: SKSpriteNode {
         wavesLeftNode.position.y -= 106
         wavesLeftLabelNode = HUDLabelNode()
         wavesLeftNode.addChild(wavesLeftLabelNode)
+        
 
-        
-        //level
-        levelLabelNode = HUDLabelNode()
-        levelLabelNode.position.x += 340
-        levelLabelNode.position.y -= 25
-        
-        
-        //score
-        scoreLabelNode = HUDLabelNode()
-        scoreLabelNode.position.x += 450
-        scoreLabelNode.position.y -= 25
-        
-        
-        self.addChild(levelLabelNode)
-        self.addChild(scoreLabelNode)
         self.addChild(wavesLeftNode)
         self.addChild(menuButtonNode)
-
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {

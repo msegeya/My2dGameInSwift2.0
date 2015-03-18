@@ -8,12 +8,26 @@
 
 import SpriteKit
 
-var tappedPoint = CGPoint()
+protocol ColumnLayerDelegate{
+    func BlockDidTap(location: CGPoint)
+    func ColumnDidSwipe(location: CGPoint, direction: Direction)
+}
+
+struct Swipe {
+    var location: CGPoint
+    var direction: Direction
+}
 
 class MainNode: SKSpriteNode {
-    
     let columnsLayer = SKSpriteNode()
     let nextColumnPreviewNode = SKNode()
+    var delegate: ColumnLayerDelegate?
+    
+    var levelLabelNode = HUDLabelNode()
+    var scoreLabelNode = HUDLabelNode()
+    
+    var tapLocation: CGPoint?
+    var swipe: Swipe?
     
     override init(texture: SKTexture!, color: UIColor!, size: CGSize) {
         super.init(texture: texture, color: color, size: size)
@@ -24,7 +38,7 @@ class MainNode: SKSpriteNode {
         
         self.size = CGSize(width: ((BlockWidth + BlockWidthOffset) * CGFloat(NumColumns)), height: ((BlockHeight + BlockHeightOffset) * CGFloat(NumRows)))
         
-        columnsLayer.size = CGSize(width: ((BlockWidth + BlockWidthOffset) * CGFloat(NumColumns)), height: ((BlockHeight + BlockHeightOffset) * CGFloat(NumRows)))
+        //columnsLayer.size = CGSize(width: ((BlockWidth + BlockWidthOffset) * CGFloat(NumColumns)), height: ((BlockHeight + BlockHeightOffset) * CGFloat(NumRows)))
         
         nextColumnPreviewNode.position = CGPoint(x: columnsLayer.position.x - 50, y: columnsLayer.position.y + 10)
         
@@ -38,7 +52,7 @@ class MainNode: SKSpriteNode {
             bottomNumbersLayer.addChild(Label)
         }
         bottomNumbersLayer.anchorPoint = CGPointZero
-        bottomNumbersLayer.position = CGPoint(x: (BlockWidth / 2)-3, y: columnsLayer.position.y - 17)
+        bottomNumbersLayer.position = CGPoint(x: (BlockWidth / 2)-3, y: columnsLayer.position.y - 16)
         
         self.addChild(columnsLayer)
         self.addChild(bottomNumbersLayer)
@@ -46,6 +60,21 @@ class MainNode: SKSpriteNode {
         
         self.columnsLayer.anchorPoint = CGPointZero
         self.userInteractionEnabled = true
+        
+
+        //level
+        levelLabelNode = HUDLabelNode()
+        levelLabelNode.position.x += 310
+        levelLabelNode.position.y += self.size.height - 15
+        
+        
+        //score
+        scoreLabelNode = HUDLabelNode()
+        scoreLabelNode.position.x += 420
+        scoreLabelNode.position.y += self.size.height - 15
+        
+        addChild(levelLabelNode)
+        addChild(scoreLabelNode)
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
@@ -53,11 +82,41 @@ class MainNode: SKSpriteNode {
         
         var touch: AnyObject? = touches.anyObject()
         var location = touch?.locationInNode(self.columnsLayer)
-        let touchedNode = self.nodeAtPoint(location!)
+
+        tapLocation = location!
+    }
+    
+    override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
+        if swipe != nil{
+            return
+        }
+
+        let touch = touches.anyObject() as UITouch
+        let location = touch.locationInNode(self.columnsLayer)
         
-        println("*\(location!)")
-        tappedPoint = location!
-        NSNotificationCenter.defaultCenter().postNotificationName("handleTapDirectly", object: nil)
+        if (location.y - tapLocation!.y) > BlockHeight*1.5{
+            swipe = Swipe(location: location, direction: Direction.Up)
+        }else if (location.y - tapLocation!.y) < -(BlockHeight*1.5){
+            swipe = Swipe(location: location, direction: Direction.Down)
+        }
+    }
+    
+    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+        if swipe != nil{
+            delegate?.ColumnDidSwipe(tapLocation!, direction: swipe!.direction)
+            swipe = nil
+            tapLocation = nil
+        }else if tapLocation != nil{
+            delegate?.BlockDidTap(tapLocation!)
+            tapLocation = nil
+        }
+    }
+    
+    override func touchesCancelled(touches: NSSet, withEvent event: UIEvent) {
+        touchesEnded(touches, withEvent: event)
+        
+        tapLocation = nil
+        swipe = nil
     }
 
     required init?(coder aDecoder: NSCoder) {

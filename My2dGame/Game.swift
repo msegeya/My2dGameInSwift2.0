@@ -163,15 +163,15 @@ class Game {
     }
     
     func removeMatchesBlocks(column: Int, row: Int) -> (removedBlocks: Set<Block>, fallenBlocks: Array<Array<Block>>)?{
-        for (id,x) in enumerate(columnArray){
-            println("   *col\(id)(\(x.id)) - \(x.currentHeight)")
-        }
-        println()
+        //for (id,x) in enumerate(columnArray){
+          //  println("   *col\(id)(\(x.id)) - \(x.currentHeight)")
+        //}
+        //println()
         detector.detectMatchesBlocks(column, row: row, array: columnArray)
         detector.detectSpecialBlockTypes()
         
-        println("matechesBlocks: - \(detector.getMatchesBlocks()?.count)")
-        println()
+        //println("matechesBlocks: - \(detector.getMatchesBlocks()?.count)")
+        //println()
         if let matchesBlocks = detector.getMatchesBlocks(){
             score += matchesBlocks.count
             

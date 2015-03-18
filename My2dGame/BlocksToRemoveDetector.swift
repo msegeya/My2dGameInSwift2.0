@@ -12,6 +12,7 @@ class BlocksToRemoveDetector {
     
     private var blocksToRemove: Set<Block>
     private var columnArray: Array<Column>
+    private var matchColor: BlockColor!
     
     init(){
         self.columnArray = Array<Column>()
@@ -38,14 +39,17 @@ class BlocksToRemoveDetector {
         self.columnArray = array
         
         if let startBlock = blockAtColumn(column, row: row){
-            recursion(startBlock, column: column, matchColor: startBlock.blockColor)
+            self.matchColor = startBlock.blockColor
+            
+            recursion(startBlock, column: column)
+            
             if blocksToRemove.count == 1{
                 blocksToRemove.removeElement(startBlock)
             }
         }
     }
     
-    private func recursion(block: Block?, column: Int, matchColor: BlockColor){
+    private func recursion(block: Block?, column: Int){
         if block == nil{
             return
         }
@@ -62,16 +66,16 @@ class BlocksToRemoveDetector {
         }
         
         if let tmpBlock = blockAtColumn(column + 1, row: block!.row){
-            recursion(tmpBlock, column: column + 1, matchColor: matchColor)
+            recursion(tmpBlock, column: column + 1)
         }
         if let tmpBlock = blockAtColumn(column - 1, row: block!.row){
-            recursion(tmpBlock, column: column - 1, matchColor: matchColor)
+            recursion(tmpBlock, column: column - 1)
         }
         if let tmpBlock = blockAtColumn(column, row: block!.row + 1){
-            recursion(tmpBlock, column: column, matchColor: matchColor)
+            recursion(tmpBlock, column: column)
         }
         if let tmpBlock = blockAtColumn(column, row: block!.row - 1){
-            recursion(tmpBlock, column: column, matchColor: matchColor)
+            recursion(tmpBlock, column: column)
         }
         
         return

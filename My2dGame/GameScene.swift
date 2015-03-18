@@ -11,8 +11,8 @@ import SpriteKit
 let BlockWidth: CGFloat = 42.0
 let BlockHeight: CGFloat = 42.0
 
-let BlockWidthOffset: CGFloat = 1.5
-let BlockHeightOffset: CGFloat = -0.5
+let BlockWidthOffset: CGFloat = -0.3
+let BlockHeightOffset: CGFloat = -0.3
 
 let TickLengthLevelOne = NSTimeInterval(3600)
 
@@ -54,12 +54,12 @@ class GameScene: SKScene {
         //HUD
         HUDLayer.position = CGPoint(x: 33, y: size.height)
         HUDLayer.anchorPoint = CGPoint(x: 0.5, y: 1.0)
-        HUDLayer.zPosition = 98
         addChild(HUDLayer)
         HUDLayer.userInteractionEnabled = true
         
+        
         //Main game layer
-        gameLayer.position = CGPoint(x: 72, y: 19)
+        gameLayer.position = CGPoint(x: 74, y: 18)
         gameLayer.anchorPoint = CGPointZero
         addChild(gameLayer)
         
@@ -68,12 +68,11 @@ class GameScene: SKScene {
         darkeningLayer = SKSpriteNode(color: UIColor.blackColor(), size: size)
         darkeningLayer.hidden = true
         darkeningLayer.anchorPoint = CGPointZero
-
         addChild(darkeningLayer)
         
         
         //Popup
-        popUp = PopUpNode(backgroundColor: UIColor(red:0.184314, green:0.184314, blue:0.184314, alpha:1.0), backgroundSize: CGSize(width: 250, height: 170), frameSize: size)
+        popUp = PopUpNode(imageNamed: "PopUpBackground", backgroundSize: CGSize(width: 185, height: 100), frameSize: size)
         popUp.zPosition = 100
         popUp.position = CGPoint(x: size.width / 2, y: size.height / 2)
         addChild(popUp)
@@ -141,7 +140,6 @@ class GameScene: SKScene {
         if audio.sounds{
             runAction(sounds[name])
         }
-        
     }
     //Other
     
@@ -357,7 +355,7 @@ class GameScene: SKScene {
             sprite.runAction(fadeIn)
         }
     }
-    func animateSwipingColumn(column: Int, newColumn: Column, direction: UISwipeGestureRecognizerDirection){
+    func animateSwipingColumn(column: Int, newColumn: Column, direction: Direction){
         if columnsNodes.isEmpty{
             return
         }
@@ -374,7 +372,7 @@ class GameScene: SKScene {
             newColumnNode.addChild(sprite)
             block!.sprite = sprite
         }
-        println(oldPosition)
+
         newColumnNode.position = oldPosition
         var moveDistance: CGFloat = 300
         
@@ -392,7 +390,6 @@ class GameScene: SKScene {
         newColumnNode.runAction(move)
         columnsNodes[column] = newColumnNode
         gameLayer.columnsLayer.addChild(newColumnNode)
-        println(newColumnNode.position)
     }
     //Animations
 

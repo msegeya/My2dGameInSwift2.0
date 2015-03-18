@@ -54,13 +54,19 @@ class SwitchLabelButton: SKLabelNode {
     }
 }
 
-class PopUpNode: SKSpriteNode {
+class SwitchButton: SKSpriteNode {
+    var onStateImage = SKTexture()
+    var offStateImage = SKTexture()
     
-    var popUpBackground: SKSpriteNode = SKSpriteNode()
-    var delegate: PopUpDelegate?
-    
-    var switchMusicButtonLabel = SwitchLabelButton()
-    var switchSoundButtonLabel = SwitchLabelButton()
+    var state: Bool = false{
+        didSet{
+            if state == true{
+                self.texture = onStateImage
+            }else{
+                self.texture = offStateImage
+            }
+        }
+    }
     
     override init(texture: SKTexture!, color: UIColor!, size: CGSize) {
         super.init(texture: texture, color: color, size: size)
@@ -70,10 +76,47 @@ class PopUpNode: SKSpriteNode {
         super.init()
     }
     
-    init(imageNamed: String, backgroundSize: CGSize) {
+    init(onStateImageNamed: String, offStateImageNamed: String, state: Bool) {
         super.init()
         
-        popUpBackground = SKSpriteNode(fileNamed: imageNamed)
+        self.onStateImage = SKTexture(imageNamed: onStateImageNamed)
+        self.offStateImage = SKTexture(imageNamed: offStateImageNamed)
+        
+        self.state = state
+        
+        if state{
+            self.texture = onStateImage
+        }else{
+            self.texture = offStateImage
+        }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class PopUpNode: SKSpriteNode {
+    
+    var popUpBackground: SKSpriteNode = SKSpriteNode()
+    var delegate: PopUpDelegate?
+    
+    var musicButton = SwitchButton()
+    var soundsButton = SwitchButton()
+    
+    override init(texture: SKTexture!, color: UIColor!, size: CGSize) {
+        super.init(texture: texture, color: color, size: size)
+    }
+    
+    override init() {
+        super.init()
+    }
+    
+    init(imageNamed: String, backgroundSize: CGSize, frameSize: CGSize) {
+        super.init()
+        self.size = frameSize
+        popUpBackground = SKSpriteNode(imageNamed: imageNamed)
+        popUpBackground.size = backgroundSize
         self.addChild(popUpBackground)
         
         self.setup()
@@ -91,33 +134,31 @@ class PopUpNode: SKSpriteNode {
         popUpBackground.name = "backgroundNode"
         self.userInteractionEnabled = true
 
+        let backButton = SKSpriteNode(imageNamed: "Exit")
+        backButton.size = CGSize(width: 50, height: 50)
+        backButton.position.x -= 55
+        backButton.position.y += 10
+        backButton.name = "backButton"
+        addChild(backButton)
         
-        let backButtonLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
-        backButtonLabel.text = NSLocalizedString("Exit", comment: "Exit")
-        backButtonLabel.fontColor = UIColor.whiteColor()
-        backButtonLabel.fontSize = 24
-        backButtonLabel.position.y += 50
-        backButtonLabel.name = "backButton"
-        self.addChild(backButtonLabel)
+        musicButton = SwitchButton(onStateImageNamed: "MusicOn", offStateImageNamed: "MusicOff", state: audio.music)
+        musicButton.size = CGSize(width: 50, height: 50)
+        musicButton.position.y += 10
+        musicButton.name = "switchMusicButton"
+        addChild(musicButton)
         
-        switchMusicButtonLabel = SwitchLabelButton(fontNamed: "Gill Sans Bold", text: NSLocalizedString("Music", comment: "Music") , state: audio.music)
-        switchMusicButtonLabel.fontSize = 24
-        switchMusicButtonLabel.position.y += 10
-        switchMusicButtonLabel.name = "switchMusicButton"
-        self.addChild(switchMusicButtonLabel)
-        
-        switchSoundButtonLabel = SwitchLabelButton(fontNamed: "Gill Sans Bold", text: NSLocalizedString("Sounds", comment: "Sounds") , state: audio.sounds)
-        switchSoundButtonLabel.fontSize = 24
-        switchSoundButtonLabel.position.y -= 30
-        switchSoundButtonLabel.name = "switchSoundButton"
-        self.addChild(switchSoundButtonLabel)
-        
-        
+        soundsButton = SwitchButton(onStateImageNamed: "SoundsOn", offStateImageNamed: "SoundsOff", state: audio.sounds)
+        soundsButton.size = CGSize(width: 50, height: 50)
+        soundsButton.position.x += 55
+        soundsButton.position.y += 10
+        soundsButton.name = "switchSoundsButton"
+        addChild(soundsButton)
+
         let resumeLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
         resumeLabel.text = NSLocalizedString("TapToResume", comment: "Tap to resume")
         resumeLabel.fontColor = UIColor.whiteColor()
-        resumeLabel.fontSize = 24
-        resumeLabel.position.y -= 70
+        resumeLabel.fontSize = 14
+        resumeLabel.position.y -= 35
         self.addChild(resumeLabel)
         
         self.hidden = true
@@ -141,11 +182,11 @@ class PopUpNode: SKSpriteNode {
                 delegate?.gameDidExitToMenu()
                 break
             case "switchMusicButton":
-                switchMusicButtonLabel.state = !switchMusicButtonLabel.state
+                musicButton.state = !musicButton.state
                 audio.music = !audio.music
                 break
-            case "switchSoundButton":
-                switchSoundButtonLabel.state = !switchSoundButtonLabel.state
+            case "switchSoundsButton":
+                soundsButton.state = !soundsButton.state
                 audio.sounds = !audio.sounds
                 break
             case "":

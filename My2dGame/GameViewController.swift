@@ -25,8 +25,11 @@ func delay(delay:Double, closure:()->()) {
 
 let audio = Audio()
 
+enum Direction{
+    case Up, Down
+}
 
-class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDelegate {
+class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDelegate, ColumnLayerDelegate {
     
     var gameCenter: GameCenter!
     
@@ -35,7 +38,19 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     var gameLogic: Game!
     
     var timePassed = 0.0
-    var isGamePaused: Bool = true
+    var isGamePaused: Bool = true{
+        didSet{
+            if isGamePaused{
+                self.gameScene.userInteractionEnabled = true
+                self.gameScene.gameLayer.userInteractionEnabled = false
+                self.gameScene.HUDLayer.userInteractionEnabled = false
+            }else{
+                self.gameScene.userInteractionEnabled = false
+                self.gameScene.gameLayer.userInteractionEnabled = true
+                self.gameScene.HUDLayer.userInteractionEnabled = true
+            }
+        }
+    }
     
     var skView: SKView = SKView()
     
@@ -44,7 +59,6 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "pauseGameSceneNotificationReceived:", name:"pauseGameScene", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "resumeGameSceneNotificationReceived:", name:"resumeGameScene", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleTapDirectly:", name:"handleTapDirectly", object: nil)
 
         skView = view as SKView
         skView.multipleTouchEnabled = false
@@ -61,17 +75,6 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         
         gameLogic = Game()
         gameLogic.delegate = self
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: Selector("handleTap:"))
-        skView.addGestureRecognizer(tapGesture)
-        
-        let swipeGestureUp = UISwipeGestureRecognizer(target: self, action: Selector("handleColumnSwipe:"))
-        swipeGestureUp.direction = .Up
-        skView.addGestureRecognizer(swipeGestureUp)
-        
-        let swipeGestureDown = UISwipeGestureRecognizer(target: self, action: Selector("handleColumnSwipe:"))
-        swipeGestureDown.direction = .Down
-        skView.addGestureRecognizer(swipeGestureDown)
         
         skView.presentScene(menuScene)
         
@@ -102,7 +105,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     
     //MenuDelegates
     func startGame() {
-        let transition = SKTransition.pushWithDirection(SKTransitionDirection.Left, duration: 0.5)
+        let transition = SKTransition.pushWithDirection(SKTransitionDirection.Left, duration: 0.3)
         
         self.gameScene.tickLengthMillis = TickLengthLevelOne
         
@@ -114,9 +117,11 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         gameScene.resumeGame = gameDidResume
         gameScene.popUp.delegate = self
         
+        gameScene.gameLayer.delegate = self
+        
         skView.presentScene(gameScene, transition: transition)
         
-        delay(0.6){
+        delay(0.4){
             audio.reset()
             self.gameLogic.reset()
             self.updateHUD()
@@ -132,9 +137,6 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     
     //PopUpDelegates
     func gameDidPause(){
-        gameScene.userInteractionEnabled = true
-        gameScene.gameLayer.userInteractionEnabled = false
-        gameScene.HUDLayer.userInteractionEnabled = false
         isGamePaused = true
         gameScene.showPopUpAnimation()
         
@@ -148,10 +150,6 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
             let newLastTickValue = NSDate().dateByAddingTimeInterval(NSTimeInterval(self.timePassed))
             self.gameScene.lastTick = newLastTickValue
             self.isGamePaused = false
-            
-            self.gameScene.userInteractionEnabled = false
-            self.gameScene.gameLayer.userInteractionEnabled = true
-            self.gameScene.HUDLayer.userInteractionEnabled = true
         }
     }
     func gameDidExitToMenu(){
@@ -181,7 +179,6 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     
     func gameDidLevelUp(game: Game) {
         gameScene.stopTicking()
-
         isGamePaused = true
         
         if gameScene.tickLengthMillisTmp != nil{
@@ -225,41 +222,28 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     
     
     //Gestures handling
-    @IBAction func handleColumnSwipe(sender: UISwipeGestureRecognizer) {
+    func ColumnDidSwipe(location: CGPoint, direction: Direction){
         if isGamePaused{
             return
         }
         
-        let currentPoint = sender.locationInView(sender.view)
+        let (success, column, row) = convertPoint(location)
         
-        var tmpPoint = currentPoint
-        tmpPoint.x -= 72
-        tmpPoint.y = 0
-        
-        let (success, column, row) = convertPoint(tmpPoint)
         if success {
             if let newColumn = gameLogic.swipeColumn(column){
-                gameScene.animateSwipingColumn(column, newColumn: newColumn, direction: sender.direction)
+                gameScene.animateSwipingColumn(column, newColumn: newColumn, direction: direction)
                 updateHUD("score")
             }
         }
     }
-    @IBAction func handleTap(sender: UITapGestureRecognizer) {
+
+    func BlockDidTap(location: CGPoint){
         if isGamePaused{
             return
         }
-        var currentPoint = sender.locationInView(self.view)
         
-        currentPoint.x -= 72
-        currentPoint.y -= 32
-        if currentPoint.y-269 < 0{
-            currentPoint.y = abs(currentPoint.y-269)
-        }else{
-            currentPoint.y = -(currentPoint.y-269)
-        }
-
-        let (success, column, row) = convertPoint(currentPoint)
-        println("\(success),(\(column), \(row))")
+        let (success, column, row) = convertPoint(location)
+        
         if success {
             if let (removedBlocks, fallenBlocks) = gameLogic.removeMatchesBlocks(column, row: row){
                 if removedBlocks.count > 0{
@@ -282,51 +266,21 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
             }
         }
     }
-    func handleTapDirectly(notification: NSNotification){
-        if isGamePaused{
-            return
-        }
-        
-        let (success, column, row) = convertPoint(tappedPoint)
-        println(">>>tap>>>\(success),(\(column), \(row))")
-//        if success {
-//            if let (removedBlocks, fallenBlocks) = gameLogic.removeMatchesBlocks(column, row: row){
-//                if removedBlocks.count > 0{
-//                    
-//                    if removedBlocks.count > 5{
-//                        gameScene.showShortMessage(NSLocalizedString("GoodGod", comment: "Good God"), delay: 0.4, completion: {self.gameLogic.score += 50})
-//                        
-//                    }else if removedBlocks.count == 5{
-//                        gameScene.showShortMessage(NSLocalizedString("VeryGood", comment: "Very Good"), delay: 0.3, completion: {self.gameLogic.score += 25})
-//                        
-//                    }else if removedBlocks.count == 4{
-//                        gameScene.showShortMessage(NSLocalizedString("Nice", comment: "Nice"), delay: 0.2, completion: {self.gameLogic.score += 10})
-//                        
-//                    }
-//                    
-//                    updateHUD("score")
-//                    gameScene.animateRemovingBlocksSprites(removedBlocks, fallenBlocks: fallenBlocks){
-//                    }
-//                }
-//            }
-//        }
-
-    }
     //Gestures handling
     
     func updateHUD(){
-        self.gameScene.HUDLayer.levelLabelNode.text = NSLocalizedString("Level", comment: "Level") + ": \(gameLogic.level)"
-        self.gameScene.HUDLayer.scoreLabelNode.text = NSLocalizedString("Score", comment: "Score") + ": \(gameLogic.score)"
+        self.gameScene.gameLayer.levelLabelNode.text = NSLocalizedString("Level", comment: "Level") + ": \(gameLogic.level)"
+        self.gameScene.gameLayer.scoreLabelNode.text = NSLocalizedString("Score", comment: "Score") + ": \(gameLogic.score)"
         self.gameScene.HUDLayer.wavesLeftLabelNode.text = "\(gameLogic.wavesLeft)"
     }
     func updateHUD(label: String){
         switch label{
             case "level":
-                self.gameScene.HUDLayer.levelLabelNode.text = NSLocalizedString("Level", comment: "Level") + ": \(gameLogic.level)"
+                self.gameScene.gameLayer.levelLabelNode.text = NSLocalizedString("Level", comment: "Level") + ": \(gameLogic.level)"
             break
             
             case "score":
-                self.gameScene.HUDLayer.scoreLabelNode.text = NSLocalizedString("Score", comment: "Score") + ": \(gameLogic.score)"
+                self.gameScene.gameLayer.scoreLabelNode.text = NSLocalizedString("Score", comment: "Score") + ": \(gameLogic.score)"
             break
             
             case "wavesLeft":
