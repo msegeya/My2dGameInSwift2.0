@@ -21,6 +21,8 @@
 		F9A376861AB412460079FACA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F9A376881AB412460079FACA /* Localizable.strings */; };
 		F9A376901AB8A7360079FACA /* Sprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = F9A3768F1AB8A7360079FACA /* Sprites.atlas */; };
 		F9C93C251AB289BD00C05063 /* ColumnNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C93C241AB289BD00C05063 /* ColumnNode.swift */; };
+		F9C9745D1AB8DCA200171A40 /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C9745C1AB8DCA200171A40 /* Set.swift */; };
+		F9C9745F1AB918FE00171A40 /* BlocksToRemoveDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C9745E1AB918FE00171A40 /* BlocksToRemoveDetector.swift */; };
 		F9F65E4B1AAA8DDC009E4421 /* Fall.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9F65E4A1AAA8DDC009E4421 /* Fall.wav */; };
 		F9F65E4D1AAA98FC009E4421 /* HUDLabelNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E4C1AAA98FC009E4421 /* HUDLabelNode.swift */; };
 		F9F65E4F1AAAAE84009E4421 /* PopUpNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E4E1AAAAE84009E4421 /* PopUpNode.swift */; };
@@ -65,6 +67,8 @@
 		F9A3768C1AB414390079FACA /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F9A3768F1AB8A7360079FACA /* Sprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Sprites.atlas; sourceTree = "<group>"; };
 		F9C93C241AB289BD00C05063 /* ColumnNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColumnNode.swift; sourceTree = "<group>"; };
+		F9C9745C1AB8DCA200171A40 /* Set.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Set.swift; path = ../Set.swift; sourceTree = "<group>"; };
+		F9C9745E1AB918FE00171A40 /* BlocksToRemoveDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlocksToRemoveDetector.swift; sourceTree = "<group>"; };
 		F9F65E4A1AAA8DDC009E4421 /* Fall.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Fall.wav; sourceTree = "<group>"; };
 		F9F65E4C1AAA98FC009E4421 /* HUDLabelNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUDLabelNode.swift; sourceTree = "<group>"; };
 		F9F65E4E1AAAAE84009E4421 /* PopUpNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopUpNode.swift; sourceTree = "<group>"; };
@@ -129,6 +133,7 @@
 				F9336C151AAA57CB00B0D204 /* Scenes */,
 				F9336BE81AAA52CA00B0D204 /* AppDelegate.swift */,
 				F9336BEE1AAA52CA00B0D204 /* GameViewController.swift */,
+				F9C9745C1AB8DCA200171A40 /* Set.swift */,
 				F9336BF01AAA52CA00B0D204 /* Main.storyboard */,
 				F9336BF31AAA52CA00B0D204 /* Images.xcassets */,
 				F9336BF51AAA52CA00B0D204 /* LaunchScreen.xib */,
@@ -178,6 +183,7 @@
 				F9336C111AAA55F400B0D204 /* Block.swift */,
 				F9336C0F1AAA55DB00B0D204 /* Column.swift */,
 				F9336C0C1AAA559500B0D204 /* Game.swift */,
+				F9C9745E1AB918FE00171A40 /* BlocksToRemoveDetector.swift */,
 				F9B0DC191AAD307400589C22 /* SpriteKit Extensions */,
 			);
 			name = Model;
@@ -329,6 +335,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9C9745D1AB8DCA200171A40 /* Set.swift in Sources */,
 				F9F65E4D1AAA98FC009E4421 /* HUDLabelNode.swift in Sources */,
 				F9336BED1AAA52CA00B0D204 /* GameScene.swift in Sources */,
 				F9FC8FDB1AB1E02C00B3E896 /* GameCenterHelper.swift in Sources */,
@@ -336,6 +343,7 @@
 				F9FC8FCD1AB0D09F00B3E896 /* HUDNode.swift in Sources */,
 				F9F65E4F1AAAAE84009E4421 /* PopUpNode.swift in Sources */,
 				F9FC8FCF1AB0D24300B3E896 /* MainNode.swift in Sources */,
+				F9C9745F1AB918FE00171A40 /* BlocksToRemoveDetector.swift in Sources */,
 				F9F65E511AAAB3E9009E4421 /* MenuScene.swift in Sources */,
 				F9336C101AAA55DB00B0D204 /* Column.swift in Sources */,
 				F9FC8FD61AB11EBF00B3E896 /* Audio.swift in Sources */,

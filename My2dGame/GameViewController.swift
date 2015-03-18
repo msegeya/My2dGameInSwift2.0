@@ -259,23 +259,23 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         println(currentPoint)
         let (success, column, row) = convertPoint(currentPoint)
         if success {
-            let removedBlocks = gameLogic.removeBlocks(column, row: row)
-            
-            if removedBlocks.blocksRemoved.count > 0{
-                
-                if removedBlocks.blocksRemoved.count > 5{
-                    gameScene.showShortMessage(NSLocalizedString("GoodGod", comment: "Good God"), delay: 0.4, completion: {self.gameLogic.score += 50})
+            if let (removedBlocks, fallenBlocks) = gameLogic.removeMatchesBlocks(column, row: row){
+                if removedBlocks.count > 0{
                     
-                }else if removedBlocks.blocksRemoved.count == 5{
-                    gameScene.showShortMessage(NSLocalizedString("VeryGood", comment: "Very Good"), delay: 0.3, completion: {self.gameLogic.score += 25})
+                    if removedBlocks.count > 5{
+                        gameScene.showShortMessage(NSLocalizedString("GoodGod", comment: "Good God"), delay: 0.4, completion: {self.gameLogic.score += 50})
+                        
+                    }else if removedBlocks.count == 5{
+                        gameScene.showShortMessage(NSLocalizedString("VeryGood", comment: "Very Good"), delay: 0.3, completion: {self.gameLogic.score += 25})
+                        
+                    }else if removedBlocks.count == 4{
+                        gameScene.showShortMessage(NSLocalizedString("Nice", comment: "Nice"), delay: 0.2, completion: {self.gameLogic.score += 10})
+                        
+                    }
                     
-                }else if removedBlocks.blocksRemoved.count == 4{
-                    gameScene.showShortMessage(NSLocalizedString("Nice", comment: "Nice"), delay: 0.2, completion: {self.gameLogic.score += 10})
-                    
-                }
-                
-                updateHUD("score")
-                gameScene.animateRemovingBlocksSprites(removedBlocks.blocksRemoved, fallenBlocks: removedBlocks.fallenBlocks){
+                    updateHUD("score")
+                    gameScene.animateRemovingBlocksSprites(removedBlocks, fallenBlocks: fallenBlocks){
+                    }
                 }
             }
         }

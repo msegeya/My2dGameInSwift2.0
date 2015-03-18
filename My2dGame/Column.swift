@@ -5,7 +5,7 @@
 //  Created by Karol Kedziora on 06.03.2015.
 //  Copyright (c) 2015 Karol Kedziora. All rights reserved.
 //
-
+import Darwin
 
 class Column {
     var id: Int
@@ -46,6 +46,24 @@ class Column {
             
             self.currentHeight++
         }
+        
+        randomBlockTypeForColumn()
+    }
+    
+    func randomBlockTypeForColumn(){
+        var probability = 0.7
+        var result = Int(arc4random_uniform(10))
+
+        if result > Int(probability * 10){
+            return
+        }
+        
+        let rand = Int(arc4random_uniform(UInt32(currentHeight)))
+        let block = getBlock(rand)
+        
+        var randomBlockTypeRawValue = Int(arc4random_uniform(UInt32(NumBlockTypes-1))+1)
+        
+        block?.blockType = BlockType(rawValue: randomBlockTypeRawValue)
     }
     
     func isEmpty() -> Bool{

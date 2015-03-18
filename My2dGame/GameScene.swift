@@ -239,12 +239,10 @@ class GameScene: SKScene {
         columnsNodes.removeAll(keepCapacity: false)
         runAction(SKAction.waitForDuration(NSTimeInterval(wholeDelayTime * 0.4)), completion: completion)
     }
-    func animateRemovingBlocksSprites(blocksToRemove: Array<Block>, fallenBlocks: Array<Array<Block>>, completion: ()->()){
+    func animateRemovingBlocksSprites(blocksToRemove: Set<Block>, fallenBlocks: Array<Array<Block>>, completion: ()->()){
         var acctions = Array<SKAction>()
-        
         acctions.append(SKAction.fadeOutWithDuration(0.2))
-        acctions.append(SKAction.removeFromParent())
-        
+        acctions.append(SKAction.removeFromParent())   
         let sequence = SKAction.sequence(acctions)
         
         for (blockId, block) in enumerate(blocksToRemove){
@@ -285,6 +283,7 @@ class GameScene: SKScene {
             if block!.blockType != BlockType.Normal{
                 let type = SKSpriteNode(imageNamed: block!.blockType.typeName)
                 type.position = CGPoint(x: BlockWidth/2, y: BlockHeight/2)
+                
                 sprite.addChild(type)
             }
             

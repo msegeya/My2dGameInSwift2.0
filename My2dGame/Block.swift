@@ -25,6 +25,7 @@ enum BlockColor: Int {
         return BlockColor(rawValue: Int(arc4random_uniform(4)))!
     }
 }
+let NumBlockTypes = 4
 enum BlockType: Int {
     case Normal = 0, Bomb, SlowMotion, Hourglass
     
@@ -39,8 +40,12 @@ enum BlockType: Int {
     }
 }
 
-class Block {
-    let blockType: BlockType!
+func ==(lhs: Block, rhs: Block) -> Bool {
+    return lhs.column.id == rhs.column.id && lhs.row == rhs.row
+}
+
+class Block: Hashable {
+    var blockType: BlockType!
     let blockColor: BlockColor!
     var sprite: SKSpriteNode?
     let column: Column
@@ -54,5 +59,9 @@ class Block {
         self.isChecked = false
         self.column = column
         self.blockType = BlockType.Normal
+    }
+    
+    var hashValue: Int {
+        return row*10 + column.id
     }
 }

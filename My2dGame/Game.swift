@@ -20,6 +20,7 @@ protocol GameDelegate {
     func gameDidLevelUp(game: Game)
 }
 
+
 class Game {
     
     var level: Int
@@ -31,6 +32,7 @@ class Game {
     var columnArray: Array<Column>
     var blocksToRemove: Array<Block>
     var delegate: GameDelegate?
+    var detector: BlocksToRemoveDetector
     
     init(){
         level = 1
@@ -41,6 +43,7 @@ class Game {
         currentNumberOfColumns = 0
         columnArray = Array<Column>()
         blocksToRemove = Array<Block>()
+        detector = BlocksToRemoveDetector()
     }
     func reset(){
         level = 1
@@ -158,73 +161,26 @@ class Game {
         return nil
     }
     
-    func blockAtColumn(column: Int, row: Int) -> Block? {
-        if(column >= 0 && row >= 0 && column < columnArray.count && row < NumRows){
-            return columnArray[column].getBlock(row)
-        }else{
-            return nil
-        }
-    }
-    
-    func removeBlocks(column: Int, row: Int) -> (blocksRemoved: Array<Block>, fallenBlocks: Array<Array<Block>>){
-        blocksToRemove.removeAll(keepCapacity: false)
-        var fallenBlocks: Array<Array<Block>> = Array<Array<Block>>()
-        var removedBlocks: Array<Block> = Array<Block>()
+    func removeMatchesBlocks(column: Int, row: Int) -> (removedBlocks: Set<Block>, fallenBlocks: Array<Array<Block>>)?{
+        detector.detectMatchesBlocks(column, row: row, array: columnArray)
+        println("*1*\(detector.getMatchesBlocks()?.count)")
+        detector.detectSpecialBlockTypes()
+        println("*2*\(detector.getMatchesBlocks()?.count)")
         
-        if let block = blockAtColumn(column, row: row){
-            findBlocksToRemove(block, column: column)
+        if let matchesBlocks = detector.getMatchesBlocks(){
+            score += matchesBlocks.count
             
-            if(blocksToRemove.count > 0){
-                blocksToRemove.append(block)
-                for block in blocksToRemove{
-                    removedBlocks.append(block)
-                    block.column.removeBlock(block.row)
-                    score += 1
-                }
-                for column in columnArray{
-                    let result = column.repositionBlocks()
-                    fallenBlocks.append(result)
-                }
-            }else{
-                block.isChecked = false
+            for block in matchesBlocks{
+                block.column.removeBlock(block.row)
             }
-            return (removedBlocks, fallenBlocks: fallenBlocks)
+            
+            var fallenBlocks = Array<Array<Block>>()
+            for column in columnArray{
+                fallenBlocks.append(column.repositionBlocks())
+            }
+            return (matchesBlocks, fallenBlocks)
         }
-        return (removedBlocks, fallenBlocks: fallenBlocks)
+        return nil
     }
     
-    func findBlocksToRemove(block: Block, column: Int){
-        if(!block.isChecked){
-            block.isChecked = true
-            
-            if let tmpBlock = blockAtColumn(column + 1, row: block.row){
-                if(tmpBlock.blockColor == block.blockColor && !tmpBlock.isChecked){
-                    blocksToRemove.append(tmpBlock)
-                    findBlocksToRemove(tmpBlock, column: column + 1)
-                }
-            }
-            
-            if let tmpBlock = blockAtColumn(column - 1, row: block.row){
-                if(tmpBlock.blockColor == block.blockColor && !tmpBlock.isChecked){
-                    blocksToRemove.append(tmpBlock)
-                    findBlocksToRemove(tmpBlock, column: column - 1)
-                }
-            }
-            
-            if let tmpBlock = blockAtColumn(column, row: block.row - 1){
-                if(tmpBlock.blockColor == block.blockColor && !tmpBlock.isChecked){
-                    blocksToRemove.append(tmpBlock)
-                    findBlocksToRemove(tmpBlock, column: column)
-                }
-            }
-            
-            if let tmpBlock = blockAtColumn(column, row: block.row + 1){
-                if(tmpBlock.blockColor == block.blockColor && !tmpBlock.isChecked){
-                    blocksToRemove.append(tmpBlock)
-                    findBlocksToRemove(tmpBlock, column: column)
-                }
-            }
-        }
-        return
-    }
 }
