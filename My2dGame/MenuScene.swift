@@ -20,24 +20,29 @@ class MenuScene: SKScene{
     }
     
     override func didMoveToView(view: SKView) {
+        let logo = SKSpriteNode(imageNamed: "Logo")
+        logo.size = CGSize(width: 300, height: 90)
+        logo.position.y += 100
+        self.addChild(logo)
+        
         let startGameLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
         startGameLabel.text = NSLocalizedString("StartGame", comment: "Start Game")
         startGameLabel.fontSize = 26
-        startGameLabel.position.y += 40
+        startGameLabel.position.y += 5
         startGameLabel.name = "startGame"
         self.addChild(startGameLabel)
         
         let highscoreLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
         highscoreLabel.text = NSLocalizedString("Leaderboard", comment: "Leaderboard")
         highscoreLabel.fontSize = 26
-        highscoreLabel.position.y = 0
+        highscoreLabel.position.y -= 30
         highscoreLabel.name = "leaderboard"
         self.addChild(highscoreLabel)
         
         let optionsLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
         optionsLabel.text = NSLocalizedString("HowToPlay", comment: "How to play")
         optionsLabel.fontSize = 24
-        optionsLabel.position.y -= 40
+        optionsLabel.position.y -= 65
         optionsLabel.name = "howToPlay"
         self.addChild(optionsLabel)
     }

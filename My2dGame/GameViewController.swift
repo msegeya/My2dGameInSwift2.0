@@ -90,9 +90,10 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         //            }
         //        }
         
+        
         //Adding facebook login/logout button to menu scene
         fbLoginView = FBLoginView(readPermissions: ["public_profile", "email", "user_friends"])
-        fbLoginView.frame = CGRectOffset(fbLoginView.frame, (self.view!.center.x - (fbLoginView.frame.size.width / 2)), 240);
+        fbLoginView.frame = CGRectOffset(fbLoginView.frame, (self.view!.center.x - (fbLoginView.frame.size.width / 2)), 250);
         fbLoginView.delegate = self
         menuScene.view?.addSubview(fbLoginView)
     }
