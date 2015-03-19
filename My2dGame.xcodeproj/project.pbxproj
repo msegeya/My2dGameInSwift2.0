@@ -16,6 +16,7 @@
 		F9336C0D1AAA559500B0D204 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9336C0C1AAA559500B0D204 /* Game.swift */; };
 		F9336C101AAA55DB00B0D204 /* Column.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9336C0F1AAA55DB00B0D204 /* Column.swift */; };
 		F9336C121AAA55F400B0D204 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9336C111AAA55F400B0D204 /* Block.swift */; };
+		F94DD1C11ABA499A000731CC /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F94DD1C01ABA499A000731CC /* FacebookSDK.framework */; };
 		F9A3767D1AB3F1AC0079FACA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9336BF01AAA52CA00B0D204 /* Main.storyboard */; };
 		F9A3767E1AB3F1AC0079FACA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F9336BF51AAA52CA00B0D204 /* LaunchScreen.xib */; };
 		F9A376861AB412460079FACA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F9A376881AB412460079FACA /* Localizable.strings */; };
@@ -62,6 +63,8 @@
 		F9336C0C1AAA559500B0D204 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		F9336C0F1AAA55DB00B0D204 /* Column.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Column.swift; sourceTree = "<group>"; };
 		F9336C111AAA55F400B0D204 /* Block.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
+		F94DD1C01ABA499A000731CC /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
+		F94DD1C21ABA4C89000731CC /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		F9A376871AB412460079FACA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F9A3768A1AB413D20079FACA /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		F9A3768C1AB414390079FACA /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -89,6 +92,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F9FC8FD11AB0ECA100B3E896 /* GameKit.framework in Frameworks */,
+				F94DD1C11ABA499A000731CC /* FacebookSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,7 +109,9 @@
 		F9336BDA1AAA52CA00B0D204 = {
 			isa = PBXGroup;
 			children = (
+				F94DD1C21ABA4C89000731CC /* Bridging-Header.h */,
 				F9A376881AB412460079FACA /* Localizable.strings */,
+				F94DD1C01ABA499A000731CC /* FacebookSDK.framework */,
 				F9FC8FD01AB0ECA100B3E896 /* GameKit.framework */,
 				F9336BE51AAA52CA00B0D204 /* My2dGame */,
 				F9336BFF1AAA52CA00B0D204 /* My2dGameTests */,
@@ -487,11 +493,16 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/Karol/Documents/FacebookSDK,
+				);
 				INFOPLIST_FILE = My2dGame/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -503,11 +514,16 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/Karol/Documents/FacebookSDK,
+				);
 				INFOPLIST_FILE = My2dGame/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

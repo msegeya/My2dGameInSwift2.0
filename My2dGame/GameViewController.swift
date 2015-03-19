@@ -29,9 +29,10 @@ enum Direction{
     case Up, Down
 }
 
-class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDelegate, ColumnLayerDelegate {
+class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDelegate, ColumnLayerDelegate, FBLoginViewDelegate {
     
     var gameCenter: GameCenter!
+    var fbLoginView : FBLoginView!
     
     var gameScene: GameScene!
     var menuScene: MenuScene!
@@ -59,12 +60,11 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "pauseGameSceneNotificationReceived:", name:"pauseGameScene", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "resumeGameSceneNotificationReceived:", name:"resumeGameScene", object: nil)
-
+        
         skView = view as SKView
         skView.multipleTouchEnabled = false
         skView.showsFPS = true
         skView.showsNodeCount = true
-        //skView.ignoresSiblingOrder = true
         
         menuScene = MenuScene(size: skView.bounds.size)
         menuScene.scaleMode = .AspectFill
@@ -78,20 +78,26 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         
         skView.presentScene(menuScene)
         
-        //self.gameCenter = GameCenter(rootViewController: self)
+        //      self.gameCenter = GameCenter(rootViewController: self)
         
-//        /* Open Windows Game Center if player not login in Game Center */
-//        self.gameCenter.loginToGameCenter() {
-//            (result: Bool) in
-//            if result {
-//                /* Player is login in Game Center OR Open Windows for login in Game Center */
-//            } else {
-//                /* Player is not login in Game Center */
-//            }
-//        }
+        //        /* Open Windows Game Center if player not login in Game Center */
+        //        self.gameCenter.loginToGameCenter() {
+        //            (result: Bool) in
+        //            if result {
+        //                /* Player is login in Game Center OR Open Windows for login in Game Center */
+        //            } else {
+        //                /* Player is not login in Game Center */
+        //            }
+        //        }
+        
+        //Adding facebook login/logout button to menu scene
+        fbLoginView = FBLoginView(readPermissions: ["public_profile", "email", "user_friends"])
+        fbLoginView.frame = CGRectOffset(fbLoginView.frame, (self.view!.center.x - (fbLoginView.frame.size.width / 2)), 240);
+        fbLoginView.delegate = self
+        menuScene.view?.addSubview(fbLoginView)
     }
     
-    func pauseGameSceneNotificationReceived(notification: NSNotification){  
+    func pauseGameSceneNotificationReceived(notification: NSNotification){
         if isGamePaused{
             return
         }
@@ -103,8 +109,37 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         }
     }
     
+    
+    //Facebook integration, delegate methods
+    func loginViewShowingLoggedInUser(loginView : FBLoginView!) {
+        println("User Logged In")
+    }
+    
+    func loginViewFetchedUserInfo(loginView : FBLoginView!, user: FBGraphUser) {
+        println("User: \(user)")
+        println("User ID: \(user.objectID)")
+        println("User Name: \(user.name)")
+        var userEmail = user.objectForKey("email") as String
+        println("User Email: \(userEmail)")
+        
+        var alert = UIAlertController(title: "Logged in!", message: "Hello \(user.first_name)", preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func loginViewShowingLoggedOutUser(loginView : FBLoginView!) {
+        println("User Logged Out")
+    }
+    
+    func loginView(loginView : FBLoginView!, handleError:NSError) {
+        println("Error: \(handleError.localizedDescription)")
+    }
+    //Facebook integration, delegate methods
+    
+    
     //MenuDelegates
     func startGame() {
+        fbLoginView.hidden = true
         let transition = SKTransition.pushWithDirection(SKTransitionDirection.Left, duration: 0.3)
         
         self.gameScene.tickLengthMillis = TickLengthLevelOne
@@ -156,6 +191,10 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         audio.backgroundMusicPlayer.volume = 0.0
         let transition = SKTransition.pushWithDirection(SKTransitionDirection.Left, duration: 0.5)
         skView.presentScene(menuScene, transition: transition)
+        delay(0.5){
+            self.fbLoginView.hidden = false
+        }
+        
     }
     //PopUpDelagates
     
@@ -236,7 +275,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
             }
         }
     }
-
+    
     func BlockDidTap(location: CGPoint){
         if isGamePaused{
             return
@@ -268,6 +307,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     }
     //Gestures handling
     
+    
     func updateHUD(){
         self.gameScene.gameLayer.levelLabelNode.text = NSLocalizedString("Level", comment: "Level") + ": \(gameLogic.level)"
         self.gameScene.gameLayer.scoreLabelNode.text = NSLocalizedString("Score", comment: "Score") + ": \(gameLogic.score)"
@@ -275,16 +315,16 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     }
     func updateHUD(label: String){
         switch label{
-            case "level":
-                self.gameScene.gameLayer.levelLabelNode.text = NSLocalizedString("Level", comment: "Level") + ": \(gameLogic.level)"
+        case "level":
+            self.gameScene.gameLayer.levelLabelNode.text = NSLocalizedString("Level", comment: "Level") + ": \(gameLogic.level)"
             break
             
-            case "score":
-                self.gameScene.gameLayer.scoreLabelNode.text = NSLocalizedString("Score", comment: "Score") + ": \(gameLogic.score)"
+        case "score":
+            self.gameScene.gameLayer.scoreLabelNode.text = NSLocalizedString("Score", comment: "Score") + ": \(gameLogic.score)"
             break
             
-            case "wavesLeft":
-                 self.gameScene.HUDLayer.wavesLeftLabelNode.text = "\(gameLogic.wavesLeft)"
+        case "wavesLeft":
+            self.gameScene.HUDLayer.wavesLeftLabelNode.text = "\(gameLogic.wavesLeft)"
             break
             
         default:
