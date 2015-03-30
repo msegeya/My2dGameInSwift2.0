@@ -10,6 +10,7 @@
 #define My2dGame_Bridging_Header_h
 
 #import <FacebookSDK/FacebookSDK.h>
+//#import "iRate.h"
 
 #endif
 

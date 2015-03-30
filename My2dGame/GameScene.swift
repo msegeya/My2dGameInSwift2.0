@@ -119,9 +119,10 @@ class GameScene: SKScene {
         var location = touch?.locationInNode(self)
         let touchedNode = self.nodeAtPoint(location!)
         
-        if popUp.hidden == false{
-            resumeGame!()
-        }
+//        println(popUp.hidden)
+//        if popUp.hidden == false{
+//            resumeGame!()
+//        }
     }
     func pointForColumn(column: Int, row: Int) -> CGPoint {
         var x: CGFloat = 0.0
@@ -182,7 +183,7 @@ class GameScene: SKScene {
         
         messageLabel.runAction(SKAction.sequence([SKAction.group([SKAction.sequence([action, action2]),action3]), delay, SKAction.group([action4, action5]), action6]), completion: completion)
     }
-    func showPopUpAnimation(){
+    func showPopUpAnimation(completion: ()->()){
         popUp.hidden = false
         darkeningLayer.hidden = false
         darkeningLayer.alpha = 0
@@ -190,7 +191,6 @@ class GameScene: SKScene {
         popUp.alpha = 0
         
         let action = SKAction.fadeAlphaTo(0.6, duration: 0.1)
-        
         let action2 = SKAction.scaleTo(1.2, duration: 0.2)
         action2.timingMode = .EaseIn
         let action3 = SKAction.scaleTo(1.0, duration: 0.15)
@@ -199,15 +199,14 @@ class GameScene: SKScene {
         let action4 = SKAction.fadeInWithDuration(0.1)
         
         darkeningLayer.runAction(SKAction.group([action]))
-        popUp.runAction(SKAction.group([action4, SKAction.sequence([action2, action3])]))
+        popUp.runAction(SKAction.group([action4, SKAction.sequence([action2, action3])]), completion: completion)
     }
     func hidePopUpAnimation(completion: ()->()){
         let action = SKAction.fadeAlphaTo(0.0, duration: 0.1)
-        
         let action2 = SKAction.scaleTo(0.0, duration: 0.1)
         
         popUp.runAction(SKAction.group([action, action2]))
-        darkeningLayer.runAction(SKAction.group([action]), completion:{
+        darkeningLayer.runAction(action, completion:{
             self.popUp.hidden = true
             self.darkeningLayer.hidden = true
             self.darkeningLayer.zPosition = 0
@@ -239,11 +238,43 @@ class GameScene: SKScene {
     }
     func animateRemovingBlocksSprites(blocksToRemove: Set<Block>, fallenBlocks: Array<Array<Block>>, completion: ()->()){
         var acctions = Array<SKAction>()
-        acctions.append(SKAction.fadeOutWithDuration(0.2))
+        acctions.append(SKAction.fadeOutWithDuration(0.1))
         acctions.append(SKAction.removeFromParent())   
         let sequence = SKAction.sequence(acctions)
         
         for (blockId, block) in enumerate(blocksToRemove){
+            var emitter = SKEmitterNode(fileNamed: "Crush.sks")
+            emitter.particleColorSequence = nil;
+            emitter.particleColorBlendFactor = 1.0;
+            
+            switch block.blockColor!.spriteName{
+            case "Blue":
+                emitter.particleColor = UIColor(red: 83/255, green: 132/255, blue: 236/255, alpha: 1.0)
+                emitter.name = "blue"
+                break
+            case "Green":
+                emitter.particleColor = UIColor(red: 99/255, green: 225/255, blue: 86/255, alpha: 1.0)
+                emitter.name = "green"
+                break
+            case "Orange":
+                emitter.particleColor = UIColor(red: 241/255, green: 138/255, blue: 60/255, alpha: 1.0)
+                emitter.name = "orange"
+                break
+            case "Red":
+                emitter.particleColor = UIColor(red: 205/255, green: 64/255, blue: 65/255, alpha: 1.0)
+                emitter.name = "red"
+                break
+            default:
+                break
+            }
+            
+            var pos = pointForColumn(block.column.id, row: block.row)
+            pos.x += BlockWidth/2
+            pos.y += BlockHeight/2
+            emitter.position = pos
+            
+            gameLayer.columnsLayer.addChild(emitter)
+            
             block.sprite?.runAction(sequence)
         }
         
@@ -368,6 +399,13 @@ class GameScene: SKScene {
             sprite.position = pointForColumn(0, row: block!.row)
             sprite.size = CGSize(width: CGFloat(BlockWidth), height: CGFloat(BlockHeight))
             sprite.anchorPoint = CGPointZero
+            
+            if block!.blockType != BlockType.Normal{
+                let type = SKSpriteNode(imageNamed: block!.blockType.typeName)
+                type.position = CGPoint(x: BlockWidth/2, y: BlockHeight/2)
+                
+                sprite.addChild(type)
+            }
             
             newColumnNode.addChild(sprite)
             block!.sprite = sprite

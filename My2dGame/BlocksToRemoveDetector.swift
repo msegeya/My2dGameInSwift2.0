@@ -87,6 +87,10 @@ class BlocksToRemoveDetector {
                 block.isChecked = true
                 bombDetected(block)
             }
+            if block.blockType == BlockType.SlowMotion{
+                block.isChecked = true
+                laserDetected(block)
+            }
         }
     }
     
@@ -107,5 +111,15 @@ class BlocksToRemoveDetector {
             }
         }
         return
+    }
+    
+    private func laserDetected(block: Block){
+        for column in columnArray{
+            if let tmpBlock = blockAtColumn(column.id, row: block.row){
+                if !tmpBlock.isChecked{
+                    blocksToRemove.addElement(tmpBlock)
+                }
+            }
+        }
     }
 }

@@ -65,7 +65,7 @@ class ProgressBarNode: SKSpriteNode {
     }
     
     func setProgress(progress: CGFloat){
-        let progress2 = 1.0 - progress;
+        //let progress2 = 1.0 - progress;
     
         let startAngle = CGFloat(M_PI) / 2.0;
         let endAngle = startAngle + (progress * 2.0 * CGFloat(M_PI))

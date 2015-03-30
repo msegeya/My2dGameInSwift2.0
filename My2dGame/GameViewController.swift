@@ -93,7 +93,8 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         
         //Adding facebook login/logout button to menu scene
         fbLoginView = FBLoginView(readPermissions: ["public_profile", "email", "user_friends"])
-        fbLoginView.frame = CGRectOffset(fbLoginView.frame, (self.view!.center.x - (fbLoginView.frame.size.width / 2)), 250);
+        fbLoginView.frame = CGRectOffset(fbLoginView.frame,
+            (self.view!.center.x - (fbLoginView.frame.size.width / 2)), self.view!.frame.height - 70);
         fbLoginView.delegate = self
         menuScene.view?.addSubview(fbLoginView)
     }
@@ -174,7 +175,9 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     //PopUpDelegates
     func gameDidPause(){
         isGamePaused = true
-        gameScene.showPopUpAnimation()
+        
+        gameScene.showPopUpAnimation(){
+        }
         
         if let lastTick = gameScene.lastTick{
             timePassed = lastTick.timeIntervalSinceNow
@@ -182,10 +185,11 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         }
     }
     func gameDidResume(){
+        self.isGamePaused = false
+        let newLastTickValue = NSDate().dateByAddingTimeInterval(NSTimeInterval(self.timePassed))
+        self.gameScene.lastTick = newLastTickValue
         gameScene.hidePopUpAnimation(){
-            let newLastTickValue = NSDate().dateByAddingTimeInterval(NSTimeInterval(self.timePassed))
-            self.gameScene.lastTick = newLastTickValue
-            self.isGamePaused = false
+            
         }
     }
     func gameDidExitToMenu(){
@@ -204,6 +208,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     func gameDidBegin(game: Game) {
         gameScene.showShortMessage(NSLocalizedString("Start", comment: "Start"), delay: 1){
             self.isGamePaused = false
+            self.didTick()
             self.gameScene.startTicking()
         }
     }
@@ -266,10 +271,18 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         if isGamePaused{
             return
         }
+        if let lastTick = gameScene.lastTick{
+            let timePassed = lastTick.timeIntervalSinceNow * -1000
+           
+            var tmp = (gameScene.tickLengthMillis - 150)
+            if timePassed >= tmp || timePassed <= 150{
+                return
+            }
+        }
         
         let (success, column, row) = convertPoint(location)
         
-        if success {
+        if success{
             if let newColumn = gameLogic.swipeColumn(column){
                 gameScene.animateSwipingColumn(column, newColumn: newColumn, direction: direction)
                 updateHUD("score")
@@ -284,23 +297,28 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         
         let (success, column, row) = convertPoint(location)
         
-        if success {
+        if success{
             if let (removedBlocks, fallenBlocks) = gameLogic.removeMatchesBlocks(column, row: row){
                 if removedBlocks.count > 0{
                     
                     if removedBlocks.count > 5{
-                        gameScene.showShortMessage(NSLocalizedString("GoodGod", comment: "Good God"), delay: 0.4, completion: {self.gameLogic.score += 50})
+                        gameScene.showShortMessage(NSLocalizedString("GoodGod", comment: "Good God"), delay: 0.4, completion: {self.gameLogic.score += 50
+                            self.updateHUD("score")})
                         
                     }else if removedBlocks.count == 5{
-                        gameScene.showShortMessage(NSLocalizedString("VeryGood", comment: "Very Good"), delay: 0.3, completion: {self.gameLogic.score += 25})
+                        gameScene.showShortMessage(NSLocalizedString("VeryGood", comment: "Very Good"), delay: 0.3, completion: {self.gameLogic.score += 25
+                        self.updateHUD("score")})
                         
                     }else if removedBlocks.count == 4{
-                        gameScene.showShortMessage(NSLocalizedString("Nice", comment: "Nice"), delay: 0.2, completion: {self.gameLogic.score += 10})
+                        gameScene.showShortMessage(NSLocalizedString("Nice", comment: "Nice"), delay: 0.2, completion: {self.gameLogic.score += 10
+                        self.updateHUD("score")})
                         
+                    }else{
+                        self.updateHUD("score")
                     }
-                    
-                    updateHUD("score")
+                    gameScene.gameLayer.userInteractionEnabled = false
                     gameScene.animateRemovingBlocksSprites(removedBlocks, fallenBlocks: fallenBlocks){
+                        self.gameScene.gameLayer.userInteractionEnabled = true
                     }
                 }
             }
