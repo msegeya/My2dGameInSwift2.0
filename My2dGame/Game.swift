@@ -20,6 +20,7 @@ protocol GameDelegate {
     func gameDidLevelUp(game: Game)
 }
 
+var columnArray: Array<Column?> = Array<Column?>(count: NumColumns, repeatedValue: nil)
 
 class Game {
     
@@ -29,7 +30,6 @@ class Game {
     
     var nextColumn: Column?
     var currentNumberOfColumns: Int
-    var columnArray: Array<Column>
     var blocksToRemove: Array<Block>
     var delegate: GameDelegate?
     var detector: BlocksToRemoveDetector
@@ -41,7 +41,6 @@ class Game {
         
         nextColumn = nil
         currentNumberOfColumns = 0
-        columnArray = Array<Column>()
         blocksToRemove = Array<Block>()
         detector = BlocksToRemoveDetector()
     }
@@ -52,7 +51,7 @@ class Game {
         
         nextColumn = nil
         currentNumberOfColumns = 0
-        columnArray = Array<Column>()
+        columnArray = Array<Column?>(count: NumColumns, repeatedValue: nil)
         blocksToRemove = Array<Block>()
     }
     
@@ -62,7 +61,7 @@ class Game {
         }
         
         currentNumberOfColumns = 0
-        columnArray.removeAll(keepCapacity: false)
+        columnArray = Array<Column?>(count: NumColumns, repeatedValue: nil)
         
         delegate?.gameDidBegin(self)
     }
@@ -81,25 +80,72 @@ class Game {
         delegate?.gameDidLevelUp(self)
     }
     
-    func swipeColumn(columnId: Int) -> Column?{
-        if columnId < columnArray.count{
-            score -= columnArray[columnId].currentHeight * (PointsPerBlock / 2)
-            let newColumn = Column(height: columnArray[columnId].currentHeight)
+    func swipeColumn(columnId: Int) -> (Column, Column)?{
+        if columnArray[columnId] != nil{
+            score -= columnArray[columnId]!.currentHeight * (PointsPerBlock / 2)
+            let newColumn = Column(height: columnArray[columnId]!.currentHeight)
+            let oldColumn = columnArray[columnId]
             newColumn.id = columnId
             columnArray[columnId] = newColumn
             
-            return newColumn
+            return (oldColumn!, newColumn)
         }
         
         return nil
+    }
+    
+    func slideColumnsRight() -> Bool{
+        var counter = 0
+        var isEdited = false
+        
+        println("lastcol: \(currentNumberOfColumns-1)")
+        for (id, col) in enumerate(columnArray){
+            if col != nil{
+                println("\(id) - \(col!.id)")
+            }else{
+                println("\(id) - nil")
+            }
+            
+            
+        }
+        println("---------------")
+        for var col = currentNumberOfColumns-1; col >= 0; --col {
+            if let column = columnArray[col]{
+                if(counter != 0){
+                    columnArray[col]!.id = col + counter
+                    columnArray[col + counter] = column
+                    columnArray[col] = nil
+                    col = col + counter
+                    
+                    counter = 0
+                    if !isEdited{
+                        isEdited = true
+                    }
+                }
+            }else{
+               counter++
+            }
+        }
+    
+        for (id, col) in enumerate(columnArray){
+            if col != nil{
+                println("\(id) - \(col!.id)")
+            }else{
+                println("\(id) - nil")
+            }
+        }
+        
+        return isEdited
     }
     
     func sumUpPointsInColumns() -> Array<Int>{
         var pointsInColumns = Array<Int>(count: NumColumns, repeatedValue: PointsPerBlock * NumRows)
         
         for (i, column) in enumerate(columnArray){
-            let columnScore = column.sumUpScore() * PointsPerBlock
-            pointsInColumns.insert(columnScore, atIndex: i)
+            if column != nil{
+                let columnScore = column!.sumUpScore() * PointsPerBlock
+                pointsInColumns.insert(columnScore, atIndex: i)
+            }
         }
         for col in pointsInColumns{
             score += col
@@ -118,30 +164,35 @@ class Game {
             }
         }
         
+        println(columnArray.count)
         var tmpColumnArray = columnArray
-        columnArray.removeAll(keepCapacity: false)
-        
+        for var i = 0; i < columnArray.count; ++i{
+            columnArray[i] = nil
+        }
         var flag = false
         var k = 0
-        columnArray.append(nextColumn!)
+        columnArray.insert(nextColumn, atIndex: 0)
         
         for col in tmpColumnArray{
-            if(!col.isEmpty() || flag == true){
+            if(col != nil || flag == true){
                 k++
-                col.id = k
-                columnArray.append(col)
+                if k == NumColumns-1{
+                    break
+                }
+                col?.id = k
+                columnArray[k] = col
             }else{
                 flag = true
             }
         }
-        
+        currentNumberOfColumns = k+1
+        println(columnArray.count)
         wavesLeft -= 1
-        currentNumberOfColumns = columnArray.count
         
-        if currentNumberOfColumns > NumColumns{
-            endGame()
-            return nil
-        }
+//        if currentNumberOfColumns > NumColumns{
+//            endGame()
+//            return nil
+//        }
         
         var tmpColumn = nextColumn
         nextColumn = Column(height: NumRows)
@@ -180,9 +231,17 @@ class Game {
             }
             
             var fallenBlocks = Array<Array<Block>>()
-            for column in columnArray{
-                fallenBlocks.append(column.repositionBlocks())
+            for (id, column) in enumerate(columnArray){
+                if column != nil{
+                    if column!.currentHeight == 0{
+                        columnArray[id] = nil
+                    }else{
+                        fallenBlocks.append(column!.repositionBlocks())
+                    }
+                }
             }
+            
+            println("\(currentNumberOfColumns)")
             return (matchesBlocks, fallenBlocks)
         }
         return nil

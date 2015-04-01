@@ -27,8 +27,6 @@ class GameScene: SKScene {
     let HUDLayer = HUDNode()
     let popUp = PopUpNode()
     
-    var columnsNodes = Array<ColumnNode>()
-    
     var pauseGame: (() -> ())?
     var resumeGame: (() -> ())?
     
@@ -55,7 +53,7 @@ class GameScene: SKScene {
         HUDLayer.position = CGPoint(x: 33, y: size.height)
         HUDLayer.anchorPoint = CGPoint(x: 0.5, y: 1.0)
         addChild(HUDLayer)
-        HUDLayer.userInteractionEnabled = true
+        //HUDLayer.userInteractionEnabled = true
         
         
         //Main game layer
@@ -112,18 +110,18 @@ class GameScene: SKScene {
     
     
     //Other
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        super.touchesBegan(touches, withEvent: event)
-        
-        var touch: AnyObject? = touches.anyObject()
-        var location = touch?.locationInNode(self)
-        let touchedNode = self.nodeAtPoint(location!)
-        
-//        println(popUp.hidden)
-//        if popUp.hidden == false{
-//            resumeGame!()
-//        }
-    }
+//    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+//        super.touchesBegan(touches, withEvent: event)
+//        
+//        var touch: AnyObject? = touches.anyObject()
+//        var location = touch?.locationInNode(self)
+//        let touchedNode = self.nodeAtPoint(location!)
+//        
+////        println(popUp.hidden)
+////        if popUp.hidden == false{
+////            resumeGame!()
+////        }
+//    }
     func pointForColumn(column: Int, row: Int) -> CGPoint {
         var x: CGFloat = 0.0
         var y: CGFloat = 0.0
@@ -147,11 +145,9 @@ class GameScene: SKScene {
     
     //Animations
     func clear(){
-        columnsNodes.removeAll(keepCapacity: false)
         gameLayer.columnsLayer.removeAllChildren()
     }
     func animateClearingScene(completion: ()->()){
-        columnsNodes.removeAll(keepCapacity: false)
         gameLayer.columnsLayer.removeAllChildren()
         
         runAction(SKAction.waitForDuration(0.5), completion: completion)
@@ -202,8 +198,8 @@ class GameScene: SKScene {
         popUp.runAction(SKAction.group([action4, SKAction.sequence([action2, action3])]), completion: completion)
     }
     func hidePopUpAnimation(completion: ()->()){
-        let action = SKAction.fadeAlphaTo(0.0, duration: 0.1)
-        let action2 = SKAction.scaleTo(0.0, duration: 0.1)
+        let action = SKAction.fadeAlphaTo(0.0, duration: 0.2)
+        let action2 = SKAction.scaleTo(0.0, duration: 0.2)
         
         popUp.runAction(SKAction.group([action, action2]))
         darkeningLayer.runAction(action, completion:{
@@ -212,9 +208,19 @@ class GameScene: SKScene {
             self.darkeningLayer.zPosition = 0
         })
         
-        runAction(SKAction.waitForDuration(0.3), completion: completion)
+        runAction(SKAction.waitForDuration(0.2), completion: completion)
     }
-    func animateSummaryResults(results: Array<Int>, columns: Array<Column>, completion: ()->()){
+    func animateSlidingColumns(completion: ()->()){
+        for column in columnArray{
+            if column != nil{
+                let slide = SKAction.moveToX(pointForColumn(column!.id, row: 0).x, duration: 0.2)
+                slide.timingMode = SKActionTimingMode.EaseOut
+                slide.speed = 2.0
+                column!.spriteNode!.runAction(slide, completion: completion)
+            }
+        }
+    }
+    func animateSummaryResults(results: Array<Int>, completion: ()->()){
         let fadeOut = SKAction.fadeAlphaTo(0, duration: 0.4)
         fadeOut.timingMode = .EaseOut
         let scale = SKAction.scaleTo(1.2, duration: 0.4)
@@ -223,17 +229,17 @@ class GameScene: SKScene {
 
         var wholeDelayTime = 0.0
         
-        for column in columnsNodes.reverse(){
-            if column.children.count > 0{
+        for column in columnArray.reverse(){
+            if column != nil{
                 
                 let duration = wholeDelayTime * 0.3
                 let delay = SKAction.waitForDuration(NSTimeInterval(duration))
 
-                column.runAction(SKAction.sequence([delay, removeColumnActionGroup, SKAction.removeFromParent()]))
+                column!.spriteNode!.runAction(SKAction.sequence([delay, removeColumnActionGroup, SKAction.removeFromParent()]))
                 wholeDelayTime++
             }
         }
-        columnsNodes.removeAll(keepCapacity: false)
+
         runAction(SKAction.waitForDuration(NSTimeInterval(wholeDelayTime * 0.4)), completion: completion)
     }
     func animateRemovingBlocksSprites(blocksToRemove: Set<Block>, fallenBlocks: Array<Array<Block>>, completion: ()->()){
@@ -301,72 +307,62 @@ class GameScene: SKScene {
         
         var newColumnNode = ColumnNode()
         newColumnNode.anchorPoint = CGPointZero
-        moveCurrentColumns()
+        columnArray[0]!.spriteNode = newColumnNode
         
-        for (blockId, block) in enumerate(column.blocks) {
-            let sprite = SKSpriteNode(imageNamed: block!.blockColor.spriteName)
-            sprite.anchorPoint = CGPointZero
-            sprite.position = pointForColumn(0, row: block!.row)
-            sprite.size = CGSize(width: CGFloat(BlockWidth), height: CGFloat(BlockHeight))
-            
-            if block!.blockType != BlockType.Normal{
-                let type = SKSpriteNode(imageNamed: block!.blockType.typeName)
-                type.position = CGPoint(x: BlockWidth/2, y: BlockHeight/2)
+        moveCurrentColumns(){
+            for (blockId, block) in enumerate(column.blocks) {
+                let sprite = SKSpriteNode(imageNamed: block!.blockColor.spriteName)
+                sprite.anchorPoint = CGPointZero
+                sprite.position = self.pointForColumn(0, row: block!.row)
+                sprite.size = CGSize(width: CGFloat(BlockWidth), height: CGFloat(BlockHeight))
                 
-                sprite.addChild(type)
+                if block!.blockType != BlockType.Normal{
+                    let type = SKSpriteNode(imageNamed: block!.blockType.typeName)
+                    type.position = CGPoint(x: BlockWidth/2, y: BlockHeight/2)
+                    
+                    sprite.addChild(type)
+                }
+                
+                newColumnNode.addChild(sprite)
+                block!.sprite = sprite
+                
+                //animation
+                //            sprite.alpha = 0
+                //            let move = SKAction.moveTo(pointForColumn(0, row: block!.row), duration: 0.15)
+                //            move.timingMode = .EaseOut
+                //            let fadeIn = SKAction.fadeAlphaTo(1, duration: 0.15)
+                //            fadeIn.timingMode = .EaseOut
+                //            let delay = SKAction.waitForDuration(NSTimeInterval(blockId) * 0.03)
+                //            sprite.runAction(SKAction.sequence([delay, SKAction.group([move, fadeIn])]))
             }
             
-            //sprite.zPosition = CGFloat(blockId)
+            newColumnNode.alpha = 0
+            newColumnNode.runAction(SKAction.scaleTo(0.0, duration: 0.01))
+            self.gameLayer.columnsLayer.addChild(newColumnNode)
             
-            newColumnNode.addChild(sprite)
-            block!.sprite = sprite
+            let action2 = SKAction.scaleTo(1.1, duration: 0.1)
+            action2.timingMode = .EaseIn
+            let action3 = SKAction.scaleTo(1.0, duration: 0.07)
+            action3.timingMode = .EaseOut
             
-            //animation
-//            sprite.alpha = 0
-//            let move = SKAction.moveTo(pointForColumn(0, row: block!.row), duration: 0.15)
-//            move.timingMode = .EaseOut
-//            let fadeIn = SKAction.fadeAlphaTo(1, duration: 0.15)
-//            fadeIn.timingMode = .EaseOut
-//            let delay = SKAction.waitForDuration(NSTimeInterval(blockId) * 0.03)
-//            sprite.runAction(SKAction.sequence([delay, SKAction.group([move, fadeIn])]))
+            let action4 = SKAction.fadeInWithDuration(0.1)
+            
+            newColumnNode.runAction(SKAction.group([action4, SKAction.sequence([action2, action3])]))
+            
+            self.runAction(SKAction.waitForDuration(0.2), completion: completion)
         }
-        
-        var tmpColumnArray = columnsNodes
-        columnsNodes.removeAll(keepCapacity: false)
-        
-        columnsNodes.append(newColumnNode)
-        for col in tmpColumnArray{
-            columnsNodes.append(col)
-        }
-        newColumnNode.alpha = 0
-        newColumnNode.runAction(SKAction.scaleTo(0.0, duration: 0.01))
-        gameLayer.columnsLayer.addChild(columnsNodes[0])
-        
-        let action2 = SKAction.scaleTo(1.1, duration: 0.1)
-        action2.timingMode = .EaseIn
-        let action3 = SKAction.scaleTo(1.0, duration: 0.07)
-        action3.timingMode = .EaseOut
-        
-        let action4 = SKAction.fadeInWithDuration(0.1)
-        
-        newColumnNode.runAction(SKAction.group([action4, SKAction.sequence([action2, action3])]))
-        
-        runAction(SKAction.waitForDuration(0.3), completion: completion)
     }
-    func moveCurrentColumns(){
-        var k = 0
-        for columnNode in columnsNodes{
-            if(columnNode.children.count > 0){
-                let move = SKAction.moveByX(BlockWidth+BlockWidthOffset, y: 0, duration: 0.1)
-                move.timingMode = SKActionTimingMode.EaseOut
-                columnNode.runAction(move)
-            }else{
-                columnsNodes.removeAtIndex(k)
-                columnNode.removeFromParent()
-                break
+    func moveCurrentColumns(completion: ()->()){
+        for column in columnArray{
+            if column != nil{
+                let slide = SKAction.moveToX(pointForColumn(column!.id, row: 0).x, duration: 0.2)
+                slide.timingMode = SKActionTimingMode.EaseOut
+                slide.speed = 2.0
+                
+                column!.spriteNode!.runAction(slide)
             }
-            k++
         }
+        runAction(SKAction.waitForDuration(0.1), completion: completion)
     }
     func animateAddingNextColumnPreview(column: Column){
         gameLayer.nextColumnPreviewNode.removeAllChildren()
@@ -386,11 +382,8 @@ class GameScene: SKScene {
             sprite.runAction(fadeIn)
         }
     }
-    func animateSwipingColumn(column: Int, newColumn: Column, direction: Direction){
-        if columnsNodes.isEmpty{
-            return
-        }
-        let oldPosition = columnsNodes[column].position
+    func animateSwipingColumn(oldColumn: Column, newColumn: Column, direction: Direction){
+        let oldPosition = oldColumn.spriteNode!.position
         let newColumnNode = ColumnNode()
         newColumnNode.anchorPoint = CGPointZero
         
@@ -424,9 +417,9 @@ class GameScene: SKScene {
         move.timingMode = .EaseOut
         let remove = SKAction.removeFromParent()
         
-        columnsNodes[column].runAction(SKAction.sequence([move, remove]))
+        oldColumn.spriteNode!.runAction(SKAction.sequence([move, remove]))
         newColumnNode.runAction(move)
-        columnsNodes[column] = newColumnNode
+        newColumn.spriteNode = newColumnNode
         gameLayer.columnsLayer.addChild(newColumnNode)
     }
     //Animations

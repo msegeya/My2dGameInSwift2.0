@@ -6,12 +6,14 @@
 //  Copyright (c) 2015 Karol Kedziora. All rights reserved.
 //
 import Darwin
+import SpriteKit
 
 class Column {
     var id: Int
     var blocks: Array<Block?>
     var maxHeight: Int
     var currentHeight: Int
+    var spriteNode: SKSpriteNode?
     
     var previouseColumn: Column?
     var nextColumn: Column?

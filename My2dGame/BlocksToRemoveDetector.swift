@@ -11,17 +11,20 @@ import Foundation
 class BlocksToRemoveDetector {
     
     private var blocksToRemove: Set<Block>
-    private var columnArray: Array<Column>
+    private var columnArray: Array<Column?>
     private var matchColor: BlockColor!
     
     init(){
-        self.columnArray = Array<Column>()
+        self.columnArray = Array<Column?>()
         self.blocksToRemove = Set<Block>()
     }
     
     private func blockAtColumn(column: Int, row: Int) -> Block? {
         if(column >= 0 && row >= 0 && column < columnArray.count && row < NumRows){
-            return columnArray[column].getBlock(row)
+            if columnArray[column] != nil{
+                return columnArray[column]!.getBlock(row)
+            }
+            return nil
         }else{
             return nil
         }
@@ -34,7 +37,7 @@ class BlocksToRemoveDetector {
         return nil
     }
     
-    func detectMatchesBlocks(column: Int, row: Int, array: Array<Column>){
+    func detectMatchesBlocks(column: Int, row: Int, array: Array<Column?>){
         self.blocksToRemove = Set<Block>()
         self.columnArray = array
         
@@ -115,9 +118,11 @@ class BlocksToRemoveDetector {
     
     private func laserDetected(block: Block){
         for column in columnArray{
-            if let tmpBlock = blockAtColumn(column.id, row: block.row){
-                if !tmpBlock.isChecked{
-                    blocksToRemove.addElement(tmpBlock)
+            if column != nil{
+                if let tmpBlock = blockAtColumn(column!.id, row: block.row){
+                    if !tmpBlock.isChecked{
+                        blocksToRemove.addElement(tmpBlock)
+                    }
                 }
             }
         }

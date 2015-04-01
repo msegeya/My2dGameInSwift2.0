@@ -11,6 +11,7 @@ import SpriteKit
 protocol ColumnLayerDelegate{
     func BlockDidTap(location: CGPoint)
     func ColumnDidSwipe(location: CGPoint, direction: Direction)
+    func HorizontalSwipeDetected(location: CGPoint, direction: Direction)
 }
 
 struct Swipe {
@@ -98,12 +99,21 @@ class MainNode: SKSpriteNode {
             swipe = Swipe(location: location, direction: Direction.Up)
         }else if (location.y - tapLocation!.y) < -(BlockHeight*1.5){
             swipe = Swipe(location: location, direction: Direction.Down)
+        }else if (location.x - tapLocation!.x) < -(BlockWidth*1.5){
+            swipe = Swipe(location: location, direction: Direction.Right)
+        }else if (location.x - tapLocation!.y) > BlockWidth*1.5{
+            swipe = Swipe(location: location, direction: Direction.Left)
         }
     }
     
     override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
         if swipe != nil{
-            delegate?.ColumnDidSwipe(tapLocation!, direction: swipe!.direction)
+            if swipe!.direction == .Up || swipe!.direction == .Down{
+                delegate?.ColumnDidSwipe(tapLocation!, direction: swipe!.direction)
+            }else{
+                delegate?.HorizontalSwipeDetected(tapLocation!, direction: swipe!.direction)
+            }
+            
             swipe = nil
             tapLocation = nil
         }else if tapLocation != nil{

@@ -26,7 +26,7 @@ func delay(delay:Double, closure:()->()) {
 let audio = Audio()
 
 enum Direction{
-    case Up, Down
+    case Up, Down, Left, Right
 }
 
 class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDelegate, ColumnLayerDelegate, FBLoginViewDelegate {
@@ -42,13 +42,11 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     var isGamePaused: Bool = true{
         didSet{
             if isGamePaused{
-                self.gameScene.userInteractionEnabled = true
-                self.gameScene.gameLayer.userInteractionEnabled = false
                 self.gameScene.HUDLayer.userInteractionEnabled = false
+                self.gameScene.gameLayer.userInteractionEnabled = false
+                
             }else{
-                self.gameScene.userInteractionEnabled = false
                 self.gameScene.gameLayer.userInteractionEnabled = true
-                self.gameScene.HUDLayer.userInteractionEnabled = true
             }
         }
     }
@@ -163,6 +161,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
             self.gameLogic.reset()
             self.updateHUD()
             self.gameLogic.beginGame()
+            self.gameScene.HUDLayer.userInteractionEnabled = true
             self.gameScene.animateAddingNextColumnPreview(self.gameLogic.nextColumn!)
         }
     }
@@ -177,6 +176,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         isGamePaused = true
         
         gameScene.showPopUpAnimation(){
+            
         }
         
         if let lastTick = gameScene.lastTick{
@@ -185,11 +185,14 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         }
     }
     func gameDidResume(){
+        if !isGamePaused{
+            return
+        }
         self.isGamePaused = false
-        let newLastTickValue = NSDate().dateByAddingTimeInterval(NSTimeInterval(self.timePassed))
-        self.gameScene.lastTick = newLastTickValue
         gameScene.hidePopUpAnimation(){
-            
+            self.gameScene.HUDLayer.userInteractionEnabled = true
+            let newLastTickValue = NSDate().dateByAddingTimeInterval(NSTimeInterval(self.timePassed))
+            self.gameScene.lastTick = newLastTickValue
         }
     }
     func gameDidExitToMenu(){
@@ -241,10 +244,11 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         updateHUD("wavesLeft")
         
         gameScene.showShortMessage(NSLocalizedString("LevelUp", comment: "Level Up"), delay: 1){
-            self.gameScene.animateSummaryResults(results, columns: game.columnArray){
+            self.gameScene.animateSummaryResults(results){
                 game.beginGame()
                 self.updateHUD()
                 self.isGamePaused = false
+                self.gameScene.HUDLayer.userInteractionEnabled = true
             }
         }
     }
@@ -267,6 +271,27 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     
     
     //Gestures handling
+    func HorizontalSwipeDetected(location: CGPoint, direction: Direction){
+        if isGamePaused{
+            return
+        }
+        if let lastTick = gameScene.lastTick{
+            let timePassed = lastTick.timeIntervalSinceNow * -1000
+            
+            var tmp = (gameScene.tickLengthMillis - 150)
+            if timePassed >= tmp || timePassed <= 150{
+                return
+            }
+        }
+        
+        let isEdited = gameLogic.slideColumnsRight()
+        
+        if isEdited{
+            gameScene.animateSlidingColumns(){}
+        }
+        
+
+    }
     func ColumnDidSwipe(location: CGPoint, direction: Direction){
         if isGamePaused{
             return
@@ -283,8 +308,8 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         let (success, column, row) = convertPoint(location)
         
         if success{
-            if let newColumn = gameLogic.swipeColumn(column){
-                gameScene.animateSwipingColumn(column, newColumn: newColumn, direction: direction)
+            if let (oldColumn, newColumn) = gameLogic.swipeColumn(column){
+                gameScene.animateSwipingColumn(oldColumn, newColumn: newColumn, direction: direction)
                 updateHUD("score")
             }
         }
