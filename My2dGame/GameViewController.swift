@@ -159,9 +159,11 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         delay(0.4){
             audio.reset()
             self.gameLogic.reset()
+            self.gameScene.tickLengthMillis = TickLengthLevelOne
             self.updateHUD()
             self.gameLogic.beginGame()
             self.gameScene.HUDLayer.userInteractionEnabled = true
+            self.gameScene.gameLayer.userInteractionEnabled = true
             self.gameScene.animateAddingNextColumnPreview(self.gameLogic.nextColumn!)
         }
     }
@@ -254,10 +256,12 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     }
     
     func didTick(){
+        gameScene.gameLayer.userInteractionEnabled = false
         if let newColumn = gameLogic.newColumn(){
             gameScene.HUDLayer.wavesLeftLabelNode.text = String(format: "%ld", gameLogic.wavesLeft)
             gameScene.animateAddingSpritesForColumn(newColumn){
                 self.gameScene.animateAddingNextColumnPreview(self.gameLogic.nextColumn!)
+                self.gameScene.gameLayer.userInteractionEnabled = true
             }
         }
         if gameLogic.wavesLeft == 0{

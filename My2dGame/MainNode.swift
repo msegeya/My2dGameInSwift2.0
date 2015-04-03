@@ -39,7 +39,7 @@ class MainNode: SKSpriteNode {
         
         self.size = CGSize(width: ((BlockWidth + BlockWidthOffset) * CGFloat(NumColumns)), height: ((BlockHeight + BlockHeightOffset) * CGFloat(NumRows)))
         
-        //columnsLayer.size = CGSize(width: ((BlockWidth + BlockWidthOffset) * CGFloat(NumColumns)), height: ((BlockHeight + BlockHeightOffset) * CGFloat(NumRows)))
+        columnsLayer.size = CGSize(width: ((BlockWidth + BlockWidthOffset) * CGFloat(NumColumns)), height: ((BlockHeight + BlockHeightOffset) * CGFloat(NumRows)))
         
         nextColumnPreviewNode.position = CGPoint(x: columnsLayer.position.x - 50, y: columnsLayer.position.y + 10)
         
@@ -60,9 +60,8 @@ class MainNode: SKSpriteNode {
         self.addChild(nextColumnPreviewNode)
         
         self.columnsLayer.anchorPoint = CGPointZero
-        self.userInteractionEnabled = true
-        
 
+        
         //level
         levelLabelNode = HUDLabelNode()
         levelLabelNode.position.x += 310
@@ -94,15 +93,16 @@ class MainNode: SKSpriteNode {
 
         let touch = touches.anyObject() as UITouch
         let location = touch.locationInNode(self.columnsLayer)
-        
+
         if (location.y - tapLocation!.y) > BlockHeight*1.5{
             swipe = Swipe(location: location, direction: Direction.Up)
         }else if (location.y - tapLocation!.y) < -(BlockHeight*1.5){
             swipe = Swipe(location: location, direction: Direction.Down)
+            
         }else if (location.x - tapLocation!.x) < -(BlockWidth*1.5){
             swipe = Swipe(location: location, direction: Direction.Right)
-        }else if (location.x - tapLocation!.y) > BlockWidth*1.5{
-            swipe = Swipe(location: location, direction: Direction.Left)
+        }else if (location.x - tapLocation!.x) > BlockWidth*1.5{
+            //swipe = Swipe(location: location, direction: Direction.Left)
         }
     }
     

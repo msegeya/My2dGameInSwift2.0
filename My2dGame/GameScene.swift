@@ -17,8 +17,8 @@ let BlockHeightOffset: CGFloat = -0.3
 let TickLengthLevelOne = NSTimeInterval(3600)
 
 let sounds: [String: SKAction] = [
-"Fall": SKAction.playSoundFileNamed("Fall.wav", waitForCompletion: false),
-"HurryUp": SKAction.playSoundFileNamed("hurryUp.wav", waitForCompletion: false),
+    "Fall": SKAction.playSoundFileNamed("Fall.wav", waitForCompletion: false),
+    "HurryUp": SKAction.playSoundFileNamed("hurryUp.wav", waitForCompletion: false),
 ]
 
 class GameScene: SKScene {
@@ -110,18 +110,18 @@ class GameScene: SKScene {
     
     
     //Other
-//    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-//        super.touchesBegan(touches, withEvent: event)
-//        
-//        var touch: AnyObject? = touches.anyObject()
-//        var location = touch?.locationInNode(self)
-//        let touchedNode = self.nodeAtPoint(location!)
-//        
-////        println(popUp.hidden)
-////        if popUp.hidden == false{
-////            resumeGame!()
-////        }
-//    }
+    //    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    //        super.touchesBegan(touches, withEvent: event)
+    //
+    //        var touch: AnyObject? = touches.anyObject()
+    //        var location = touch?.locationInNode(self)
+    //        let touchedNode = self.nodeAtPoint(location!)
+    //
+    ////        println(popUp.hidden)
+    ////        if popUp.hidden == false{
+    ////            resumeGame!()
+    ////        }
+    //    }
     func pointForColumn(column: Int, row: Int) -> CGPoint {
         var x: CGFloat = 0.0
         var y: CGFloat = 0.0
@@ -226,7 +226,7 @@ class GameScene: SKScene {
         let scale = SKAction.scaleTo(1.2, duration: 0.4)
         scale.timingMode = .EaseOut
         let removeColumnActionGroup = SKAction.group([fadeOut, scale])
-
+        
         var wholeDelayTime = 0.0
         
         for column in columnArray.reverse(){
@@ -234,18 +234,18 @@ class GameScene: SKScene {
                 
                 let duration = wholeDelayTime * 0.3
                 let delay = SKAction.waitForDuration(NSTimeInterval(duration))
-
+                
                 column!.spriteNode!.runAction(SKAction.sequence([delay, removeColumnActionGroup, SKAction.removeFromParent()]))
                 wholeDelayTime++
             }
         }
-
+        
         runAction(SKAction.waitForDuration(NSTimeInterval(wholeDelayTime * 0.4)), completion: completion)
     }
     func animateRemovingBlocksSprites(blocksToRemove: Set<Block>, fallenBlocks: Array<Array<Block>>, completion: ()->()){
         var acctions = Array<SKAction>()
         acctions.append(SKAction.fadeOutWithDuration(0.1))
-        acctions.append(SKAction.removeFromParent())   
+        acctions.append(SKAction.removeFromParent())
         let sequence = SKAction.sequence(acctions)
         
         for (blockId, block) in enumerate(blocksToRemove){
@@ -348,9 +348,8 @@ class GameScene: SKScene {
             let action4 = SKAction.fadeInWithDuration(0.1)
             
             newColumnNode.runAction(SKAction.group([action4, SKAction.sequence([action2, action3])]))
-            
-            self.runAction(SKAction.waitForDuration(0.2), completion: completion)
         }
+        self.runAction(SKAction.waitForDuration(0.3), completion: completion)
     }
     func moveCurrentColumns(completion: ()->()){
         for column in columnArray{
@@ -377,7 +376,7 @@ class GameScene: SKScene {
             
             //animation
             sprite.alpha = 0
-            let fadeIn = SKAction.fadeAlphaTo(0.4, duration: 0.1)
+            let fadeIn = SKAction.fadeAlphaTo(0.5, duration: 0.2)
             fadeIn.timingMode = .EaseOut
             sprite.runAction(fadeIn)
         }
@@ -403,7 +402,7 @@ class GameScene: SKScene {
             newColumnNode.addChild(sprite)
             block!.sprite = sprite
         }
-
+        
         newColumnNode.position = oldPosition
         var moveDistance: CGFloat = 300
         
@@ -423,7 +422,7 @@ class GameScene: SKScene {
         gameLayer.columnsLayer.addChild(newColumnNode)
     }
     //Animations
-
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")

@@ -29,7 +29,7 @@ class Game {
     var wavesLeft: Int
     
     var nextColumn: Column?
-    var currentNumberOfColumns: Int
+    var lastColumnIndex = 0
     var blocksToRemove: Array<Block>
     var delegate: GameDelegate?
     var detector: BlocksToRemoveDetector
@@ -40,7 +40,6 @@ class Game {
         wavesLeft = StartingNumWaves
         
         nextColumn = nil
-        currentNumberOfColumns = 0
         blocksToRemove = Array<Block>()
         detector = BlocksToRemoveDetector()
     }
@@ -50,7 +49,6 @@ class Game {
         wavesLeft = StartingNumWaves
         
         nextColumn = nil
-        currentNumberOfColumns = 0
         columnArray = Array<Column?>(count: NumColumns, repeatedValue: nil)
         blocksToRemove = Array<Block>()
     }
@@ -59,8 +57,7 @@ class Game {
         if(nextColumn == nil){
             nextColumn = Column(height: NumRows)
         }
-        
-        currentNumberOfColumns = 0
+
         columnArray = Array<Column?>(count: NumColumns, repeatedValue: nil)
         
         delegate?.gameDidBegin(self)
@@ -90,26 +87,22 @@ class Game {
             
             return (oldColumn!, newColumn)
         }
-        
         return nil
     }
     
     func slideColumnsRight() -> Bool{
         var counter = 0
         var isEdited = false
-        
-        println("lastcol: \(currentNumberOfColumns-1)")
-        for (id, col) in enumerate(columnArray){
-            if col != nil{
-                println("\(id) - \(col!.id)")
-            }else{
-                println("\(id) - nil")
+
+        for column in columnArray{
+            if column != nil{
+                if column!.currentHeight != 0{
+                    lastColumnIndex = column!.id
+                }
             }
-            
-            
         }
-        println("---------------")
-        for var col = currentNumberOfColumns-1; col >= 0; --col {
+
+        for var col = lastColumnIndex; col >= 0; --col {
             if let column = columnArray[col]{
                 if(counter != 0){
                     columnArray[col]!.id = col + counter
@@ -124,14 +117,6 @@ class Game {
                 }
             }else{
                counter++
-            }
-        }
-    
-        for (id, col) in enumerate(columnArray){
-            if col != nil{
-                println("\(id) - \(col!.id)")
-            }else{
-                println("\(id) - nil")
             }
         }
         
@@ -163,36 +148,25 @@ class Game {
                 return nil
             }
         }
-        
-        println(columnArray.count)
+
         var tmpColumnArray = columnArray
-        for var i = 0; i < columnArray.count; ++i{
-            columnArray[i] = nil
-        }
-        var flag = false
-        var k = 0
-        columnArray.insert(nextColumn, atIndex: 0)
+        columnArray = Array<Column?>(count: NumColumns, repeatedValue: nil)
         
-        for col in tmpColumnArray{
-            if(col != nil || flag == true){
-                k++
-                if k == NumColumns-1{
-                    break
-                }
-                col?.id = k
-                columnArray[k] = col
+        var flag = false
+        columnArray[0] = nextColumn
+        
+        for var i = 0, j = 1; i < NumColumns-1; ++i{
+            let column = tmpColumnArray[i]
+            if(column != nil || flag == true){
+                column?.id = j
+                columnArray[j] = column
+                j++
             }else{
                 flag = true
             }
         }
-        currentNumberOfColumns = k+1
-        println(columnArray.count)
+
         wavesLeft -= 1
-        
-//        if currentNumberOfColumns > NumColumns{
-//            endGame()
-//            return nil
-//        }
         
         var tmpColumn = nextColumn
         nextColumn = Column(height: NumRows)
@@ -201,13 +175,18 @@ class Game {
     }
     
     func checkGameState() -> Bool?{
-        if(currentNumberOfColumns > NumColumns){
+        var counter = 0
+        for column in columnArray{
+            if column != nil{
+                counter++
+            }
+        }
+        
+        if counter == NumColumns{
             return false
         }else{
             if(wavesLeft == 0){
-                if(currentNumberOfColumns <= NumColumns){
-                    return true
-                }
+                return true
             }
         }
         return nil
@@ -230,6 +209,7 @@ class Game {
                 block.column.removeBlock(block.row)
             }
             
+            let tmp = 0
             var fallenBlocks = Array<Array<Block>>()
             for (id, column) in enumerate(columnArray){
                 if column != nil{
@@ -240,8 +220,7 @@ class Game {
                     }
                 }
             }
-            
-            println("\(currentNumberOfColumns)")
+
             return (matchesBlocks, fallenBlocks)
         }
         return nil
