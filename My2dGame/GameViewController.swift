@@ -9,11 +9,6 @@
 import UIKit
 import SpriteKit
 
-protocol MenuDelegate {
-    func startGame()
-    func showHighscore()
-}
-
 func delay(delay:Double, closure:()->()) {
     dispatch_after(
         dispatch_time(
@@ -29,13 +24,9 @@ enum Direction{
     case Up, Down, Left, Right
 }
 
-class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDelegate, ColumnLayerDelegate, FBLoginViewDelegate {
-    
-    var gameCenter: GameCenter!
-    var fbLoginView : FBLoginView!
+class GameViewController: UIViewController, GameDelegate, PopUpDelegate, ColumnLayerDelegate{
     
     var gameScene: GameScene!
-    var menuScene: MenuScene!
     var gameLogic: Game!
     
     var timePassed = 0.0
@@ -64,37 +55,10 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         skView.showsFPS = true
         skView.showsNodeCount = true
         
-        menuScene = MenuScene(size: skView.bounds.size)
-        menuScene.scaleMode = .AspectFill
-        menuScene.thisDelegate = self
-        
-        gameScene = GameScene(size: skView.bounds.size)
-        gameScene.scaleMode = .AspectFill
-        
         gameLogic = Game()
         gameLogic.delegate = self
         
-        skView.presentScene(menuScene)
-        
-        //      self.gameCenter = GameCenter(rootViewController: self)
-        
-        //        /* Open Windows Game Center if player not login in Game Center */
-        //        self.gameCenter.loginToGameCenter() {
-        //            (result: Bool) in
-        //            if result {
-        //                /* Player is login in Game Center OR Open Windows for login in Game Center */
-        //            } else {
-        //                /* Player is not login in Game Center */
-        //            }
-        //        }
-        
-        
-        //Adding facebook login/logout button to menu scene
-        fbLoginView = FBLoginView(readPermissions: ["public_profile", "email", "user_friends"])
-        fbLoginView.frame = CGRectOffset(fbLoginView.frame,
-            (self.view!.center.x - (fbLoginView.frame.size.width / 2)), self.view!.frame.height - 70);
-        fbLoginView.delegate = self
-        menuScene.view?.addSubview(fbLoginView)
+        startGame()
     }
     
     func pauseGameSceneNotificationReceived(notification: NSNotification){
@@ -109,44 +73,13 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         }
     }
     
-    
-    //Facebook integration, delegate methods
-    func loginViewShowingLoggedInUser(loginView : FBLoginView!) {
-        println("User Logged In")
-    }
-    
-    func loginViewFetchedUserInfo(loginView : FBLoginView!, user: FBGraphUser) {
-        println("User: \(user)")
-        println("User ID: \(user.objectID)")
-        println("User Name: \(user.name)")
-        var userEmail = user.objectForKey("email") as String
-        println("User Email: \(userEmail)")
-        
-        var alert = UIAlertController(title: "Logged in!", message: "Hello \(user.first_name)", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
-    }
-    
-    func loginViewShowingLoggedOutUser(loginView : FBLoginView!) {
-        println("User Logged Out")
-    }
-    
-    func loginView(loginView : FBLoginView!, handleError:NSError) {
-        println("Error: \(handleError.localizedDescription)")
-    }
-    //Facebook integration, delegate methods
-    
-    
     //MenuDelegates
     func startGame() {
-        fbLoginView.hidden = true
-        let transition = SKTransition.pushWithDirection(SKTransitionDirection.Left, duration: 0.3)
-        
-        self.gameScene.tickLengthMillis = TickLengthLevelOne
         
         gameScene = GameScene(size: skView.bounds.size)
         gameScene.scaleMode = .AspectFill
         gameScene.tick = didTick
+        gameScene.tickLengthMillis = TickLengthLevelOne
         
         gameScene.pauseGame = gameDidPause
         gameScene.resumeGame = gameDidResume
@@ -154,9 +87,8 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
         
         gameScene.gameLayer.delegate = self
         
-        skView.presentScene(gameScene, transition: transition)
-        
-        delay(0.4){
+        skView.presentScene(gameScene)
+
             audio.reset()
             self.gameLogic.reset()
             self.gameScene.tickLengthMillis = TickLengthLevelOne
@@ -165,10 +97,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
             self.gameScene.HUDLayer.userInteractionEnabled = true
             self.gameScene.gameLayer.userInteractionEnabled = true
             self.gameScene.animateAddingNextColumnPreview(self.gameLogic.nextColumn!)
-        }
-    }
-    func showHighscore() {
-        //show highscore scene
+        
     }
     //MenuDelegates
     
@@ -199,12 +128,9 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
     }
     func gameDidExitToMenu(){
         audio.backgroundMusicPlayer.volume = 0.0
-        let transition = SKTransition.pushWithDirection(SKTransitionDirection.Left, duration: 0.5)
-        skView.presentScene(menuScene, transition: transition)
-        delay(0.5){
-            self.fbLoginView.hidden = false
-        }
         
+        println(navigationController)
+       navigationController?.popToRootViewControllerAnimated(true)
     }
     //PopUpDelagates
     
@@ -388,7 +314,15 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, MenuDel
             return (false, 0, 0)
         }
     }
+    override func viewWillAppear(animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        super.viewWillAppear(true)
+    }
     
+    override func viewWillDisappear(animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        super.viewWillDisappear(true)
+    }
     override func prefersStatusBarHidden() -> Bool {
         return true
     }

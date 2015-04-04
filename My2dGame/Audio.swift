@@ -30,13 +30,13 @@ class Audio {
             }
         }
     }
-    
+    let audioSession = AVAudioSession.sharedInstance()
     var backgroundMusicPlayer: AVAudioPlayer = AVAudioPlayer()
+    var error:NSError?
     
     init(){
         var backgroundMusic = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("BackgroundSound", ofType: "mp3")!)
         
-        var error:NSError?
         backgroundMusicPlayer = AVAudioPlayer(contentsOfURL: backgroundMusic, error: &error)
         backgroundMusicPlayer.numberOfLoops = -1 //infinite loop
         backgroundMusicPlayer.prepareToPlay()

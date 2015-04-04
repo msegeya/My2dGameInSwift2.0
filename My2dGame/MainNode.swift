@@ -99,9 +99,9 @@ class MainNode: SKSpriteNode {
         }else if (location.y - tapLocation!.y) < -(BlockHeight*1.5){
             swipe = Swipe(location: location, direction: Direction.Down)
             
-        }else if (location.x - tapLocation!.x) < -(BlockWidth*1.5){
-            swipe = Swipe(location: location, direction: Direction.Right)
         }else if (location.x - tapLocation!.x) > BlockWidth*1.5{
+            swipe = Swipe(location: location, direction: Direction.Right)
+        }else if (location.x - tapLocation!.x) > -(BlockWidth*1.5){
             //swipe = Swipe(location: location, direction: Direction.Left)
         }
     }
