@@ -6,9 +6,13 @@
 //  Copyright (c) 2015 Karol Kedziora. All rights reserved.
 //
 import AVFoundation
+import MediaPlayer
 
 class Audio {
     let defaults = NSUserDefaults.standardUserDefaults()
+    let audioSession = AVAudioSession.sharedInstance()
+    var backgroundMusicPlayer: AVAudioPlayer = AVAudioPlayer()
+    var error:NSError?
     
     var sounds: Bool{
         didSet{
@@ -19,42 +23,47 @@ class Audio {
             }
         }
     }
-    var music: Bool{
+    var music: Bool = false{
         didSet{
             if music{
+                audioSession.setCategory(AVAudioSessionCategorySoloAmbient, error: nil)
                 backgroundMusicPlayer.play()
                 defaults.setBool(true, forKey: "music")
             }else{
+                audioSession.setCategory(AVAudioSessionCategoryAmbient, error: nil)
                 backgroundMusicPlayer.stop()
                 defaults.setBool(false, forKey: "music")
             }
         }
     }
-    let audioSession = AVAudioSession.sharedInstance()
-    var backgroundMusicPlayer: AVAudioPlayer = AVAudioPlayer()
-    var error:NSError?
     
     init(){
         var backgroundMusic = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("BackgroundSound", ofType: "mp3")!)
         
         backgroundMusicPlayer = AVAudioPlayer(contentsOfURL: backgroundMusic, error: &error)
         backgroundMusicPlayer.numberOfLoops = -1 //infinite loop
-        backgroundMusicPlayer.prepareToPlay()
-
+        
+        if audioSession.otherAudioPlaying{
+            audioSession.setCategory(AVAudioSessionCategoryAmbient, error: nil)
+        }else{
+            backgroundMusicPlayer.prepareToPlay()
+            
+            if let musicFromDefaults = defaults.boolForKey("music") as Bool?
+            {
+                self.music = musicFromDefaults
+            }else{
+                self.music = true
+            }
+        }
+        
         if let soundsFromDefaults = defaults.boolForKey("sounds") as Bool?
         {
             self.sounds = soundsFromDefaults
         }else{
             self.sounds = true
         }
-        if let musicFromDefaults = defaults.boolForKey("music") as Bool?
-        {
-            self.music = musicFromDefaults
-        }else{
-            self.music = true
-        }
     }
-    
+
     func reset(){
         backgroundMusicPlayer.currentTime = 0
         backgroundMusicPlayer.volume = 1
