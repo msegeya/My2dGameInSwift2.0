@@ -128,6 +128,9 @@ class PageViewController: UIViewController, UIScrollViewDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        self.scrollView.delegate = nil
+    }
     
 }
 

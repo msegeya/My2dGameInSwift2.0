@@ -311,29 +311,31 @@ class GameScene: SKScene {
         
         moveCurrentColumns(){
             for (blockId, block) in enumerate(column.blocks) {
-                let sprite = SKSpriteNode(imageNamed: block!.blockColor.spriteName)
-                sprite.anchorPoint = CGPointZero
-                sprite.position = self.pointForColumn(0, row: block!.row)
-                sprite.size = CGSize(width: CGFloat(BlockWidth), height: CGFloat(BlockHeight))
-                
-                if block!.blockType != BlockType.Normal{
-                    let type = SKSpriteNode(imageNamed: block!.blockType.typeName)
-                    type.position = CGPoint(x: BlockWidth/2, y: BlockHeight/2)
+                if block != nil{
+                    let sprite = SKSpriteNode(imageNamed: block!.blockColor.spriteName)
+                    sprite.anchorPoint = CGPointZero
+                    sprite.position = self.pointForColumn(0, row: block!.row)
+                    sprite.size = CGSize(width: CGFloat(BlockWidth), height: CGFloat(BlockHeight))
                     
-                    sprite.addChild(type)
+                    if block!.blockType != BlockType.Normal{
+                        let type = SKSpriteNode(imageNamed: block!.blockType.typeName)
+                        type.position = CGPoint(x: BlockWidth/2, y: BlockHeight/2)
+                        
+                        sprite.addChild(type)
+                    }
+                    
+                    newColumnNode.addChild(sprite)
+                    block!.sprite = sprite
+                    
+                    //animation
+                    //            sprite.alpha = 0
+                    //            let move = SKAction.moveTo(pointForColumn(0, row: block!.row), duration: 0.15)
+                    //            move.timingMode = .EaseOut
+                    //            let fadeIn = SKAction.fadeAlphaTo(1, duration: 0.15)
+                    //            fadeIn.timingMode = .EaseOut
+                    //            let delay = SKAction.waitForDuration(NSTimeInterval(blockId) * 0.03)
+                    //            sprite.runAction(SKAction.sequence([delay, SKAction.group([move, fadeIn])]))
                 }
-                
-                newColumnNode.addChild(sprite)
-                block!.sprite = sprite
-                
-                //animation
-                //            sprite.alpha = 0
-                //            let move = SKAction.moveTo(pointForColumn(0, row: block!.row), duration: 0.15)
-                //            move.timingMode = .EaseOut
-                //            let fadeIn = SKAction.fadeAlphaTo(1, duration: 0.15)
-                //            fadeIn.timingMode = .EaseOut
-                //            let delay = SKAction.waitForDuration(NSTimeInterval(blockId) * 0.03)
-                //            sprite.runAction(SKAction.sequence([delay, SKAction.group([move, fadeIn])]))
             }
             
             newColumnNode.alpha = 0

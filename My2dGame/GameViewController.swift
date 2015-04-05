@@ -128,9 +128,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, ColumnL
     }
     func gameDidExitToMenu(){
         audio.backgroundMusicPlayer.volume = 0.0
-        
-        println(navigationController)
-       navigationController?.popToRootViewControllerAnimated(true)
+        navigationController?.popToRootViewControllerAnimated(true)
     }
     //PopUpDelagates
     
