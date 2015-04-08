@@ -35,6 +35,14 @@
 		F9C93C251AB289BD00C05063 /* ColumnNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C93C241AB289BD00C05063 /* ColumnNode.swift */; };
 		F9C9745D1AB8DCA200171A40 /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C9745C1AB8DCA200171A40 /* Set.swift */; };
 		F9C9745F1AB918FE00171A40 /* BlocksToRemoveDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C9745E1AB918FE00171A40 /* BlocksToRemoveDetector.swift */; };
+		F9E1DD8D1AD1EE2A00AAEE90 /* LevelCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E1DD8C1AD1EE2A00AAEE90 /* LevelCollectionViewController.swift */; };
+		F9E1DD8F1AD1F74400AAEE90 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E1DD8E1AD1F74400AAEE90 /* CollectionViewCell.swift */; };
+		F9E1DD931AD1FE9200AAEE90 /* grayStar.png in Resources */ = {isa = PBXBuildFile; fileRef = F9E1DD921AD1FE9200AAEE90 /* grayStar.png */; };
+		F9E1DD951AD208C900AAEE90 /* Levels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E1DD941AD208C900AAEE90 /* Levels.swift */; };
+		F9E1DD971AD2091A00AAEE90 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E1DD961AD2091A00AAEE90 /* Level.swift */; };
+		F9E1DD9A1AD21AE500AAEE90 /* levels.json in Resources */ = {isa = PBXBuildFile; fileRef = F9E1DD991AD21AE500AAEE90 /* levels.json */; };
+		F9E1DD9E1AD21CF500AAEE90 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E1DD9D1AD21CF500AAEE90 /* SwiftyJSON.swift */; };
+		F9E1DDA01AD2317B00AAEE90 /* LevelPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E1DD9F1AD2317B00AAEE90 /* LevelPopUpViewController.swift */; };
 		F9EB998E1AC2E46A00127A0C /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = F9EB998D1AC2E46A00127A0C /* star.png */; };
 		F9F65E4B1AAA8DDC009E4421 /* Fall.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9F65E4A1AAA8DDC009E4421 /* Fall.wav */; };
 		F9F65E4D1AAA98FC009E4421 /* HUDLabelNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E4C1AAA98FC009E4421 /* HUDLabelNode.swift */; };
@@ -95,6 +103,14 @@
 		F9C93C241AB289BD00C05063 /* ColumnNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColumnNode.swift; sourceTree = "<group>"; };
 		F9C9745C1AB8DCA200171A40 /* Set.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Set.swift; path = ../Set.swift; sourceTree = "<group>"; };
 		F9C9745E1AB918FE00171A40 /* BlocksToRemoveDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlocksToRemoveDetector.swift; sourceTree = "<group>"; };
+		F9E1DD8C1AD1EE2A00AAEE90 /* LevelCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelCollectionViewController.swift; sourceTree = "<group>"; };
+		F9E1DD8E1AD1F74400AAEE90 /* CollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
+		F9E1DD921AD1FE9200AAEE90 /* grayStar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grayStar.png; sourceTree = "<group>"; };
+		F9E1DD941AD208C900AAEE90 /* Levels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Levels.swift; sourceTree = "<group>"; };
+		F9E1DD961AD2091A00AAEE90 /* Level.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
+		F9E1DD991AD21AE500AAEE90 /* levels.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = levels.json; sourceTree = "<group>"; };
+		F9E1DD9D1AD21CF500AAEE90 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftyJSON.swift; path = ../SwiftyJSON.swift; sourceTree = "<group>"; };
+		F9E1DD9F1AD2317B00AAEE90 /* LevelPopUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelPopUpViewController.swift; sourceTree = "<group>"; };
 		F9EB998D1AC2E46A00127A0C /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = star.png; path = "../../../Downloads/iRate-master/iRate/star.png"; sourceTree = "<group>"; };
 		F9F65E4A1AAA8DDC009E4421 /* Fall.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Fall.wav; sourceTree = "<group>"; };
 		F9F65E4C1AAA98FC009E4421 /* HUDLabelNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUDLabelNode.swift; sourceTree = "<group>"; };
@@ -135,6 +151,7 @@
 				F95667401AC8D67800BCF48E /* Crush.sks */,
 				F956674A1AC8DCBF00BCF48E /* Particle.png */,
 				F9EB998D1AC2E46A00127A0C /* star.png */,
+				F9E1DD921AD1FE9200AAEE90 /* grayStar.png */,
 				F9A376881AB412460079FACA /* Localizable.strings */,
 				F94DD1C01ABA499A000731CC /* FacebookSDK.framework */,
 				F9FC8FD01AB0ECA100B3E896 /* GameKit.framework */,
@@ -157,8 +174,10 @@
 		F9336BE51AAA52CA00B0D204 /* My2dGame */ = {
 			isa = PBXGroup;
 			children = (
+				F9E1DD991AD21AE500AAEE90 /* levels.json */,
 				F94A52D21ACF158200C9DB9A /* HowToPlayPhotos */,
 				F9336BE81AAA52CA00B0D204 /* AppDelegate.swift */,
+				F9E1DD9D1AD21CF500AAEE90 /* SwiftyJSON.swift */,
 				F94DD1C21ABA4C89000731CC /* Bridging-Header.h */,
 				F9FC8FD21AB0ED1600B3E896 /* My2dGame.entitlements */,
 				F9336BF51AAA52CA00B0D204 /* LaunchScreen.xib */,
@@ -218,6 +237,8 @@
 				F9336C0F1AAA55DB00B0D204 /* Column.swift */,
 				F9336C0C1AAA559500B0D204 /* Game.swift */,
 				F9C9745E1AB918FE00171A40 /* BlocksToRemoveDetector.swift */,
+				F9E1DD941AD208C900AAEE90 /* Levels.swift */,
+				F9E1DD961AD2091A00AAEE90 /* Level.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -228,6 +249,9 @@
 				F94A52C51ACEDDE500C9DB9A /* PageViewController.swift */,
 				F94A52C11ACE337800C9DB9A /* MainMenuViewController.swift */,
 				F9336BEE1AAA52CA00B0D204 /* GameViewController.swift */,
+				F9E1DD8C1AD1EE2A00AAEE90 /* LevelCollectionViewController.swift */,
+				F9E1DD8E1AD1F74400AAEE90 /* CollectionViewCell.swift */,
+				F9E1DD9F1AD2317B00AAEE90 /* LevelPopUpViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -380,6 +404,7 @@
 				F9A376901AB8A7360079FACA /* Sprites.atlas in Resources */,
 				F94A52CF1ACEEFE600C9DB9A /* photo4.png in Resources */,
 				F9FC8FD81AB13C0500B3E896 /* hurryUp.wav in Resources */,
+				F9E1DD931AD1FE9200AAEE90 /* grayStar.png in Resources */,
 				F9F65E4B1AAA8DDC009E4421 /* Fall.wav in Resources */,
 				F94A52CD1ACEEFE600C9DB9A /* photo2.png in Resources */,
 				F94DD1C91ABD13EB000731CC /* iRate.bundle in Resources */,
@@ -393,6 +418,7 @@
 				F95667411AC8D67800BCF48E /* Crush.sks in Resources */,
 				F9336BF41AAA52CA00B0D204 /* Images.xcassets in Resources */,
 				F927A2EE1AAD3FC700AB6F0F /* BackgroundSound.mp3 in Resources */,
+				F9E1DD9A1AD21AE500AAEE90 /* levels.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,21 +438,27 @@
 			files = (
 				F9C9745D1AB8DCA200171A40 /* Set.swift in Sources */,
 				F9F65E4D1AAA98FC009E4421 /* HUDLabelNode.swift in Sources */,
+				F9E1DD951AD208C900AAEE90 /* Levels.swift in Sources */,
+				F9E1DD9E1AD21CF500AAEE90 /* SwiftyJSON.swift in Sources */,
 				F9336BED1AAA52CA00B0D204 /* GameScene.swift in Sources */,
 				F9FC8FDB1AB1E02C00B3E896 /* GameCenterHelper.swift in Sources */,
 				F9C93C251AB289BD00C05063 /* ColumnNode.swift in Sources */,
 				F9FC8FCD1AB0D09F00B3E896 /* HUDNode.swift in Sources */,
 				F9F65E4F1AAAAE84009E4421 /* PopUpNode.swift in Sources */,
+				F9E1DD971AD2091A00AAEE90 /* Level.swift in Sources */,
 				F9FC8FCF1AB0D24300B3E896 /* MainNode.swift in Sources */,
 				F9C9745F1AB918FE00171A40 /* BlocksToRemoveDetector.swift in Sources */,
 				F94DD1CA1ABD13EB000731CC /* iRate.m in Sources */,
 				F94A52C61ACEDDE500C9DB9A /* PageViewController.swift in Sources */,
+				F9E1DDA01AD2317B00AAEE90 /* LevelPopUpViewController.swift in Sources */,
 				F9336C101AAA55DB00B0D204 /* Column.swift in Sources */,
 				F9FC8FD61AB11EBF00B3E896 /* Audio.swift in Sources */,
 				F9336BEF1AAA52CA00B0D204 /* GameViewController.swift in Sources */,
 				F9336C121AAA55F400B0D204 /* Block.swift in Sources */,
 				F9336BE91AAA52CA00B0D204 /* AppDelegate.swift in Sources */,
 				F9F65E571AAC04E9009E4421 /* ProgressBarNode.swift in Sources */,
+				F9E1DD8F1AD1F74400AAEE90 /* CollectionViewCell.swift in Sources */,
+				F9E1DD8D1AD1EE2A00AAEE90 /* LevelCollectionViewController.swift in Sources */,
 				F94A52C21ACE337800C9DB9A /* MainMenuViewController.swift in Sources */,
 				F9336C0D1AAA559500B0D204 /* Game.swift in Sources */,
 			);

@@ -9,8 +9,6 @@
 let NumColumns = 11
 let NumRows = 7
 
-let StartingNumWaves = 12
-
 let PointsPerBlock = 10
 
 protocol GameDelegate {
@@ -24,7 +22,8 @@ var columnArray: Array<Column?> = Array<Column?>(count: NumColumns, repeatedValu
 
 class Game {
     
-    var level: Int
+    var currentLevel: Level!
+
     var score: Int
     var wavesLeft: Int
     
@@ -34,19 +33,24 @@ class Game {
     var delegate: GameDelegate?
     var detector: BlocksToRemoveDetector
     
-    init(){
-        level = 1
-        score = 0
-        wavesLeft = StartingNumWaves
-        
+    init(level: Level){
         nextColumn = nil
         blocksToRemove = Array<Block>()
         detector = BlocksToRemoveDetector()
-    }
-    func reset(){
-        level = 1
+        
+        currentLevel = level
         score = 0
-        wavesLeft = StartingNumWaves
+        wavesLeft = level.numWaves
+    }
+    
+    func loadLevel(level: Level){
+        self.currentLevel = level
+        self.score = 0
+        self.wavesLeft = level.numWaves
+    }
+    
+    func reset(){
+        loadLevel(currentLevel)
         
         nextColumn = nil
         columnArray = Array<Column?>(count: NumColumns, repeatedValue: nil)
@@ -64,16 +68,12 @@ class Game {
     }
     
     func endGame(){
-        level = 1
-        score = 0
-        wavesLeft = StartingNumWaves
+        loadLevel(currentLevel)
+        
         delegate?.gameDidEnd(self)
     }
     
     func levelUp(){
-        wavesLeft = StartingNumWaves + level
-        level += 1
-        
         delegate?.gameDidLevelUp(self)
     }
     

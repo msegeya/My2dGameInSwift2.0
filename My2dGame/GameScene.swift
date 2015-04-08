@@ -292,7 +292,7 @@ class GameScene: SKScene {
                 move.timingMode = SKActionTimingMode.EaseIn
                 
                 var acctions = Array<SKAction>()
-                
+                acctions.append(SKAction.waitForDuration(0.125))
                 acctions.append(SKAction.waitForDuration(NSTimeInterval(blockId) * 0.03))
                 acctions.append(move)
                 

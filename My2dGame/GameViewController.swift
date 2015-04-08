@@ -28,6 +28,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, ColumnL
     
     var gameScene: GameScene!
     var gameLogic: Game!
+    var choosenLevel: Level!
     
     var timePassed = 0.0
     var isGamePaused: Bool = true{
@@ -55,7 +56,8 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, ColumnL
         skView.showsFPS = true
         skView.showsNodeCount = true
         
-        gameLogic = Game()
+        gameLogic = Game(level: choosenLevel)
+        
         gameLogic.delegate = self
         
         startGame()
@@ -281,14 +283,14 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, ColumnL
     
     
     func updateHUD(){
-        self.gameScene.gameLayer.levelLabelNode.text = NSLocalizedString("Level", comment: "Level") + ": \(gameLogic.level)"
+        self.gameScene.gameLayer.levelLabelNode.text = NSLocalizedString("Level", comment: "Level") + ": \(gameLogic.currentLevel.id)"
         self.gameScene.gameLayer.scoreLabelNode.text = NSLocalizedString("Score", comment: "Score") + ": \(gameLogic.score)"
         self.gameScene.HUDLayer.wavesLeftLabelNode.text = "\(gameLogic.wavesLeft)"
     }
     func updateHUD(label: String){
         switch label{
         case "level":
-            self.gameScene.gameLayer.levelLabelNode.text = NSLocalizedString("Level", comment: "Level") + ": \(gameLogic.level)"
+            self.gameScene.gameLayer.levelLabelNode.text = NSLocalizedString("Level", comment: "Level") + ": \(gameLogic.currentLevel.id)"
             break
             
         case "score":

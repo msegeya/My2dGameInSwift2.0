@@ -16,6 +16,8 @@ protocol MenuDelegate {
     func showHighscore()
 }
 
+let levelManager: Levels = Levels()
+
 class MainMenuViewController: UIViewController, MenuDelegate, FBLoginViewDelegate {
     var gameCenter: GameCenter!
     var fbLoginView : FBLoginView!
@@ -41,6 +43,8 @@ class MainMenuViewController: UIViewController, MenuDelegate, FBLoginViewDelegat
         (self.view!.center.x - (fbLoginView.frame.size.width / 2)), self.view!.frame.height - 70);
         fbLoginView.delegate = self
         view.addSubview(fbLoginView)
+        
+        var x = levelManager.getLevel(0)
     }
     
     //Facebook integration, delegate methods

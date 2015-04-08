@@ -1,0 +1,35 @@
+{
+    "levels" : [
+                {
+                    "id" : 1,
+                    "delay" : 3600,
+                    "numWaves" : 12,
+    
+                    "isPassed" : true,
+                    "score" : 1225,
+                },
+                {
+                    "id" : 2,
+                    "delay" : 3500,
+                    "numWaves" : 13,
+    
+                    "isPassed" : false,
+                    "score" : 0,
+                },
+                {
+                "id" : 3,
+                "delay" : 3400,
+                "numWaves" : 14,
+                
+                "isPassed" : false,
+                "score" : 0,
+                },
+                {
+                "id" : 4,
+                "delay" : 3300,
+                "numWaves" : 15,
+                
+                "isPassed" : false,
+                "score" : 0,
+                }]
+}
