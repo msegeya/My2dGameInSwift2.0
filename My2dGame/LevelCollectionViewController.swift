@@ -16,9 +16,11 @@ class LevelCollectinoViewController: UICollectionViewController, UICollectionVie
     
     let sectionInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
     var vc: LevelPopUpViewController!
+    var gestureRecognizer = UITapGestureRecognizer()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        gestureRecognizer = UITapGestureRecognizer(target: self, action: "tapHandler:")
         
     }
     
@@ -31,10 +33,17 @@ class LevelCollectinoViewController: UICollectionViewController, UICollectionVie
         //self.scrollView.delegate = nil
     }
     
+    func tapHandler(recognizer: UIGestureRecognizer){
+        vc.removeAnimate(){
+            self.vc = nil
+        }
+        self.view.removeGestureRecognizer(self.gestureRecognizer)
+    }
+    
     func gameDidStart(level: Level) {
         self.vc = nil
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewControllerWithIdentifier("GameViewController") as GameViewController
+        let vc = storyboard.instantiateViewControllerWithIdentifier("GameViewController") as! GameViewController
         
         vc.choosenLevel = level
         navigationController?.pushViewController(vc, animated: true)
@@ -53,13 +62,13 @@ class LevelCollectinoViewController: UICollectionViewController, UICollectionVie
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as CollectionViewCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! CollectionViewCell
         cell.title.text = "Level \(indexPath.item + 1)"
         
         var imgName = "star"
         
-        if indexPath.item > 8{
-            imgName = "grayStar"
+        if indexPath.item > levelManager.numPassedLevels{
+            imgName = "lock"
         }
 
         cell.pinImage.image = UIImage(named: imgName)
@@ -71,24 +80,25 @@ class LevelCollectinoViewController: UICollectionViewController, UICollectionVie
         shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
 
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            self.vc = storyboard.instantiateViewControllerWithIdentifier("LevelPopUpViewController") as LevelPopUpViewController
+            self.vc = storyboard.instantiateViewControllerWithIdentifier("LevelPopUpViewController") as! LevelPopUpViewController
             
             if let level = levelManager.getLevel(indexPath.item){
                 self.vc.delegate = self
                 vc.showInView(self.view, choosenLevel: level, animated: true)
+                self.view.addGestureRecognizer(gestureRecognizer)
             }
             
             return false
     }
     
-    func collectionView(collectionView: UICollectionView!,
-        layout collectionViewLayout: UICollectionViewLayout!,
-        sizeForItemAtIndexPath indexPath: NSIndexPath!) -> CGSize {
+    func collectionView(collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
             return CGSize(width: 80, height: 80)
     }
     
-    func collectionView(collectionView: UICollectionView!,
-        layout collectionViewLayout: UICollectionViewLayout!,
+    func collectionView(collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
         insetForSectionAtIndex section: Int) -> UIEdgeInsets {
             return sectionInsets
     }

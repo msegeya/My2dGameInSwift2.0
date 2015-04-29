@@ -43,8 +43,6 @@ class MainMenuViewController: UIViewController, MenuDelegate, FBLoginViewDelegat
         (self.view!.center.x - (fbLoginView.frame.size.width / 2)), self.view!.frame.height - 70);
         fbLoginView.delegate = self
         view.addSubview(fbLoginView)
-        
-        var x = levelManager.getLevel(0)
     }
     
     //Facebook integration, delegate methods
@@ -56,7 +54,7 @@ class MainMenuViewController: UIViewController, MenuDelegate, FBLoginViewDelegat
         println("User: \(user)")
         println("User ID: \(user.objectID)")
         println("User Name: \(user.name)")
-        var userEmail = user.objectForKey("email") as String
+        var userEmail = user.objectForKey("email") as! String
         println("User Email: \(userEmail)")
         
         var alert = UIAlertController(title: "Logged in!", message: "Hello \(user.first_name)", preferredStyle: UIAlertControllerStyle.Alert)

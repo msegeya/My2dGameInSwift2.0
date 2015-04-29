@@ -22,6 +22,7 @@ protocol LevelPopUpDelegate{
     @IBOutlet weak var scoreLabel: UILabel!
     
     @IBOutlet weak var starsImage: UIImageView!
+    @IBOutlet weak var startButton: UIButton!
     
     var choosenLevel: Level!
     
@@ -51,7 +52,12 @@ protocol LevelPopUpDelegate{
         levelLabel!.text = "Level \(choosenLevel.id)"
         wavesLabel!.text = "Number of waves: \(choosenLevel.numWaves)"
         scoreLabel!.text = "Score: \(choosenLevel.score)"
-        starsImage!.image = UIImage(named: "Stars1")
+        starsImage!.image = UIImage(named: "Stars0")
+        
+        if self.choosenLevel.id > levelManager.numPassedLevels + 1{
+            startButton.setTitle("Locked", forState: UIControlState.Normal)
+            startButton.enabled = false
+        }
         
         if animated
         {
@@ -69,7 +75,7 @@ protocol LevelPopUpDelegate{
         });
     }
     
-    func removeAnimate()
+    func removeAnimate(completion: () -> ())
     {
         UIView.animateWithDuration(0.25, animations: {
             self.view.transform = CGAffineTransformMakeScale(1.3, 1.3)
@@ -78,13 +84,15 @@ protocol LevelPopUpDelegate{
                 if (finished)
                 {
                     self.view.removeFromSuperview()
-                    
-                    self.delegate.gameDidStart(self.choosenLevel)
+                    completion()
                 }
         });
     }
 
     @IBAction func closePopup(sender: AnyObject) {
-        self.removeAnimate()
+        self.removeAnimate(){
+            println("koniec")
+            self.delegate.gameDidStart(self.choosenLevel)
+        }
     }
 }

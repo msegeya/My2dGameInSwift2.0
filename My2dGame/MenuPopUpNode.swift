@@ -8,50 +8,9 @@
 
 import SpriteKit
 
-protocol PopUpDelegate {
+protocol MenuPopUpDelegate {
     func gameDidResume()
     func gameDidExitToMenu()
-}
-
-class SwitchLabelButton: SKLabelNode {
-    var initialText: String = ""
-    var state: Bool = false{
-        didSet{
-            if state == true{
-                self.text = initialText + " " + NSLocalizedString("On", comment: "On")
-                self.fontColor = UIColor(red:0.298039, green:0.760784, blue:0.282353, alpha:1.0)
-            }else{
-                self.text = initialText + " " + NSLocalizedString("Off", comment: "Off")
-                self.fontColor = UIColor(red:0.780392, green:0.243137, blue:0.219608, alpha:1.0)
-            }
-        }
-    }
-    
-    override init() {
-        super.init()
-    }
-    
-    override init(fontNamed fontName: String!) {
-        super.init(fontNamed: fontName)
-    }
-    
-    init(fontNamed fontName: String!, text: String!, state: Bool){
-        super.init(fontNamed: fontName)
-        self.initialText = text
-        self.state = state
-        
-        if state == true{
-            self.text = initialText + " " + NSLocalizedString("On", comment: "On")
-            self.fontColor = UIColor(red:0.298039, green:0.760784, blue:0.282353, alpha:1.0)
-        }else{
-            self.text = initialText + " " + NSLocalizedString("Off", comment: "Off")
-            self.fontColor = UIColor(red:0.780392, green:0.243137, blue:0.219608, alpha:1.0)
-        }
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 }
 
 class SwitchButton: SKSpriteNode {
@@ -72,23 +31,21 @@ class SwitchButton: SKSpriteNode {
         super.init(texture: texture, color: color, size: size)
     }
     
-    override init() {
-        super.init()
-    }
-    
     init(onStateImageNamed: String, offStateImageNamed: String, state: Bool) {
-        super.init()
-        
         self.onStateImage = SKTexture(imageNamed: onStateImageNamed)
         self.offStateImage = SKTexture(imageNamed: offStateImageNamed)
         
         self.state = state
         
+        let texture: SKTexture
+        
         if state{
-            self.texture = onStateImage
+            texture = onStateImage
         }else{
-            self.texture = offStateImage
+            texture = offStateImage
         }
+        
+        super.init(texture: texture, color: UIColor.clearColor(), size: texture.size())
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -96,10 +53,10 @@ class SwitchButton: SKSpriteNode {
     }
 }
 
-class PopUpNode: SKSpriteNode {
+class MenuPopUpNode: SKSpriteNode {
     
     var popUpBackground: SKSpriteNode = SKSpriteNode()
-    var delegate: PopUpDelegate?
+    var delegate: MenuPopUpDelegate?
     
     var musicButton = SwitchButton()
     var soundsButton = SwitchButton()
@@ -108,13 +65,9 @@ class PopUpNode: SKSpriteNode {
         super.init(texture: texture, color: color, size: size)
     }
     
-    override init() {
-        super.init()
-    }
-    
     init(imageNamed: String, backgroundSize: CGSize, frameSize: CGSize) {
-        super.init()
-        self.size = frameSize
+        super.init(texture: nil, color: UIColor.clearColor(), size: frameSize)
+
         popUpBackground = SKSpriteNode(imageNamed: imageNamed)
         popUpBackground.size = backgroundSize
         self.addChild(popUpBackground)
@@ -122,18 +75,19 @@ class PopUpNode: SKSpriteNode {
         self.setup()
     }
     init(backgroundColor: UIColor, backgroundSize: CGSize, frameSize: CGSize) {
-        super.init()
-        self.size = frameSize
-        popUpBackground = SKSpriteNode(color: backgroundColor, size: backgroundSize)
-        self.addChild(popUpBackground)
-        
+        super.init(texture: nil, color: UIColor.clearColor(), size: frameSize)
+
         self.setup()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     func setup(){
         popUpBackground.name = "backgroundNode"
         self.userInteractionEnabled = true
-
+        
         let backButton = SKSpriteNode(imageNamed: "Exit")
         backButton.size = CGSize(width: 50, height: 50)
         backButton.position.x -= 55
@@ -153,7 +107,7 @@ class PopUpNode: SKSpriteNode {
         soundsButton.position.y += 10
         soundsButton.name = "switchSoundsButton"
         addChild(soundsButton)
-
+        
         let resumeLabel = SKLabelNode(fontNamed: "Gill Sans Bold")
         resumeLabel.text = NSLocalizedString("TapToResume", comment: "Tap to resume")
         resumeLabel.fontColor = UIColor.whiteColor()
@@ -164,20 +118,20 @@ class PopUpNode: SKSpriteNode {
         self.hidden = true
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        super.touchesBegan(touches, withEvent: event)
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        super.touchesBegan(touches as Set<NSObject>, withEvent: event)
         
-        var touch: AnyObject? = touches.anyObject()
-        var location = touch?.locationInNode(self)
-        let touchedNode = self.nodeAtPoint(location!)
-        
-        
-        var nodeName: String = ""
-        if(touchedNode.name != nil){
-            nodeName = "\(touchedNode.name!)"
-        }
-        
-        switch nodeName{
+        if let touch = touches.first as? UITouch {
+            var location = touch.locationInNode(self)
+            let touchedNode = self.nodeAtPoint(location)
+            
+            
+            var nodeName: String = ""
+            if(touchedNode.name != nil){
+                nodeName = "\(touchedNode.name!)"
+            }
+            
+            switch nodeName{
             case "backButton":
                 delegate?.gameDidExitToMenu()
                 break
@@ -195,10 +149,7 @@ class PopUpNode: SKSpriteNode {
             default:
                 delegate?.gameDidResume()
                 break
+            }
         }
-    }
-    
-    required init(coder aDecoder: NSCoder) {
-        super.init()
     }
 }

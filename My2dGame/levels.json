@@ -1,4 +1,6 @@
 {
+    "numLevels" : 5,
+    "numPassedLevels" : 2,
     "levels" : [
                 {
                     "id" : 1,
@@ -13,8 +15,8 @@
                     "delay" : 3500,
                     "numWaves" : 13,
     
-                    "isPassed" : false,
-                    "score" : 0,
+                    "isPassed" : true,
+                    "score" : 1410,
                 },
                 {
                 "id" : 3,
@@ -28,6 +30,29 @@
                 "id" : 4,
                 "delay" : 3300,
                 "numWaves" : 15,
+                
+                "isPassed" : false,
+                "score" : 0,
+                },
+                {
+                "id" : 5,
+                "delay" : 3200,
+                "numWaves" : 16,
+                
+                "isPassed" : false,
+                "score" : 0,
+                },
+                "id" : 6,
+                "delay" : 3100,
+                "numWaves" : 17,
+                
+                "isPassed" : false,
+                "score" : 0,
+                },
+                {
+                "id" : 7,
+                "delay" : 3000,
+                "numWaves" : 18,
                 
                 "isPassed" : false,
                 "score" : 0,

@@ -48,7 +48,7 @@ class Game {
         self.score = 0
         self.wavesLeft = level.numWaves
     }
-    
+
     func reset(){
         loadLevel(currentLevel)
         

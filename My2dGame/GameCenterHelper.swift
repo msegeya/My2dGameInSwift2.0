@@ -185,7 +185,7 @@ class GameCenter: NSObject, GKGameCenterControllerDelegate {
             var scoreReporter = GKScore(leaderboardIdentifier: uleaderboardIdentifier)
             scoreReporter.value = Int64(uScore)
             var scoreArray: [GKScore] = [scoreReporter]
-            GKScore.reportScores(scoreArray, {(error : NSError!) -> Void in
+            GKScore.reportScores(scoreArray, withCompletionHandler: {(error : NSError!) -> Void in
                 
                 if error != nil {
                     if completion != nil { completion!(result: false) }

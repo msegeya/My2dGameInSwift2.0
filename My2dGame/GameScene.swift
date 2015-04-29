@@ -22,10 +22,11 @@ let sounds: [String: SKAction] = [
 ]
 
 class GameScene: SKScene {
-    let darkeningLayer = SKSpriteNode()
+    var darkeningLayer = SKSpriteNode()
     let gameLayer = MainNode()
     let HUDLayer = HUDNode()
-    let popUp = PopUpNode()
+    var menuPopUp = MenuPopUpNode()
+    var levelUpPopUp = LevelUpPopUpNode()
     
     var pauseGame: (() -> ())?
     var resumeGame: (() -> ())?
@@ -69,12 +70,18 @@ class GameScene: SKScene {
         addChild(darkeningLayer)
         
         
-        //Popup
-        popUp = PopUpNode(imageNamed: "PopUpBackground", backgroundSize: CGSize(width: 185, height: 100), frameSize: size)
-        popUp.zPosition = 100
-        popUp.position = CGPoint(x: size.width / 2, y: size.height / 2)
-        addChild(popUp)
-        popUp.runAction(SKAction.scaleTo(0.0, duration: 0.01))
+        //Popups
+        menuPopUp = MenuPopUpNode(imageNamed: "PopUpBackground", backgroundSize: CGSize(width: 185, height: 100), frameSize: size)
+        menuPopUp.zPosition = 100
+        menuPopUp.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        addChild(menuPopUp)
+        menuPopUp.runAction(SKAction.scaleTo(0.0, duration: 0.01))
+        
+        levelUpPopUp = LevelUpPopUpNode(imageNamed: "PopUpBackground", backgroundSize: CGSize(width: 185, height: 100), frameSize: size)
+        levelUpPopUp.zPosition = 100
+        levelUpPopUp.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        addChild(levelUpPopUp)
+        levelUpPopUp.runAction(SKAction.scaleTo(0.0, duration: 0.01))
     }
     override func didMoveToView(view: SKView){
         clear()
@@ -180,11 +187,11 @@ class GameScene: SKScene {
         messageLabel.runAction(SKAction.sequence([SKAction.group([SKAction.sequence([action, action2]),action3]), delay, SKAction.group([action4, action5]), action6]), completion: completion)
     }
     func showPopUpAnimation(completion: ()->()){
-        popUp.hidden = false
+        menuPopUp.hidden = false
         darkeningLayer.hidden = false
         darkeningLayer.alpha = 0
         darkeningLayer.zPosition = 99
-        popUp.alpha = 0
+        menuPopUp.alpha = 0
         
         let action = SKAction.fadeAlphaTo(0.6, duration: 0.1)
         let action2 = SKAction.scaleTo(1.2, duration: 0.2)
@@ -195,15 +202,15 @@ class GameScene: SKScene {
         let action4 = SKAction.fadeInWithDuration(0.1)
         
         darkeningLayer.runAction(SKAction.group([action]))
-        popUp.runAction(SKAction.group([action4, SKAction.sequence([action2, action3])]), completion: completion)
+        menuPopUp.runAction(SKAction.group([action4, SKAction.sequence([action2, action3])]), completion: completion)
     }
     func hidePopUpAnimation(completion: ()->()){
         let action = SKAction.fadeAlphaTo(0.0, duration: 0.2)
         let action2 = SKAction.scaleTo(0.0, duration: 0.2)
         
-        popUp.runAction(SKAction.group([action, action2]))
+        menuPopUp.runAction(SKAction.group([action, action2]))
         darkeningLayer.runAction(action, completion:{
-            self.popUp.hidden = true
+            self.menuPopUp.hidden = true
             self.darkeningLayer.hidden = true
             self.darkeningLayer.zPosition = 0
         })

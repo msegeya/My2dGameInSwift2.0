@@ -13,9 +13,6 @@ import SpriteKit
 
 
 class ColumnNode: SKSpriteNode {
-    override init(){
-        super.init()
-    }
 
     override init(texture: SKTexture!, color: UIColor!, size: CGSize) {
         super.init(texture: texture, color: color, size: size)

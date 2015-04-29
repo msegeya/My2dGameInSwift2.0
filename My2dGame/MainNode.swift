@@ -34,9 +34,10 @@ class MainNode: SKSpriteNode {
         super.init(texture: texture, color: color, size: size)
     }
     
-    override init(){
-        super.init()
+    init(){
         
+        super.init(texture: nil, color: UIColor.clearColor(), size: CGSizeZero)
+
         self.size = CGSize(width: ((BlockWidth + BlockWidthOffset) * CGFloat(NumColumns)), height: ((BlockHeight + BlockHeightOffset) * CGFloat(NumRows)))
         
         columnsLayer.size = CGSize(width: ((BlockWidth + BlockWidthOffset) * CGFloat(NumColumns)), height: ((BlockHeight + BlockHeightOffset) * CGFloat(NumRows)))
@@ -48,7 +49,7 @@ class MainNode: SKSpriteNode {
             let Label = SKLabelNode(fontNamed: "GillSans-Bold")
             Label.fontSize = 10
             Label.fontColor = UIColor(red: 0.40, green: 0.40, blue: 0.40, alpha: 1)
-            Label.text = NSString(format: "%ld", i+1)
+            Label.text = NSString(format: "%ld", i+1) as String
             Label.position = CGPoint(x: CGFloat(i) * (BlockWidth+BlockWidthOffset+0.4), y: 0.0)
             bottomNumbersLayer.addChild(Label)
         }
@@ -60,7 +61,7 @@ class MainNode: SKSpriteNode {
         self.addChild(nextColumnPreviewNode)
         
         self.columnsLayer.anchorPoint = CGPointZero
-
+        
         
         //level
         levelLabelNode = HUDLabelNode()
@@ -77,36 +78,38 @@ class MainNode: SKSpriteNode {
         addChild(scoreLabelNode)
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        super.touchesBegan(touches, withEvent: event)
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        super.touchesBegan(touches as Set<NSObject>, withEvent: event)
         
-        var touch: AnyObject? = touches.anyObject()
-        var location = touch?.locationInNode(self.columnsLayer)
-
-        tapLocation = location!
+        
+        if let touch = touches.first as? UITouch {
+            var location = touch.locationInNode(self.columnsLayer)
+            tapLocation = location
+        }
     }
     
-    override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
         if swipe != nil{
             return
         }
-
-        let touch = touches.anyObject() as UITouch
-        let location = touch.locationInNode(self.columnsLayer)
-
-        if (location.y - tapLocation!.y) > BlockHeight*1.5{
-            swipe = Swipe(location: location, direction: Direction.Up)
-        }else if (location.y - tapLocation!.y) < -(BlockHeight*1.5){
-            swipe = Swipe(location: location, direction: Direction.Down)
+        
+        if let touch = touches.first as? UITouch {
+            let location = touch.locationInNode(self.columnsLayer)
             
-        }else if (location.x - tapLocation!.x) > BlockWidth*1.5{
-            swipe = Swipe(location: location, direction: Direction.Right)
-        }else if (location.x - tapLocation!.x) > -(BlockWidth*1.5){
-            //swipe = Swipe(location: location, direction: Direction.Left)
+            if (location.y - tapLocation!.y) > BlockHeight*1.5{
+                swipe = Swipe(location: location, direction: Direction.Up)
+            }else if (location.y - tapLocation!.y) < -(BlockHeight*1.5){
+                swipe = Swipe(location: location, direction: Direction.Down)
+                
+            }else if (location.x - tapLocation!.x) > BlockWidth*1.5{
+                swipe = Swipe(location: location, direction: Direction.Right)
+            }else if (location.x - tapLocation!.x) > -(BlockWidth*1.5){
+                //swipe = Swipe(location: location, direction: Direction.Left)
+            }
         }
     }
     
-    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
         if swipe != nil{
             if swipe!.direction == .Up || swipe!.direction == .Down{
                 delegate?.ColumnDidSwipe(tapLocation!, direction: swipe!.direction)
@@ -122,13 +125,13 @@ class MainNode: SKSpriteNode {
         }
     }
     
-    override func touchesCancelled(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesCancelled(touches: Set<NSObject>, withEvent event: UIEvent) {
         touchesEnded(touches, withEvent: event)
         
         tapLocation = nil
         swipe = nil
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

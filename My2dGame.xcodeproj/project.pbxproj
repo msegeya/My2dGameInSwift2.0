@@ -33,7 +33,6 @@
 		F9A376861AB412460079FACA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F9A376881AB412460079FACA /* Localizable.strings */; };
 		F9A376901AB8A7360079FACA /* Sprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = F9A3768F1AB8A7360079FACA /* Sprites.atlas */; };
 		F9C93C251AB289BD00C05063 /* ColumnNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C93C241AB289BD00C05063 /* ColumnNode.swift */; };
-		F9C9745D1AB8DCA200171A40 /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C9745C1AB8DCA200171A40 /* Set.swift */; };
 		F9C9745F1AB918FE00171A40 /* BlocksToRemoveDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C9745E1AB918FE00171A40 /* BlocksToRemoveDetector.swift */; };
 		F9E1DD8D1AD1EE2A00AAEE90 /* LevelCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E1DD8C1AD1EE2A00AAEE90 /* LevelCollectionViewController.swift */; };
 		F9E1DD8F1AD1F74400AAEE90 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E1DD8E1AD1F74400AAEE90 /* CollectionViewCell.swift */; };
@@ -43,10 +42,12 @@
 		F9E1DD9A1AD21AE500AAEE90 /* levels.json in Resources */ = {isa = PBXBuildFile; fileRef = F9E1DD991AD21AE500AAEE90 /* levels.json */; };
 		F9E1DD9E1AD21CF500AAEE90 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E1DD9D1AD21CF500AAEE90 /* SwiftyJSON.swift */; };
 		F9E1DDA01AD2317B00AAEE90 /* LevelPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E1DD9F1AD2317B00AAEE90 /* LevelPopUpViewController.swift */; };
+		F9E937201ADA9A6200A5B8F3 /* lock.png in Resources */ = {isa = PBXBuildFile; fileRef = F9E9371F1ADA9A6200A5B8F3 /* lock.png */; };
+		F9E937221ADAA4D100A5B8F3 /* LevelUpPopUpNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E937211ADAA4D100A5B8F3 /* LevelUpPopUpNode.swift */; };
 		F9EB998E1AC2E46A00127A0C /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = F9EB998D1AC2E46A00127A0C /* star.png */; };
 		F9F65E4B1AAA8DDC009E4421 /* Fall.wav in Resources */ = {isa = PBXBuildFile; fileRef = F9F65E4A1AAA8DDC009E4421 /* Fall.wav */; };
 		F9F65E4D1AAA98FC009E4421 /* HUDLabelNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E4C1AAA98FC009E4421 /* HUDLabelNode.swift */; };
-		F9F65E4F1AAAAE84009E4421 /* PopUpNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E4E1AAAAE84009E4421 /* PopUpNode.swift */; };
+		F9F65E4F1AAAAE84009E4421 /* MenuPopUpNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E4E1AAAAE84009E4421 /* MenuPopUpNode.swift */; };
 		F9F65E571AAC04E9009E4421 /* ProgressBarNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F65E561AAC04E9009E4421 /* ProgressBarNode.swift */; };
 		F9FC8FCD1AB0D09F00B3E896 /* HUDNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FC8FCC1AB0D09F00B3E896 /* HUDNode.swift */; };
 		F9FC8FCF1AB0D24300B3E896 /* MainNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FC8FCE1AB0D24300B3E896 /* MainNode.swift */; };
@@ -101,7 +102,6 @@
 		F9A3768C1AB414390079FACA /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F9A3768F1AB8A7360079FACA /* Sprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Sprites.atlas; sourceTree = "<group>"; };
 		F9C93C241AB289BD00C05063 /* ColumnNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColumnNode.swift; sourceTree = "<group>"; };
-		F9C9745C1AB8DCA200171A40 /* Set.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Set.swift; path = ../Set.swift; sourceTree = "<group>"; };
 		F9C9745E1AB918FE00171A40 /* BlocksToRemoveDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlocksToRemoveDetector.swift; sourceTree = "<group>"; };
 		F9E1DD8C1AD1EE2A00AAEE90 /* LevelCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelCollectionViewController.swift; sourceTree = "<group>"; };
 		F9E1DD8E1AD1F74400AAEE90 /* CollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
@@ -111,10 +111,12 @@
 		F9E1DD991AD21AE500AAEE90 /* levels.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = levels.json; sourceTree = "<group>"; };
 		F9E1DD9D1AD21CF500AAEE90 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftyJSON.swift; path = ../SwiftyJSON.swift; sourceTree = "<group>"; };
 		F9E1DD9F1AD2317B00AAEE90 /* LevelPopUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelPopUpViewController.swift; sourceTree = "<group>"; };
+		F9E9371F1ADA9A6200A5B8F3 /* lock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lock.png; sourceTree = "<group>"; };
+		F9E937211ADAA4D100A5B8F3 /* LevelUpPopUpNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelUpPopUpNode.swift; sourceTree = "<group>"; };
 		F9EB998D1AC2E46A00127A0C /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = star.png; path = "../../../Downloads/iRate-master/iRate/star.png"; sourceTree = "<group>"; };
 		F9F65E4A1AAA8DDC009E4421 /* Fall.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Fall.wav; sourceTree = "<group>"; };
 		F9F65E4C1AAA98FC009E4421 /* HUDLabelNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUDLabelNode.swift; sourceTree = "<group>"; };
-		F9F65E4E1AAAAE84009E4421 /* PopUpNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopUpNode.swift; sourceTree = "<group>"; };
+		F9F65E4E1AAAAE84009E4421 /* MenuPopUpNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuPopUpNode.swift; sourceTree = "<group>"; };
 		F9F65E561AAC04E9009E4421 /* ProgressBarNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressBarNode.swift; sourceTree = "<group>"; };
 		F9FC8FCC1AB0D09F00B3E896 /* HUDNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUDNode.swift; sourceTree = "<group>"; };
 		F9FC8FCE1AB0D24300B3E896 /* MainNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNode.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				F95667401AC8D67800BCF48E /* Crush.sks */,
 				F956674A1AC8DCBF00BCF48E /* Particle.png */,
 				F9EB998D1AC2E46A00127A0C /* star.png */,
+				F9E9371F1ADA9A6200A5B8F3 /* lock.png */,
 				F9E1DD921AD1FE9200AAEE90 /* grayStar.png */,
 				F9A376881AB412460079FACA /* Localizable.strings */,
 				F94DD1C01ABA499A000731CC /* FacebookSDK.framework */,
@@ -231,7 +234,6 @@
 		F9336C161AAA580E00B0D204 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				F9C9745C1AB8DCA200171A40 /* Set.swift */,
 				F9FC8FD51AB11EBF00B3E896 /* Audio.swift */,
 				F9336C111AAA55F400B0D204 /* Block.swift */,
 				F9336C0F1AAA55DB00B0D204 /* Column.swift */,
@@ -283,11 +285,12 @@
 			isa = PBXGroup;
 			children = (
 				F9F65E4C1AAA98FC009E4421 /* HUDLabelNode.swift */,
-				F9F65E4E1AAAAE84009E4421 /* PopUpNode.swift */,
+				F9F65E4E1AAAAE84009E4421 /* MenuPopUpNode.swift */,
 				F9F65E561AAC04E9009E4421 /* ProgressBarNode.swift */,
 				F9FC8FCC1AB0D09F00B3E896 /* HUDNode.swift */,
 				F9FC8FCE1AB0D24300B3E896 /* MainNode.swift */,
 				F9C93C241AB289BD00C05063 /* ColumnNode.swift */,
+				F9E937211ADAA4D100A5B8F3 /* LevelUpPopUpNode.swift */,
 			);
 			name = "SpriteKit Extensions";
 			sourceTree = "<group>";
@@ -416,6 +419,7 @@
 				F9EB998E1AC2E46A00127A0C /* star.png in Resources */,
 				F94A52CC1ACEEFE600C9DB9A /* photo1.png in Resources */,
 				F95667411AC8D67800BCF48E /* Crush.sks in Resources */,
+				F9E937201ADA9A6200A5B8F3 /* lock.png in Resources */,
 				F9336BF41AAA52CA00B0D204 /* Images.xcassets in Resources */,
 				F927A2EE1AAD3FC700AB6F0F /* BackgroundSound.mp3 in Resources */,
 				F9E1DD9A1AD21AE500AAEE90 /* levels.json in Resources */,
@@ -436,7 +440,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9C9745D1AB8DCA200171A40 /* Set.swift in Sources */,
 				F9F65E4D1AAA98FC009E4421 /* HUDLabelNode.swift in Sources */,
 				F9E1DD951AD208C900AAEE90 /* Levels.swift in Sources */,
 				F9E1DD9E1AD21CF500AAEE90 /* SwiftyJSON.swift in Sources */,
@@ -444,8 +447,9 @@
 				F9FC8FDB1AB1E02C00B3E896 /* GameCenterHelper.swift in Sources */,
 				F9C93C251AB289BD00C05063 /* ColumnNode.swift in Sources */,
 				F9FC8FCD1AB0D09F00B3E896 /* HUDNode.swift in Sources */,
-				F9F65E4F1AAAAE84009E4421 /* PopUpNode.swift in Sources */,
+				F9F65E4F1AAAAE84009E4421 /* MenuPopUpNode.swift in Sources */,
 				F9E1DD971AD2091A00AAEE90 /* Level.swift in Sources */,
+				F9E937221ADAA4D100A5B8F3 /* LevelUpPopUpNode.swift in Sources */,
 				F9FC8FCF1AB0D24300B3E896 /* MainNode.swift in Sources */,
 				F9C9745F1AB918FE00171A40 /* BlocksToRemoveDetector.swift in Sources */,
 				F94DD1CA1ABD13EB000731CC /* iRate.m in Sources */,
@@ -614,7 +618,7 @@
 					/Users/Karol/Documents/FacebookSDK,
 				);
 				INFOPLIST_FILE = My2dGame/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

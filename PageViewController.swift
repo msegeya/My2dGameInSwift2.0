@@ -118,7 +118,7 @@ class PageViewController: UIViewController, UIScrollViewDelegate {
     }
     
     
-    func scrollViewDidScroll(scrollView: UIScrollView!) {
+    func scrollViewDidScroll(scrollView: UIScrollView) {
         // Load the pages that are now on screen
         loadVisiblePages()
     }

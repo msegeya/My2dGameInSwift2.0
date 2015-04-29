@@ -32,7 +32,7 @@ class HUDLabelNode: SKLabelNode {
             if text == oldValue{
                 return
             }
-            let length = countElements(self.text)
+            let length = count(self.text)
             switch length{
                 case 4:
                     self.fontSize -= 2

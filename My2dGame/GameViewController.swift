@@ -24,7 +24,7 @@ enum Direction{
     case Up, Down, Left, Right
 }
 
-class GameViewController: UIViewController, GameDelegate, PopUpDelegate, ColumnLayerDelegate{
+class GameViewController: UIViewController, GameDelegate, MenuPopUpDelegate, ColumnLayerDelegate{
     
     var gameScene: GameScene!
     var gameLogic: Game!
@@ -51,7 +51,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, ColumnL
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "pauseGameSceneNotificationReceived:", name:"pauseGameScene", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "resumeGameSceneNotificationReceived:", name:"resumeGameScene", object: nil)
         
-        skView = view as SKView
+        skView = view as! SKView
         skView.multipleTouchEnabled = false
         skView.showsFPS = true
         skView.showsNodeCount = true
@@ -85,7 +85,7 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, ColumnL
         
         gameScene.pauseGame = gameDidPause
         gameScene.resumeGame = gameDidResume
-        gameScene.popUp.delegate = self
+        gameScene.menuPopUp.delegate = self
         
         gameScene.gameLayer.delegate = self
         
@@ -162,12 +162,17 @@ class GameViewController: UIViewController, GameDelegate, PopUpDelegate, ColumnL
             gameScene.tickLengthMillisTmp = nil
         }
         
-        if(gameScene.tickLengthMillis >= 1800){
-            gameScene.tickLengthMillis -= 100
-        }else if gameScene.tickLengthMillis > 600{
-            gameScene.tickLengthMillis -= 50
-        }
         let results = game.sumUpPointsInColumns()
+        
+        levelManager.numPassedLevels += 1
+        if let level = levelManager.getLevel(choosenLevel.id){
+            self.choosenLevel = level
+            self.gameLogic.loadLevel(choosenLevel)
+            self.gameScene.tickLengthMillis = level.delay
+        }else{
+            println("loading next Level problem")
+        }
+
         updateHUD("level")
         updateHUD("wavesLeft")
         

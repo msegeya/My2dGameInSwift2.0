@@ -10,26 +10,21 @@ import SpriteKit
 
 class ProgressBarNode: SKSpriteNode {
 
-    let backgroundImage = SKSpriteNode()
-    let shapeToMask = SKSpriteNode()
-    let mask = SKShapeNode()
-    let cropNode = SKCropNode()
-    let radius: CGFloat = 0.0
-    
-    override init() {
-        super.init()
-    }
+    var backgroundImage = SKSpriteNode()
+    var shapeToMask = SKSpriteNode()
+    var mask = SKShapeNode()
+    var cropNode = SKCropNode()
+    var radius: CGFloat = 0.0
     
     override init(texture: SKTexture!, color: UIColor!, size: CGSize) {
         super.init(texture: texture, color: color, size: size)
     }
     
     init(imageNamed: String){
-        super.init()
+        let texture = SKTexture(imageNamed: imageNamed)
+        super.init(texture: texture, color: UIColor.clearColor(), size: texture.size())
         
-        backgroundImage = SKSpriteNode(imageNamed: imageNamed)
-        backgroundImage.size = CGSize(width: 50, height: 50)
-        addChild(backgroundImage)
+        self.size = CGSize(width: 50, height: 50)
         
         self.shapeToMask = SKSpriteNode(color: UIColor(red:0.780392, green:0.243137, blue:0.219608, alpha:1.0), size: CGSize(width: 47, height: 47))
         self.shapeToMask.alpha = 1
@@ -46,8 +41,10 @@ class ProgressBarNode: SKSpriteNode {
         cropNode.maskNode = mask
         self.addChild(cropNode)
     }
+    
     init(shapeColorToMask: UIColor, shapeSize: CGSize){
-        super.init()
+        super.init(texture: nil, color: UIColor.clearColor(), size: CGSizeZero)
+        
         self.shapeToMask = SKSpriteNode(color: shapeColorToMask, size: shapeSize)
         self.mask = SKShapeNode()
         self.mask.antialiased = false

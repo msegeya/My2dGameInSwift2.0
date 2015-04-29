@@ -16,9 +16,9 @@ class HUDNode: SKSpriteNode {
         super.init(texture: texture, color: color, size: size)
     }
     
-    override init(){
-        super.init()
-        //self.color = UIColor.redColor()
+    init(){
+        super.init(texture: nil, color: UIColor.clearColor(), size: CGSizeZero)
+        
         self.size = CGSize(width: 50, height: 100)
         
         
@@ -40,17 +40,18 @@ class HUDNode: SKSpriteNode {
         self.addChild(menuButtonNode)
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        super.touchesBegan(touches, withEvent: event)
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        super.touchesBegan(touches as Set<NSObject>, withEvent: event)
         
-        var touch: AnyObject? = touches.anyObject()
-        var location = touch?.locationInNode(self)
-        let touchedNode = self.nodeAtPoint(location!)
+        if let touch = touches.first as? UITouch{
+        var location = touch.locationInNode(self)
+        let touchedNode = self.nodeAtPoint(location)
         
         if touchedNode.name != nil{
             if touchedNode.name! == "menuButton"{
                 NSNotificationCenter.defaultCenter().postNotificationName("pauseGameScene", object: nil)
             }
+        }
         }
     }
 

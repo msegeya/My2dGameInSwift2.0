@@ -47,7 +47,7 @@ class BlocksToRemoveDetector {
             recursion(startBlock, column: column)
             
             if blocksToRemove.count == 1{
-                blocksToRemove.removeElement(startBlock)
+                blocksToRemove.remove(startBlock)
             }
         }
     }
@@ -56,13 +56,12 @@ class BlocksToRemoveDetector {
         if block == nil{
             return
         }
-        
-        if blocksToRemove.containsElement(block!){
+        if blocksToRemove.contains(block!){
             return
         }
         
         if block!.blockColor == matchColor{
-            blocksToRemove.addElement(block!)
+            blocksToRemove.insert(block!)
             block!.isChecked = true
         }else{
             return
@@ -102,7 +101,7 @@ class BlocksToRemoveDetector {
             for row in -1...1{
                 if let tmpBlock = blockAtColumn(block.column.id+column, row: block.row+row){
                     if !tmpBlock.isChecked{
-                        blocksToRemove.addElement(tmpBlock)
+                        blocksToRemove.insert(tmpBlock)
                         
                         //detecting bombs in previouse bomb area
                         if tmpBlock.blockType == BlockType.Bomb{
@@ -121,7 +120,7 @@ class BlocksToRemoveDetector {
             if column != nil{
                 if let tmpBlock = blockAtColumn(column!.id, row: block.row){
                     if !tmpBlock.isChecked{
-                        blocksToRemove.addElement(tmpBlock)
+                        blocksToRemove.insert(tmpBlock)
                     }
                 }
             }
