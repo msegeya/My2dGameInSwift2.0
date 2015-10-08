@@ -18,9 +18,9 @@ protocol MenuDelegate {
 
 let levelManager: Levels = Levels()
 
-class MainMenuViewController: UIViewController, MenuDelegate, FBLoginViewDelegate {
-    var gameCenter: GameCenter!
-    var fbLoginView : FBLoginView!
+class MainMenuViewController: UIViewController, MenuDelegate, FBSDKLoginButtonDelegate {
+    var gameCenter: EasyGameCenter!
+    //var fbLoginView : FBLoginView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,38 +36,47 @@ class MainMenuViewController: UIViewController, MenuDelegate, FBLoginViewDelegat
         //                /* Player is not login in Game Center */
         //            }
         //        }
-        
-        //Adding facebook login/logout button to menu scene
-        fbLoginView = FBLoginView(readPermissions: ["public_profile", "email", "user_friends"])
-        fbLoginView.frame = CGRectOffset(fbLoginView.frame,
-        (self.view!.center.x - (fbLoginView.frame.size.width / 2)), self.view!.frame.height - 70);
-        fbLoginView.delegate = self
-        view.addSubview(fbLoginView)
+     
+        let button = FBSDKLoginButton(frame: CGRectMake(0, self.view!.frame.height - 70, 150, 40))
+        button.center.x = self.view!.center.x
+        button.delegate = self
+        button.readPermissions = ["public_profile", "email", "user_friends"]
+        view.addSubview(button)
     }
     
     //Facebook integration, delegate methods
-    func loginViewShowingLoggedInUser(loginView : FBLoginView!) {
-        println("User Logged In")
-    }
-    
-    func loginViewFetchedUserInfo(loginView : FBLoginView!, user: FBGraphUser) {
-        println("User: \(user)")
-        println("User ID: \(user.objectID)")
-        println("User Name: \(user.name)")
-        var userEmail = user.objectForKey("email") as! String
-        println("User Email: \(userEmail)")
+    func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
         
-        var alert = UIAlertController(title: "Logged in!", message: "Hello \(user.first_name)", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
+        if error != nil {
+            print("error")
+        } else if result.isCancelled {
+            print("cancelled")
+        } else {
+            print("token: \(result.token.tokenString)")
+            print("user_id: \(result.token.userID)")
+            
+            let graphRequest : FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me", parameters: nil)
+            graphRequest.startWithCompletionHandler({ (connection, result, error) -> Void in
+                
+                if ((error) != nil)
+                {
+                    // Process error
+                    print("Error: \(error)")
+                }
+                else
+                {
+                    print("fetched user: \(result)")
+                    let userName : NSString = result.valueForKey("name") as! NSString
+                    print("User Name is: \(userName)")
+                    let userEmail : NSString = result.valueForKey("email") as! NSString
+                    print("User Email is: \(userEmail)")
+                }
+            })
+        }
     }
     
-    func loginViewShowingLoggedOutUser(loginView : FBLoginView!) {
-        println("User Logged Out")
-    }
-    
-    func loginView(loginView : FBLoginView!, handleError:NSError) {
-        println("Error: \(handleError.localizedDescription)")
+    func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
+        print("User logged out...")
     }
     //Facebook integration, delegate methods
     

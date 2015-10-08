@@ -26,11 +26,11 @@ class Audio {
     var music: Bool = false{
         didSet{
             if music{
-                audioSession.setCategory(AVAudioSessionCategorySoloAmbient, error: nil)
+                try! audioSession.setCategory(AVAudioSessionCategorySoloAmbient)
                 backgroundMusicPlayer.play()
                 defaults.setBool(true, forKey: "music")
             }else{
-                audioSession.setCategory(AVAudioSessionCategoryAmbient, error: nil)
+                try! audioSession.setCategory(AVAudioSessionCategoryAmbient)
                 backgroundMusicPlayer.stop()
                 defaults.setBool(false, forKey: "music")
             }
@@ -38,13 +38,13 @@ class Audio {
     }
     
     init(){
-        var backgroundMusic = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("BackgroundSound", ofType: "mp3")!)
+        let backgroundMusic = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("BackgroundSound", ofType: "mp3")!)
         
-        backgroundMusicPlayer = AVAudioPlayer(contentsOfURL: backgroundMusic, error: &error)
+        try! backgroundMusicPlayer = AVAudioPlayer(contentsOfURL: backgroundMusic)
         backgroundMusicPlayer.numberOfLoops = -1 //infinite loop
         
         if audioSession.otherAudioPlaying{
-            audioSession.setCategory(AVAudioSessionCategoryAmbient, error: nil)
+            try! audioSession.setCategory(AVAudioSessionCategoryAmbient)
         }else{
             backgroundMusicPlayer.prepareToPlay()
             

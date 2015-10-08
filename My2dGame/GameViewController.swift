@@ -170,7 +170,7 @@ class GameViewController: UIViewController, GameDelegate, MenuPopUpDelegate, Col
             self.gameLogic.loadLevel(choosenLevel)
             self.gameScene.tickLengthMillis = level.delay
         }else{
-            println("loading next Level problem")
+            print("loading next Level problem")
         }
 
         updateHUD("level")
@@ -213,7 +213,7 @@ class GameViewController: UIViewController, GameDelegate, MenuPopUpDelegate, Col
         if let lastTick = gameScene.lastTick{
             let timePassed = lastTick.timeIntervalSinceNow * -1000
             
-            var tmp = (gameScene.tickLengthMillis - 150)
+            let tmp = (gameScene.tickLengthMillis - 150)
             if timePassed >= tmp || timePassed <= 150{
                 return
             }
@@ -234,13 +234,13 @@ class GameViewController: UIViewController, GameDelegate, MenuPopUpDelegate, Col
         if let lastTick = gameScene.lastTick{
             let timePassed = lastTick.timeIntervalSinceNow * -1000
            
-            var tmp = (gameScene.tickLengthMillis - 150)
+            let tmp = (gameScene.tickLengthMillis - 150)
             if timePassed >= tmp || timePassed <= 150{
                 return
             }
         }
         
-        let (success, column, row) = convertPoint(location)
+        let (success, column, _) = convertPoint(location)
         
         if success{
             if let (oldColumn, newColumn) = gameLogic.swipeColumn(column){
@@ -333,8 +333,5 @@ class GameViewController: UIViewController, GameDelegate, MenuPopUpDelegate, Col
     }
     override func shouldAutorotate() -> Bool {
         return true
-    }
-    override func supportedInterfaceOrientations() -> Int {
-        return Int(UIInterfaceOrientationMask.LandscapeRight.rawValue)
     }
 }

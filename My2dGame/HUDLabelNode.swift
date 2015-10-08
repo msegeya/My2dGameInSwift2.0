@@ -27,12 +27,12 @@ class HUDLabelNode: SKLabelNode {
         self.position.y -= 5
     }
     
-    override var text : String{
+    override var text : String?{
         didSet{
             if text == oldValue{
                 return
             }
-            let length = count(self.text)
+            let length = self.text!.characters.count
             switch length{
                 case 4:
                     self.fontSize -= 2

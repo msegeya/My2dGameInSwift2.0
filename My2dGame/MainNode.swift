@@ -30,7 +30,7 @@ class MainNode: SKSpriteNode {
     var tapLocation: CGPoint?
     var swipe: Swipe?
     
-    override init(texture: SKTexture!, color: UIColor!, size: CGSize) {
+    override init(texture: SKTexture!, color: UIColor, size: CGSize) {
         super.init(texture: texture, color: color, size: size)
     }
     
@@ -78,22 +78,22 @@ class MainNode: SKSpriteNode {
         addChild(scoreLabelNode)
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        super.touchesBegan(touches as Set<NSObject>, withEvent: event)
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        super.touchesBegan(touches as Set<UITouch>, withEvent: event)
         
         
-        if let touch = touches.first as? UITouch {
-            var location = touch.locationInNode(self.columnsLayer)
+        if let touch = touches.first as UITouch? {
+            let location = touch.locationInNode(self.columnsLayer)
             tapLocation = location
         }
     }
     
-    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         if swipe != nil{
             return
         }
         
-        if let touch = touches.first as? UITouch {
+        if let touch = touches.first as UITouch? {
             let location = touch.locationInNode(self.columnsLayer)
             
             if (location.y - tapLocation!.y) > BlockHeight*1.5{
@@ -109,7 +109,7 @@ class MainNode: SKSpriteNode {
         }
     }
     
-    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         if swipe != nil{
             if swipe!.direction == .Up || swipe!.direction == .Down{
                 delegate?.ColumnDidSwipe(tapLocation!, direction: swipe!.direction)
@@ -124,14 +124,13 @@ class MainNode: SKSpriteNode {
             tapLocation = nil
         }
     }
-    
-    override func touchesCancelled(touches: Set<NSObject>, withEvent event: UIEvent) {
-        touchesEnded(touches, withEvent: event)
+    override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
+        touchesEnded(touches!, withEvent: event)
         
         tapLocation = nil
         swipe = nil
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

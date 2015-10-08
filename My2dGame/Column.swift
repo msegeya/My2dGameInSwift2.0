@@ -42,7 +42,7 @@ class Column {
     func generateBlocks(){
         for var row = 0; row < maxHeight; ++row {
             
-            var blockColor = BlockColor.random()
+            let blockColor = BlockColor.random()
             let block = Block(column: self, row: row, blockColor: blockColor)
             blocks.append(block)
             
@@ -53,8 +53,8 @@ class Column {
     }
     
     func randomBlockTypeForColumn(){
-        var probability = 0.9
-        var result = Int(arc4random_uniform(10))
+        let probability = 0.9
+        let result = Int(arc4random_uniform(10))
 
         if result > Int(probability * 10){
             return
@@ -63,7 +63,7 @@ class Column {
         let rand = Int(arc4random_uniform(UInt32(currentHeight)))
         let block = getBlock(rand)
         
-        var randomBlockTypeRawValue = Int(arc4random_uniform(UInt32(NumBlockTypes-1))+1)
+        let randomBlockTypeRawValue = Int(arc4random_uniform(UInt32(NumBlockTypes-1))+1)
         
         block?.blockType = BlockType(rawValue: randomBlockTypeRawValue)
     }
@@ -88,7 +88,7 @@ class Column {
         var fallenBlocks = Array<Block>()
         
         for var row = 0; row < self.blocks.count; ++row {
-            var block = blocks[row]
+            let block = blocks[row]
             
             if(block == nil){
                 counter++

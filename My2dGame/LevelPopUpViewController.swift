@@ -37,7 +37,7 @@ protocol LevelPopUpDelegate{
     }
 
     required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        super.init(coder: aDecoder)!
     }
     
     override init(nibName nibNameOrNil: String!, bundle nibBundleOrNil: NSBundle!) {
@@ -91,7 +91,7 @@ protocol LevelPopUpDelegate{
 
     @IBAction func closePopup(sender: AnyObject) {
         self.removeAnimate(){
-            println("koniec")
+            print("koniec")
             self.delegate.gameDidStart(self.choosenLevel)
         }
     }

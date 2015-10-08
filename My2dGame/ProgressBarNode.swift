@@ -16,7 +16,7 @@ class ProgressBarNode: SKSpriteNode {
     var cropNode = SKCropNode()
     var radius: CGFloat = 0.0
     
-    override init(texture: SKTexture!, color: UIColor!, size: CGSize) {
+    override init(texture: SKTexture!, color: UIColor, size: CGSize) {
         super.init(texture: texture, color: color, size: size)
     }
     

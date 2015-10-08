@@ -12,7 +12,7 @@ class HUDNode: SKSpriteNode {
     var wavesLeftLabelNode = HUDLabelNode()
     var wavesLeftNode: ProgressBarNode = ProgressBarNode()
     
-    override init(texture: SKTexture!, color: UIColor!, size: CGSize) {
+    override init(texture: SKTexture!, color: UIColor, size: CGSize) {
         super.init(texture: texture, color: color, size: size)
     }
     
@@ -40,11 +40,11 @@ class HUDNode: SKSpriteNode {
         self.addChild(menuButtonNode)
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        super.touchesBegan(touches as Set<NSObject>, withEvent: event)
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        super.touchesBegan(touches as Set<UITouch>, withEvent: event)
         
-        if let touch = touches.first as? UITouch{
-        var location = touch.locationInNode(self)
+        if let touch = touches.first as UITouch?{
+        let location = touch.locationInNode(self)
         let touchedNode = self.nodeAtPoint(location)
         
         if touchedNode.name != nil{

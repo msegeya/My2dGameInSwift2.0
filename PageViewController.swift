@@ -53,7 +53,7 @@ class PageViewController: UIViewController, UIScrollViewDelegate {
         }
         
         // 1
-        if let pageView = pageViews[page] {
+        if let _ = pageViews[page] {
             // Do nothing. The view is already loaded.
         } else {
             // 2

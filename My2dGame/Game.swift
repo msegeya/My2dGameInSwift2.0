@@ -126,7 +126,7 @@ class Game {
     func sumUpPointsInColumns() -> Array<Int>{
         var pointsInColumns = Array<Int>(count: NumColumns, repeatedValue: PointsPerBlock * NumRows)
         
-        for (i, column) in enumerate(columnArray){
+        for (i, column) in columnArray.enumerate(){
             if column != nil{
                 let columnScore = column!.sumUpScore() * PointsPerBlock
                 pointsInColumns.insert(columnScore, atIndex: i)
@@ -168,7 +168,7 @@ class Game {
 
         wavesLeft -= 1
         
-        var tmpColumn = nextColumn
+        let tmpColumn = nextColumn
         nextColumn = Column(height: NumRows)
         
         return tmpColumn
@@ -209,9 +209,9 @@ class Game {
                 block.column.removeBlock(block.row)
             }
             
-            let tmp = 0
+            _ = 0
             var fallenBlocks = Array<Array<Block>>()
-            for (id, column) in enumerate(columnArray){
+            for (id, column) in columnArray.enumerate(){
                 if column != nil{
                     if column!.currentHeight == 0{
                         columnArray[id] = nil

@@ -94,7 +94,7 @@ class GameScene: SKScene {
         if lastTick == nil {
             return
         }
-        var timePassed = lastTick!.timeIntervalSinceNow * -1000.0
+        let timePassed = lastTick!.timeIntervalSinceNow * -1000.0
         
         //progressBar update
         HUDLayer.wavesLeftNode.setProgress(CGFloat(timePassed) / CGFloat(tickLengthMillis))
@@ -144,7 +144,7 @@ class GameScene: SKScene {
     }
     func playSound(name: String){
         if audio.sounds{
-            runAction(sounds[name])
+            runAction(sounds[name]!)
         }
     }
     //Other
@@ -255,27 +255,27 @@ class GameScene: SKScene {
         acctions.append(SKAction.removeFromParent())
         let sequence = SKAction.sequence(acctions)
         
-        for (blockId, block) in enumerate(blocksToRemove){
-            var emitter = SKEmitterNode(fileNamed: "Crush.sks")
-            emitter.particleColorSequence = nil;
-            emitter.particleColorBlendFactor = 1.0;
+        for (_, block) in blocksToRemove.enumerate(){
+            let emitter = SKEmitterNode(fileNamed: "Crush.sks")
+            emitter!.particleColorSequence = nil;
+            emitter!.particleColorBlendFactor = 1.0;
             
             switch block.blockColor!.spriteName{
             case "Blue":
-                emitter.particleColor = UIColor(red: 83/255, green: 132/255, blue: 236/255, alpha: 1.0)
-                emitter.name = "blue"
+                emitter!.particleColor = UIColor(red: 83/255, green: 132/255, blue: 236/255, alpha: 1.0)
+                emitter!.name = "blue"
                 break
             case "Green":
-                emitter.particleColor = UIColor(red: 99/255, green: 225/255, blue: 86/255, alpha: 1.0)
-                emitter.name = "green"
+                emitter!.particleColor = UIColor(red: 99/255, green: 225/255, blue: 86/255, alpha: 1.0)
+                emitter!.name = "green"
                 break
             case "Orange":
-                emitter.particleColor = UIColor(red: 241/255, green: 138/255, blue: 60/255, alpha: 1.0)
-                emitter.name = "orange"
+                emitter!.particleColor = UIColor(red: 241/255, green: 138/255, blue: 60/255, alpha: 1.0)
+                emitter!.name = "orange"
                 break
             case "Red":
-                emitter.particleColor = UIColor(red: 205/255, green: 64/255, blue: 65/255, alpha: 1.0)
-                emitter.name = "red"
+                emitter!.particleColor = UIColor(red: 205/255, green: 64/255, blue: 65/255, alpha: 1.0)
+                emitter!.name = "red"
                 break
             default:
                 break
@@ -284,15 +284,15 @@ class GameScene: SKScene {
             var pos = pointForColumn(block.column.id, row: block.row)
             pos.x += BlockWidth/2
             pos.y += BlockHeight/2
-            emitter.position = pos
+            emitter!.position = pos
             
-            gameLayer.columnsLayer.addChild(emitter)
+            gameLayer.columnsLayer.addChild(emitter!)
             
             block.sprite?.runAction(sequence)
         }
         
         for column in fallenBlocks{
-            for (blockId, block) in enumerate(column){
+            for (blockId, block) in column.enumerate(){
                 let newPosition = pointForColumn(0, row: block.row)
                 
                 let move = SKAction.moveTo(newPosition, duration: 0.15)
@@ -312,12 +312,12 @@ class GameScene: SKScene {
     }
     func animateAddingSpritesForColumn(column: Column, completion: ()->()){
         
-        var newColumnNode = ColumnNode()
+        let newColumnNode = ColumnNode()
         newColumnNode.anchorPoint = CGPointZero
         columnArray[0]!.spriteNode = newColumnNode
         
         moveCurrentColumns(){
-            for (blockId, block) in enumerate(column.blocks) {
+            for (_, block) in column.blocks.enumerate() {
                 if block != nil{
                     let sprite = SKSpriteNode(imageNamed: block!.blockColor.spriteName)
                     sprite.anchorPoint = CGPointZero
@@ -374,7 +374,7 @@ class GameScene: SKScene {
     }
     func animateAddingNextColumnPreview(column: Column){
         gameLayer.nextColumnPreviewNode.removeAllChildren()
-        for (blockId, block) in enumerate(column.blocks) {
+        for (blockId, block) in column.blocks.enumerate() {
             let sprite = SKSpriteNode(imageNamed: block!.blockColor.spriteName)
             sprite.position = CGPoint(x: 0, y: CGFloat(blockId) * (BlockHeight / 2))
             sprite.size = CGSize(width: CGFloat(BlockWidth / 2), height: CGFloat(BlockHeight / 2))
@@ -395,7 +395,7 @@ class GameScene: SKScene {
         let newColumnNode = ColumnNode()
         newColumnNode.anchorPoint = CGPointZero
         
-        for (blockId, block) in enumerate(newColumn.blocks) {
+        for (_, block) in newColumn.blocks.enumerate() {
             let sprite = SKSpriteNode(imageNamed: block!.blockColor.spriteName)
             sprite.position = pointForColumn(0, row: block!.row)
             sprite.size = CGSize(width: CGFloat(BlockWidth), height: CGFloat(BlockHeight))

@@ -8,6 +8,7 @@
 
 import UIKit
 import SpriteKit
+import FBSDKCoreKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -25,18 +26,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        //enable preview mode
 //        iRate.sharedInstance().previewMode = true
 //    }
-    
+
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
-        FBLoginView.self
-        FBProfilePictureView.self
         
-        return true
+        return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        
     }
     
-    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
-        var wasHandled:Bool = FBAppCall.handleOpenURL(url, sourceApplication: sourceApplication)
-        return wasHandled
+    func application(application: UIApplication,
+        openURL url: NSURL,
+        sourceApplication: String?,
+        annotation: AnyObject) -> Bool {
+            return FBSDKApplicationDelegate.sharedInstance().application(
+                application,
+                openURL: url,
+                sourceApplication: sourceApplication,
+                annotation: annotation)
     }
 
     func applicationWillResignActive(application: UIApplication) {
